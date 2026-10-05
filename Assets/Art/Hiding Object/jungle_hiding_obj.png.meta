@@ -1,0 +1,441 @@
+fileFormatVersion: 2
+guid: 820bcd087b2c2df4d8cb7435ae3cb047
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 915686474793251263
+    second: jungle_hiding_obj_0
+  - first:
+      213: 946461426220887224
+    second: jungle_hiding_obj_1
+  - first:
+      213: -9148749988231911838
+    second: jungle_hiding_obj_2
+  - first:
+      213: 2793514907846463656
+    second: jungle_hiding_obj_3
+  - first:
+      213: 4948653912566047234
+    second: jungle_hiding_obj_4
+  - first:
+      213: -4554809190704214219
+    second: jungle_hiding_obj_5
+  - first:
+      213: 6787285803595405267
+    second: jungle_hiding_obj_6
+  - first:
+      213: -3079482611019564104
+    second: jungle_hiding_obj_7
+  - first:
+      213: -8007230438688607528
+    second: jungle_hiding_obj_8
+  - first:
+      213: -5768443677422662589
+    second: jungle_hiding_obj_9
+  - first:
+      213: 4302437140440573477
+    second: jungle_hiding_obj_10
+  - first:
+      213: 6618319515746387234
+    second: jungle_hiding_obj_11
+  - first:
+      213: 6860248740028638794
+    second: jungle_hiding_obj_12
+  - first:
+      213: -5112869312048127293
+    second: jungle_hiding_obj_13
+  - first:
+      213: -4795038023695987786
+    second: jungle_hiding_obj_14
+  - first:
+      213: 8408390716159027872
+    second: jungle_hiding_obj_15
+  - first:
+      213: 3851744492857469692
+    second: jungle_hiding_obj_16
+  - first:
+      213: -8593236833626418843
+    second: jungle_hiding_obj_17
+  - first:
+      213: 7978130234429447451
+    second: jungle_hiding_obj_18
+  - first:
+      213: -4679046446165383904
+    second: jungle_hiding_obj_19
+  - first:
+      213: -9090613054655419126
+    second: jungle_hiding_obj_20
+  - first:
+      213: 2259124328233689469
+    second: jungle_hiding_obj_21
+  - first:
+      213: -8241621207507516200
+    second: jungle_hiding_obj_22
+  - first:
+      213: -8611464863906837880
+    second: jungle_hiding_obj_23
+  - first:
+      213: 5549873180832670259
+    second: jungle_hiding_obj_24
+  - first:
+      213: -5059180623532657052
+    second: jungle_hiding_obj_25
+  - first:
+      213: 5863326116329127240
+    second: jungle_hiding_obj_26
+  - first:
+      213: -6516953398592726121
+    second: jungle_hiding_obj_27
+  - first:
+      213: -431113699680731234
+    second: jungle_hiding_obj_28
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: jungle_hiding_obj_1
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 1007
+        width: 338
+        height: 379
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bc618f07a1822d00800000000000000
+      internalID: 946461426220887224
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jungle_hiding_obj_3
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 998
+        width: 352
+        height: 381
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a052fc020f84c620800000000000000
+      internalID: 2793514907846463656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jungle_hiding_obj_5
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 1002
+        width: 311
+        height: 379
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53f04686c211ac0c0800000000000000
+      internalID: -4554809190704214219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jungle_hiding_obj_6
+      rect:
+        serializedVersion: 2
+        x: 21
+        y: 530
+        width: 342
+        height: 164
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d71b505a78413e50800000000000000
+      internalID: 6787285803595405267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jungle_hiding_obj_8
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 79
+        width: 278
+        height: 208
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d23543175a90e090800000000000000
+      internalID: -8007230438688607528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jungle_hiding_obj_29
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 750
+        width: 328
+        height: 204
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e5b6d0502cc4934cb39506092857358
+      internalID: -671555410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: jungle_hiding_obj_0
+      rect:
+        serializedVersion: 2
+        x: 22
+        y: 91
+        width: 274
+        height: 185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c879cc24b61dd34ab0b3a2445d7fed0
+      internalID: 915686474793251263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 107114fb8f8f1b64fa8784cf9d8abb73
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      jungle_hiding_obj_0: 915686474793251263
+      jungle_hiding_obj_1: 946461426220887224
+      jungle_hiding_obj_10: 4302437140440573477
+      jungle_hiding_obj_11: 6618319515746387234
+      jungle_hiding_obj_12: 6860248740028638794
+      jungle_hiding_obj_13: -5112869312048127293
+      jungle_hiding_obj_14: -4795038023695987786
+      jungle_hiding_obj_15: 8408390716159027872
+      jungle_hiding_obj_16: 3851744492857469692
+      jungle_hiding_obj_17: -8593236833626418843
+      jungle_hiding_obj_18: 7978130234429447451
+      jungle_hiding_obj_19: -4679046446165383904
+      jungle_hiding_obj_2: -9148749988231911838
+      jungle_hiding_obj_20: -9090613054655419126
+      jungle_hiding_obj_21: 2259124328233689469
+      jungle_hiding_obj_22: -8241621207507516200
+      jungle_hiding_obj_23: -8611464863906837880
+      jungle_hiding_obj_24: 5549873180832670259
+      jungle_hiding_obj_25: -5059180623532657052
+      jungle_hiding_obj_26: 5863326116329127240
+      jungle_hiding_obj_27: -6516953398592726121
+      jungle_hiding_obj_28: -431113699680731234
+      jungle_hiding_obj_29: -671555410
+      jungle_hiding_obj_3: 2793514907846463656
+      jungle_hiding_obj_30: -618804926
+      jungle_hiding_obj_4: 4948653912566047234
+      jungle_hiding_obj_5: -4554809190704214219
+      jungle_hiding_obj_6: 6787285803595405267
+      jungle_hiding_obj_7: -3079482611019564104
+      jungle_hiding_obj_8: -8007230438688607528
+      jungle_hiding_obj_9: -5768443677422662589
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

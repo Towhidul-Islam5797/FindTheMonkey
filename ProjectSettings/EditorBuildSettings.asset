@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/System/Bootstrap.unity
+    guid: 3ce8cf87bb19e294c887940fca05dcd7
+  - enabled: 0
+    path: Assets/Scenes/System/Splash.unity
+    guid: 909bcc74981cae24797543eb919f7758
+  - enabled: 1
+    path: Assets/Scenes/Menu/MainMenu.unity
+    guid: b1cac35190c39054b8047eb0b9518ec1
+  - enabled: 0
+    path: Assets/Scenes/Menu/WorldSelection.unity
+    guid: 360ad9884ee0eee41823ecf95807d610
+  - enabled: 0
+    path: Assets/Scenes/Menu/LevelSelection.unity
+    guid: b0bb77250945874458a23af37ce6e07c
+  - enabled: 0
+    path: Assets/Scenes/Menu/MonkeyCollection.unity
+    guid: 8297fbfe62d337f4c812152b804ffdb1
+  - enabled: 0
+    path: Assets/Scenes/Menu/Rewards.unity
+    guid: 0cb91670752d0944bac378f813944e13
+  - enabled: 0
+    path: Assets/Scenes/Menu/Settings.unity
+    guid: a81d015a5e8eb5f459025859a92ed50e
+  - enabled: 1
+    path: Assets/Scenes/Gameplay/JungleMap.unity
+    guid: 988e966e085683e48a4b58caafcc8c97
+  - enabled: 1
+    path: Assets/Scenes/Gameplay/BeachMap.unity
+    guid: cbe904e8a83cf3c469c88e5443edb2c2
+  - enabled: 1
+    path: Assets/Scenes/Gameplay/SnowMap.unity
+    guid: e08e1a03dea20d540a6263b56aceaaf5
+  m_configObjects:
+    com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  m_UseUCBPForAssetBundles: 0
