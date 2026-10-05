@@ -1,0 +1,38 @@
+SPRINT 00 - CLAUDE CODE SETUP
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Set up Claude Code on the half-built project so it understands the
+project and follows the working rules before any feature work starts.
+
+CHANGES
+- Added CLAUDE.md in the project root. It holds the project summary,
+  working rules, folder layout, current state, in-scope list,
+  out-of-scope list, and known debt.
+- Added this SprintDoc in SprintDocs/.
+- No scripts, scenes, prefabs, or settings were changed.
+
+WHAT WAS FOUND (read-only review)
+- Exists: coins, bananas, stars, score, level unlocking, shop with
+  skins, audio, vibration, PlayerPrefs saving.
+- Partly done: countdown timer (only the 3-2-1 before a level) and
+  difficulty progression (levels unlock but do not get harder).
+- Missing: hint system, AdMob, daily rewards.
+- Empty placeholder scenes: WorldSelection, LevelSelection,
+  MonkeyCollection, Rewards, Settings.
+- No keystores, API keys, or AdMob IDs are committed.
+
+DONE CONDITIONS
+- Claude Code runs in the project folder: done.
+- Its project summary matches the real project: done.
+- CLAUDE.md is read by a new session: done. The test answer gave the
+  correct Unity version and the correct out-of-scope list.
+- CLAUDE.md and this SprintDoc are committed: done after the commit.
+
+NOT TOUCHED
+- AGENTS.md stays untracked on purpose.
+
+NEXT
+- Sprint 01 is chosen by the developer from the Phase 2 scope list in
+  CLAUDE.md. It starts with a plan and waits for approval.
