@@ -3,7 +3,7 @@
 Single-player kids' hide-and-seek game for Android and iOS.
 Unity 6000.3.6f1, URP 2D, Input System, TextMesh Pro. Portrait only.
 All gameplay is built on a Canvas with UI objects (RectTransform), reference resolution 1080x1920.
-Facts below were checked against the real code at commit 99889c6. Items marked (not verified) were not checked.
+Facts below were checked against the real code at commit 78035b2 (Sprint 01a). Sprint 01b and 01c are described from the approved plans and were not re-read in the code. Items marked (not verified) were not checked.
 
 ## 0. Read this first
 These rules apply in every permission mode, including Accept edits and any auto-approval mode.
@@ -19,6 +19,7 @@ The player taps the object they think hides the monkey.
 - Right object: the monkey is revealed, the level is complete, stars and rewards are granted.
 - Wrong object: the object slides aside, shows nothing, and returns. The try count goes up. The player taps again.
 - There is no game-over. Retries are unlimited.
+- A level timer counts down from 60 seconds. It starts when the monkey has stopped and taps become possible. At 0:00 it stays at 0:00 and play continues. Time does not change stars or rewards yet.
 - Fewer tries means more stars. 1 try = 3 stars, 2 tries = 2 stars, 3 or more tries = 1 star.
 - Rewards are cumulative per level. Improving your best stars pays only the difference.
   - Score totals: 1 star 500, 2 stars 750, 3 stars 1000.
@@ -57,8 +58,9 @@ A map scene (for example JungleMap) holds everything for that world:
 | ArrivalLayerTrigger | Old script, unused. Arrival markers are now plain RectTransforms listed in CharacterPathMover. | none |
 | HidingObject | One tappable object. Handles tap, slide, reveal or return. Decides right or wrong. | CharacterPathMover, LevelState |
 | LevelState | Current run: tries, stars, rewards. Saves totals. Fires events. | MapLevelManager |
-| LevelCompletePanelController | Shows the win panel. Calculates coin reward, completes the level. | LevelState, MapLevelManager |
-| GameplayHUD | Shows score, coins, bananas, tries, stars. Listens to LevelState events. | LevelState |
+| LevelCompletePanelController | Shows the win panel (stars, rewards, tries, time spent). Calculates coin reward, completes the level. | LevelState, MapLevelManager, LevelTimer |
+| GameplayHUD | Shows score, coins, bananas, tries, stars, and the timer. Listens to LevelState and LevelTimer events. | LevelState, LevelTimer |
+| LevelTimer | Countdown from 60 and elapsed time. Waits for the monkey to stop, then counts. Stops when the monkey is found. Never ends the level. | CharacterPathMover (reads IsMovementComplete), LevelState |
 | MenuWindowController | Pause menu: open, close, restart, main menu. | scenes |
 | ShopManager, ShopItemUI | Shop window. Buys skins with coins or bananas. Stores the selected item. | LevelState totals |
 | PlayerSkinController | Applies the selected skin by swapping the animator override. | ShopManager |
@@ -86,6 +88,15 @@ Editor-only: Assets/Editor/GameDataDebugWindow shows, edits and resets saved dat
 
 Order rule: the coin reward must be calculated before CompleteCurrentLevel(), because that call saves the new best stars.
 Never reorder steps 10 and 11.
+
+### 2.4a Level timer (added in Sprint 01)
+- MapWindowController calls LevelTimer.StartTimerWhenMovementEnds(activePlayer) just before activePlayer.StartGame().
+- The timer shows the full time (1:00) while the monkey walks. It starts counting when CharacterPathMover.IsMovementComplete becomes true. That is the same moment taps start working.
+- The countdown stops at 0:00. The elapsed time keeps counting until the monkey is found, so the time spent can be longer than 60 seconds.
+- OnMonkeyFound calls LevelTimer.StopTimer. LevelCompletePanelController reads ElapsedWholeSeconds and shows Time: M:SS. The order of the two subscribers does not matter.
+- The timer never ends the level, never blocks a tap, and never changes stars or rewards. A time bonus is a separate future sprint.
+- LevelTimer is optional. If a scene has none, the HUD and the panel show nothing extra and nothing breaks.
+- Each of the three map scenes has a LevelTimer component, a TimerText on the HUD, and a TimeText on the level-complete panel (found by reading the scene files; not verified in the Inspector).
 
 ### 2.5 Events (LevelState)
 OnScoreChanged, OnTotalScoreChanged, OnBananaChanged, OnCoinChanged, OnTryChanged, OnStarsChanged, OnScoreRewarded, OnBananaRewarded, OnMonkeyFound.
@@ -119,6 +130,7 @@ Any timer that uses Time.deltaTime pauses automatically. Do not use unscaled tim
 | 11 | Only one hiding object may move at a time (the static activeMovingObject lock in HidingObject). Keep it. | Prevents two taps from running at once and breaking the try count. |
 | 12 | The Animator field on CharacterPathMover must be assigned in every level's Player. | If it is empty the code does nothing and shows no error. The monkey stays in Idle while walking. |
 | 13 | Every level root has its own Player. MapWindowController finds the active level's CharacterPathMover. Never assign one Player by hand. Never add a starter script to each level. | Per-level wiring was tried and was too complex and fragile. |
+| 14 | LevelTimer must never end a level or block a tap. At 0:00 play continues. | Core design: no game-over. |
 
 ## 4. Hard rules (never, in any mode)
 - Never edit .unity, .prefab, or .meta files, ProjectSettings, Packages, Library, Temp, .git, or .claude.
@@ -198,7 +210,11 @@ Stop and ask the developer before continuing if:
 7. The pause menu opens, the game freezes, and it resumes.
 8. Quit and reopen the game: progress and totals are kept.
 9. BeachMap and SnowMap open without errors.
-10. The Unity Console shows no new red errors.
+10. The HUD shows 1:00 and does not move while the monkey walks. It starts counting down when the monkey stops.
+11. The pause menu freezes the timer. Finding the monkey stops it.
+12. The level-complete panel shows Time: M:SS. If you wait past 0:00 first, the panel time keeps counting past 1:00.
+13. Restart from the level-complete panel and Next both load a level that starts properly (countdown, monkey moves, timer waits and then counts). Check this in all three maps.
+14. The Unity Console shows no new red errors.
 
 ## 9. Unity and UI rules
 - Everything in gameplay is Canvas UI. Use RectTransform, Image, Button, TMP_Text. Do not write world-space code (SpriteRenderer, Collider2D, Transform.position) for gameplay objects.
@@ -209,7 +225,8 @@ Stop and ask the developer before continuing if:
 ## 10. Scope
 
 ### In scope now (Phase 2: polish, monetization, release builds)
-- Play timer (Sprint 01, in progress: LevelTimer.cs counts down from 60 and never ends the level).
+- Play timer: done (Sprint 01a to 01c). It starts when the monkey stops, never ends the level, and the level-complete panel shows the time spent.
+- Time bonus: faster completion gives extra coins (planned Sprint 02).
 - Harder hiding in later levels (partial visibility, varied positions, faster movement).
 - Hint system, and coins that are useful (hints, extra tries).
 - Difficulty balancing: early levels easy, later levels challenging.
@@ -241,4 +258,5 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 - URP warning: "Missing types ... UniversalRenderPipelineGlobalSettings". manifest.json asks for URP 17.6.0 but 17.3.0 is installed. Harmless for 2D so far. Do not fix without a separate plan.
 - File name with many spaces: Resources/ShopWindow .prefab.
 - Debug logging is on in many scripts.
+- Start flag (not verified in Play mode): the countdown only runs when PlayerPrefs StartSelectedLevel is 1. MapWindowController clears it before each countdown. MenuWindowController.StartCurrentLevel and the map window set it. MapLevelManager.RestartCurrentLevel and LoadNextLevel reload the scene without setting it. In the scenes pushed at commit 78035b2, the panel Restart button calls MenuWindowController.RestartLevel, and Next calls LevelCompletePanelController.LoadNextLevel. Check in Play mode that the next level starts after Next.
 - Content status of Beach and Snow levels (not verified). Only Jungle_Level_1 exists as a prefab in Assets/Level_Prefab.
