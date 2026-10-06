@@ -16,10 +16,14 @@ public class LevelTimer : MonoBehaviour
 
     private float remainingSeconds;
     private int lastShownSeconds = -1;
+    private CharacterPathMover watchedMover;
+    private float elapsedSeconds;
 
     public bool IsRunning { get; private set; }
 
     public int DisplaySeconds => Mathf.CeilToInt(remainingSeconds);
+
+    public int ElapsedWholeSeconds => Mathf.FloorToInt(elapsedSeconds);
 
     public event Action<int> OnSecondsChanged;
 
@@ -45,26 +49,41 @@ public class LevelTimer : MonoBehaviour
 
     private void Update()
     {
+        if (watchedMover != null && watchedMover.IsMovementComplete)
+        {
+            watchedMover = null;
+            StartTimer();
+        }
+
         if (!IsRunning)
             return;
+
+        elapsedSeconds += Time.deltaTime;
 
         remainingSeconds = Mathf.Max(0f, remainingSeconds - Time.deltaTime);
 
         NotifyIfSecondsChanged();
-
-        if (remainingSeconds <= 0f)
-            IsRunning = false;
     }
 
     public void StartTimer()
     {
         remainingSeconds = timeLimitSeconds;
+        elapsedSeconds = 0f;
         IsRunning = true;
+        NotifyIfSecondsChanged();
+    }
+
+    public void StartTimerWhenMovementEnds(CharacterPathMover mover)
+    {
+        remainingSeconds = timeLimitSeconds;
+        IsRunning = false;
+        watchedMover = mover;
         NotifyIfSecondsChanged();
     }
 
     public void StopTimer()
     {
+        watchedMover = null;
         IsRunning = false;
     }
 

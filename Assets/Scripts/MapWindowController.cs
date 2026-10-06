@@ -1665,7 +1665,7 @@ public class MapWindowController : MonoBehaviour
 
         if (levelTimer != null)
         {
-            levelTimer.StartTimer();
+            levelTimer.StartTimerWhenMovementEnds(activePlayer);
         }
 
         activePlayer.StartGame();

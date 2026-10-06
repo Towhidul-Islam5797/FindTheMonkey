@@ -42,6 +42,9 @@ public class LevelCompletePanelController : MonoBehaviour
     [SerializeField]
     private TMP_Text triesText;
 
+    [SerializeField]
+    private TMP_Text timeText;
+
     // -------------------------------------------------------
     // STARS
     // -------------------------------------------------------
@@ -107,6 +110,7 @@ public class LevelCompletePanelController : MonoBehaviour
     private bool showDebugLogs = true;
 
     private bool panelShown;
+    private LevelTimer levelTimer;
 
     // -------------------------------------------------------
     // UNITY
@@ -166,6 +170,12 @@ public class LevelCompletePanelController : MonoBehaviour
         {
             mapLevelManager =
                 FindFirstObjectByType<MapLevelManager>();
+        }
+
+        if (levelTimer == null)
+        {
+            levelTimer =
+                FindFirstObjectByType<LevelTimer>();
         }
     }
 
@@ -382,6 +392,14 @@ public class LevelCompletePanelController : MonoBehaviour
         {
             triesText.text =
                 $"Tries: {levelState.TryCount}";
+        }
+
+        if (timeText != null && levelTimer != null)
+        {
+            int seconds = levelTimer.ElapsedWholeSeconds;
+
+            timeText.text =
+                $"Time: {seconds / 60}:{seconds % 60:00}";
         }
 
         UpdateStars(

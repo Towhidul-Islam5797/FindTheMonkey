@@ -1,0 +1,71 @@
+SPRINT 01c - TIME ON LEVEL-COMPLETE PANEL
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Show the time the player spent on the level on the level-complete
+panel, as "Time: M:SS". Rewards do not use the time.
+
+DESIGN DECISIONS
+- LevelTimer counts elapsed seconds from the moment the timer starts
+  (when the monkey stops moving, see Sprint 01b) until the monkey is
+  found.
+- Elapsed time keeps counting after the 60 second countdown reaches 0.
+  The countdown value stays at 0 because of Mathf.Max. IsRunning now
+  stays true after 0 until StopTimer() runs. Nothing else reads
+  IsRunning.
+- The panel text is optional. If Time Text is not assigned, the time is
+  not shown and nothing breaks.
+- The reward calculation and its order (coin reward before
+  CompleteCurrentLevel) are not changed.
+
+CHANGES
+- Edited: Assets/Scripts/LevelTimer.cs
+  New private field elapsedSeconds. New property ElapsedWholeSeconds.
+  Update() adds Time.deltaTime to elapsedSeconds while running. The two
+  lines that set IsRunning to false at 0 were removed. StartTimer()
+  resets elapsedSeconds.
+- Edited: Assets/Scripts/LevelCompletePanelController.cs
+  New optional field timeText. New private field levelTimer, found in
+  ResolveReferences(). UpdatePanelUI() writes the time after the tries
+  text.
+- No scene, prefab, or other script changes.
+
+INSPECTOR STEPS (by hand)
+- JungleMap: add a TMP text on Canvas/LevelCompletePanel and assign it to
+  Time Text on LevelCompletePanelController.
+- BeachMap and SnowMap: same step when their setup is done.
+
+DONE CONDITIONS AND RESULTS (JungleMap)
+Write PASS or FAIL after each line.
+- Panel shows Time: M:SS after the monkey is found: ___
+- Value matches the time from the monkey stopping to the right tap: ___
+- Time keeps counting after the HUD countdown reaches 0:00: ___
+- HUD countdown stays at 0:00 and play continues: ___
+- Restart resets the elapsed time: ___
+- Stars, score, bananas and coins behave as before: ___
+- No new red errors in the Unity Console: ___
+
+KNOWN ISSUES / NOTES
+- Not compiled or run when this doc was written. Results above are
+  blank until the developer runs the smoke test.
+- Found while reading JungleMap (not fixed, not part of this sprint):
+  the Next button on the level-complete panel calls
+  LevelCompletePanelController.LoadNextLevel but its On Click target is
+  empty (fileID 0). No button was found calling
+  LevelCompletePanelController.RestartCurrentLevel; two buttons call
+  MenuWindowController.RestartLevel. Check these in the Inspector.
+  BeachMap and SnowMap were not checked.
+Write anything else unexpected here, or write none.
+___
+
+NOT DONE YET
+- BeachMap and SnowMap timer setup (from Sprint 01) and Time Text.
+- Rewards based on time.
+- Update CLAUDE.md: timer moves from partly done to done.
+
+NEXT
+- Run the smoke test and fill in the results. Fix the Next and Restart
+  button wiring by hand if the check confirms it. Then choose Sprint 02
+  from the Phase 2 list in CLAUDE.md. It starts with a plan and waits
+  for approval.

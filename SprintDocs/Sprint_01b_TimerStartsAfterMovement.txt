@@ -1,0 +1,60 @@
+SPRINT 01b - TIMER STARTS AFTER MOVEMENT
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Start the level timer only when the monkey has finished moving, not at
+GO. The player cannot tap before IsMovementComplete is true, so the
+timer should not run during the walk.
+
+DESIGN DECISIONS
+- The timer shows the full time (1:00) after GO and while the monkey
+  walks. It starts counting when CharacterPathMover.IsMovementComplete
+  becomes true.
+- LevelTimer watches the monkey in Update(). No new events and no
+  changes to CharacterPathMover.
+- IsMovementComplete cannot be stale: it is set to false in
+  CharacterPathMover.Start() and again in StartGame(), and StartGame()
+  has a hasStarted guard (confirmed by the developer).
+- StopTimer() clears the watched monkey, so finding the monkey cancels
+  a timer that has not started yet.
+
+CHANGES
+- Edited: Assets/Scripts/LevelTimer.cs
+  New private field watchedMover. New public method
+  StartTimerWhenMovementEnds(CharacterPathMover mover): resets the
+  time, does not run yet, remembers the mover. Top of Update() starts
+  the timer once the mover reports IsMovementComplete. StopTimer()
+  clears watchedMover.
+- Edited: Assets/Scripts/MapWindowController.cs
+  One line (around 1668): levelTimer.StartTimer() replaced with
+  levelTimer.StartTimerWhenMovementEnds(activePlayer).
+- No scene, prefab, or CharacterPathMover changes. No Inspector steps.
+
+DONE CONDITIONS AND RESULTS (JungleMap)
+Write PASS or FAIL after each line.
+- HUD shows 1:00 after GO while the monkey walks: ___
+- Timer does not count down while the monkey walks: ___
+- Timer starts counting when the monkey stops: ___
+- Freezes when the pause menu is open: ___
+- Freezes when the monkey is found: ___
+- Finding the monkey cannot leave a pending timer that starts later: ___
+- Restart resets the timer to 1:00 and the cycle repeats: ___
+- Next level behaves the same: ___
+- No new red errors in the Unity Console: ___
+
+KNOWN ISSUES / NOTES
+Write anything unexpected here, or write none.
+___
+
+NOT DONE YET
+- Not compiled or run when this doc was written. Results above are
+  blank until the developer runs the smoke test.
+- BeachMap and SnowMap timer setup (from Sprint 01).
+- Rewards based on remaining time.
+- Update CLAUDE.md: timer moves from partly done to done.
+
+NEXT
+- Run the smoke test, fill in the results, then choose Sprint 02 from
+  the Phase 2 list in CLAUDE.md. It starts with a plan and waits for
+  approval.
