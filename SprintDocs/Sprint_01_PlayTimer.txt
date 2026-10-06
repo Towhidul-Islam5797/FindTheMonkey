@@ -1,0 +1,51 @@
+SPRINT 01 - PLAY TIMER
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Add a countdown timer to the level HUD. The timer starts after the
+3-2-1-GO countdown, pauses with the game, and stops when the monkey is
+found. Running out of time does not end the level. There is no
+game-over.
+
+DESIGN DECISIONS
+- Countdown from 60 seconds. The value is editable in the Inspector.
+- At 0 the timer stops and play continues.
+- The timer uses Time.deltaTime, so it pauses automatically whenever
+  Time.timeScale is 0 (countdown, pause menu, complete panel).
+- Using the remaining time for rewards is not part of this sprint.
+
+CHANGES
+- New: Assets/Scripts/LevelTimer.cs (and LevelTimer.cs.meta)
+  Counts down, stops when the monkey is found, tells listeners when the
+  whole second changes.
+- Edited: Assets/Scripts/GameplayHUD.cs
+  New optional Timer Text field. Shows the time as M:SS.
+- Edited: Assets/Scripts/MapWindowController.cs
+  One block before activePlayer.StartGame() that starts the timer.
+- Edited: Assets/Scenes/Gameplay/JungleMap.unity
+  LevelTimer component added to the LevelState object. TimerText added
+  to the HUD and assigned to GameplayHUD.
+
+DONE CONDITIONS AND RESULTS (JungleMap)
+Write PASS or FAIL after each line.
+- HUD shows 1:00 before GO: ___
+- Counts down every second after GO: ___
+- Freezes when the pause menu is open: ___
+- Freezes when the monkey is found: ___
+- Stars and rewards behave as before: ___
+- Restart resets the timer to 1:00: ___
+- At 0:00 the timer stays at 0:00 and play continues: ___
+
+KNOWN ISSUES / NOTES
+Write anything unexpected here, or write none.
+___
+
+NOT DONE YET
+- BeachMap and SnowMap setup (same Unity steps as JungleMap).
+- Rewards based on remaining time.
+- Update CLAUDE.md: timer moves from partly done to done.
+
+NEXT
+- Finish Beach and Snow setup, then choose Sprint 02 from the Phase 2
+  list in CLAUDE.md. It starts with a plan and waits for approval.

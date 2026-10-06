@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 9e036eb1e7e2f114eb60795f87c10cf4
+guid: 8fa0e66e0ee940b4dbdc05a03b94fd74
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5806429548128397179
-    second: trophy_0
+      213: 8657793866415726961
+    second: Jungle Treasure Hourglass_0
+  - first:
+      213: -384872219000675191
+    second: Jungle Treasure Hourglass_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -152,13 +155,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: trophy_0
+      name: Jungle Treasure Hourglass_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1842
-        height: 2043
+        width: 837
+        height: 1178
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -167,8 +170,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 588997af61b6b6fa0800000000000000
-      internalID: -5806429548128397179
+      spriteID: 171e34a86a9a62870800000000000000
+      internalID: 8657793866415726961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Jungle Treasure Hourglass_1
+      rect:
+        serializedVersion: 2
+        x: 145
+        y: 103
+        width: 7
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9846c8681c8a8aaf0800000000000000
+      internalID: -384872219000675191
       vertices: []
       indices: 
       edges: []
@@ -177,7 +202,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: f3fd58b1fc3a30842afe34e6aba80f66
     internalID: 0
     vertices: []
     indices: 
@@ -187,7 +212,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      trophy_0: -5806429548128397179
+      Jungle Treasure Hourglass_0: 8657793866415726961
+      Jungle Treasure Hourglass_1: -384872219000675191
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

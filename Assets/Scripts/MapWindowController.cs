@@ -1661,6 +1661,13 @@ public class MapWindowController : MonoBehaviour
             activePlayer
         );
 
+        LevelTimer levelTimer = FindFirstObjectByType<LevelTimer>();
+
+        if (levelTimer != null)
+        {
+            levelTimer.StartTimer();
+        }
+
         activePlayer.StartGame();
     }
 

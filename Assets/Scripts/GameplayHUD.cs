@@ -31,6 +31,10 @@ public class GameplayHUD : MonoBehaviour
     [SerializeField]
     private TMP_Text starText;
 
+    [Tooltip("Optional level timer text.")]
+    [SerializeField]
+    private TMP_Text timerText;
+
     [Header("Formatting")]
     [SerializeField]
     private bool useThousandsSeparator = false;
@@ -46,6 +50,7 @@ public class GameplayHUD : MonoBehaviour
     private bool showDebugLogs = false;
 
     private bool isSubscribed;
+    private LevelTimer levelTimer;
 
     private void Awake()
     {
@@ -55,6 +60,7 @@ public class GameplayHUD : MonoBehaviour
     private void OnEnable()
     {
         FindLevelStateIfMissing();
+        FindLevelTimerIfMissing();
         SubscribeToEvents();
         RefreshHUD();
     }
@@ -86,6 +92,12 @@ public class GameplayHUD : MonoBehaviour
         }
     }
 
+    private void FindLevelTimerIfMissing()
+    {
+        if (levelTimer == null)
+            levelTimer = FindFirstObjectByType<LevelTimer>();
+    }
+
     private void SubscribeToEvents()
     {
         if (levelState == null || isSubscribed)
@@ -96,6 +108,7 @@ public class GameplayHUD : MonoBehaviour
         levelState.OnBananaChanged += UpdateBananaText;
         levelState.OnTryChanged += UpdateTryText;
         levelState.OnStarsChanged += UpdateStarText;
+        if (levelTimer != null) levelTimer.OnSecondsChanged += UpdateTimerText;
 
         isSubscribed = true;
     }
@@ -110,6 +123,7 @@ public class GameplayHUD : MonoBehaviour
         levelState.OnBananaChanged -= UpdateBananaText;
         levelState.OnTryChanged -= UpdateTryText;
         levelState.OnStarsChanged -= UpdateStarText;
+        if (levelTimer != null) levelTimer.OnSecondsChanged -= UpdateTimerText;
 
         isSubscribed = false;
     }
@@ -124,6 +138,7 @@ public class GameplayHUD : MonoBehaviour
         UpdateBananaText(levelState.TotalBananas);
         UpdateTryText(levelState.TryCount);
         UpdateStarText(levelState.EarnedStars);
+        if (levelTimer != null) UpdateTimerText(levelTimer.DisplaySeconds);
 
         if (showDebugLogs)
         {
@@ -167,6 +182,12 @@ public class GameplayHUD : MonoBehaviour
     {
         if (starText != null)
             starText.text = starPrefix + value;
+    }
+
+    private void UpdateTimerText(int totalSeconds)
+    {
+        if (timerText != null)
+            timerText.text = $"{totalSeconds / 60}:{totalSeconds % 60:00}";
     }
 
     private string FormatNumber(int value)
