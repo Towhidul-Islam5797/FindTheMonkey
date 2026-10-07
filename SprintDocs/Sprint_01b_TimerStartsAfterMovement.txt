@@ -33,19 +33,19 @@ CHANGES
 
 DONE CONDITIONS AND RESULTS (JungleMap)
 Write PASS or FAIL after each line.
-- HUD shows 1:00 after GO while the monkey walks: ___
-- Timer does not count down while the monkey walks: ___
-- Timer starts counting when the monkey stops: ___
-- Freezes when the pause menu is open: ___
-- Freezes when the monkey is found: ___
-- Finding the monkey cannot leave a pending timer that starts later: ___
-- Restart resets the timer to 1:00 and the cycle repeats: ___
-- Next level behaves the same: ___
-- No new red errors in the Unity Console: ___
+- HUD shows 1:00 after GO while the monkey walks: PASS
+- Timer does not count down while the monkey walks: PASS
+- Timer starts counting when the monkey stops: PASS
+- Freezes when the pause menu is open: PASS
+- Freezes when the monkey is found: PASS
+- Finding the monkey cannot leave a pending timer that starts later: PASS
+- Restart resets the timer to 1:00 and the cycle repeats: PASS
+- Next level behaves the same: PASS
+- No new red errors in the Unity Console: PASS
 
 KNOWN ISSUES / NOTES
 Write anything unexpected here, or write none.
-___
+none
 
 NOT DONE YET
 - Not compiled or run when this doc was written. Results above are

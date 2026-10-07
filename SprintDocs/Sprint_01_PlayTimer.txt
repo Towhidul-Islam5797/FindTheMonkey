@@ -29,17 +29,17 @@ CHANGES
 
 DONE CONDITIONS AND RESULTS (JungleMap)
 Write PASS or FAIL after each line.
-- HUD shows 1:00 before GO: ___
-- Counts down every second after GO: ___
-- Freezes when the pause menu is open: ___
-- Freezes when the monkey is found: ___
-- Stars and rewards behave as before: ___
-- Restart resets the timer to 1:00: ___
-- At 0:00 the timer stays at 0:00 and play continues: ___
+- HUD shows 1:00 before GO: PASS
+- Counts down every second after GO: PASS
+- Freezes when the pause menu is open: PASS
+- Freezes when the monkey is found: PASS
+- Stars and rewards behave as before: PASS
+- Restart resets the timer to 1:00: PASS
+- At 0:00 the timer stays at 0:00 and play continues: PASS
 
 KNOWN ISSUES / NOTES
 Write anything unexpected here, or write none.
-___
+none
 
 NOT DONE YET
 - BeachMap and SnowMap setup (same Unity steps as JungleMap).

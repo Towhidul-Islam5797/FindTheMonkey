@@ -38,13 +38,13 @@ INSPECTOR STEPS (by hand)
 
 DONE CONDITIONS AND RESULTS (JungleMap)
 Write PASS or FAIL after each line.
-- Panel shows Time: M:SS after the monkey is found: ___
-- Value matches the time from the monkey stopping to the right tap: ___
-- Time keeps counting after the HUD countdown reaches 0:00: ___
-- HUD countdown stays at 0:00 and play continues: ___
-- Restart resets the elapsed time: ___
-- Stars, score, bananas and coins behave as before: ___
-- No new red errors in the Unity Console: ___
+- Panel shows Time: M:SS after the monkey is found: PASS
+- Value matches the time from the monkey stopping to the right tap: PASS
+- Time keeps counting after the HUD countdown reaches 0:00: PASS
+- HUD countdown stays at 0:00 and play continues: PASS
+- Restart resets the elapsed time: PASS
+- Stars, score, bananas and coins behave as before: PASS
+- No new red errors in the Unity Console: PASS
 
 KNOWN ISSUES / NOTES
 - Not compiled or run when this doc was written. Results above are
@@ -57,7 +57,7 @@ KNOWN ISSUES / NOTES
   MenuWindowController.RestartLevel. Check these in the Inspector.
   BeachMap and SnowMap were not checked.
 Write anything else unexpected here, or write none.
-___
+none
 
 NOT DONE YET
 - BeachMap and SnowMap timer setup (from Sprint 01) and Time Text.
