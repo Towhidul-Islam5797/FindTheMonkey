@@ -1,0 +1,96 @@
+SPRINT 02 - TIME BONUS COINS
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Pay extra coins when the player finishes a level fast. The bonus uses
+the elapsed time from Sprint 01c. Stars, score, bananas and the normal
+coin reward are not changed.
+
+DESIGN DECISIONS
+- Three time tiers, set in the Inspector:
+  within 20 seconds = tier 3, within 40 = tier 2, within 60 = tier 1,
+  slower = no bonus.
+- Bonus coin totals per tier: tier 1 = 1, tier 2 = 2, tier 3 = 3.
+- The bonus is cumulative per level, like the star rewards. The best
+  tier is saved per level. Improving the tier pays only the difference.
+  Repeating the same tier or a worse one pays 0.
+- The bonus reuses MapLevelManager.CalculateCumulativeReward. No new
+  reward math.
+- The bonus is claimed after the normal coin reward and after
+  CompleteCurrentLevel(). The order in section 2.4 of CLAUDE.md is
+  unchanged.
+- The time never ends a level or blocks a tap (invariant 14).
+- Everything is optional. If a scene has no LevelTimeBonus or no
+  LevelTimer, no bonus is paid and nothing breaks. If the Time Bonus
+  Text is not assigned, the bonus is still paid but not shown.
+- New PlayerPrefs key: {map}_LevelBestTimeTier_{n}. No existing key was
+  renamed or removed.
+
+CHANGES
+- New: Assets/Scripts/LevelTimeBonus.cs (and its .meta file)
+  Inspector fields for the tier limits and the bonus totals. Public
+  method ClaimBonus(elapsedSeconds) returns the coins to add and saves
+  the best tier.
+- Edited: Assets/Scripts/LevelCompletePanelController.cs
+  New optional field timeBonusText. New private fields levelTimeBonus
+  and lastTimeBonus. ResolveReferences() finds LevelTimeBonus.
+  ShowPanel() claims the bonus after the coin reward block and adds the
+  coins with LevelState.AddCoins. UpdatePanelUI() writes
+  "Time bonus: +N".
+- No scene or prefab edits by the assistant. No other script changes.
+
+INSPECTOR STEPS (by hand, each of JungleMap, BeachMap, SnowMap)
+- Add a LevelTimeBonus component to an always-active object. The
+  LevelController object under Managers was used. One per scene.
+- Under Canvas/LevelCompletePanel/CompleteBox, duplicate the Time text,
+  name it TimerBonusText, place it inside the box, and assign it to
+  Time Bonus Text on LevelCompletePanelController.
+- Save the scene.
+
+DONE CONDITIONS AND RESULTS
+Write PASS or FAIL after each line.
+SnowMap:
+- Level 3, finished in 5 seconds (first time): panel shows
+  Time bonus: +3 and the coin total rose by the normal reward plus 3
+  (36 to 41): PASS
+- Level 2 replayed in 1 to 2 seconds after the tier 3 was already
+  saved: Time bonus: +0 (cumulative, no double payment): PASS
+- Stars, score and bananas behave as before (Level 3: +500, +5): PASS
+- HUD totals match the panel (score 6500, coins 41, bananas 65): PASS
+JungleMap:
+- LevelTimeBonus component added, slot assigned: not tested yet
+- Quick win shows Time bonus: +3: not tested yet
+BeachMap:
+- LevelTimeBonus component added, slot assigned: not tested yet
+- Quick win shows Time bonus: +3: not tested yet
+All maps:
+- A win slower than 60 seconds shows Time bonus: +0: not tested yet
+- A slower win followed by a faster win pays only the difference: not
+  tested yet
+- No new red errors in the Unity Console: not checked
+
+KNOWN ISSUES / NOTES
+- The Time bonus text on SnowMap was wrapping into several lines
+  ("Time / Bonu / S: +3") because the object was too narrow and the font
+  too large. Layout fix by hand: widen it and match the Time text size.
+  Not a code problem.
+- The Time bonus text was first placed outside the panel box. Place it
+  inside, below the Time line.
+- Edits made in Play mode are lost when Play stops. Do the layout in
+  Edit mode.
+- AGENTS.md showed as modified in git. It is written by Unity's AI
+  Assistant and was not touched. Do not commit it.
+- Testing the bonus again on a played level needs a data reset
+  (Assets/Editor/GameDataDebugWindow) or a level not finished yet.
+
+NOT DONE YET
+- JungleMap and BeachMap setup and tests (above).
+- Tuning of the tier limits and bonus coins (balancing sprint).
+- Update CLAUDE.md: time bonus moves from planned to done. Add the new
+  script to the script map and the new PlayerPrefs key to section 2.7.
+
+NEXT
+- Finish the Jungle and Beach setup, run the smoke test, and fill in
+  the results above. Then choose the next Phase 2 item from CLAUDE.md.
+  It starts with a plan and waits for approval.

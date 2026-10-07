@@ -45,6 +45,9 @@ public class LevelCompletePanelController : MonoBehaviour
     [SerializeField]
     private TMP_Text timeText;
 
+    [SerializeField]
+    private TMP_Text timeBonusText;
+
     // -------------------------------------------------------
     // STARS
     // -------------------------------------------------------
@@ -111,6 +114,8 @@ public class LevelCompletePanelController : MonoBehaviour
 
     private bool panelShown;
     private LevelTimer levelTimer;
+    private LevelTimeBonus levelTimeBonus;
+    private int lastTimeBonus;
 
     // -------------------------------------------------------
     // UNITY
@@ -176,6 +181,12 @@ public class LevelCompletePanelController : MonoBehaviour
         {
             levelTimer =
                 FindFirstObjectByType<LevelTimer>();
+        }
+
+        if (levelTimeBonus == null)
+        {
+            levelTimeBonus =
+                FindFirstObjectByType<LevelTimeBonus>();
         }
     }
 
@@ -286,6 +297,24 @@ public class LevelCompletePanelController : MonoBehaviour
             levelState.AddCoins(
                 coinReward
             );
+        }
+
+        lastTimeBonus = 0;
+
+        if (levelTimeBonus != null &&
+            levelTimer != null)
+        {
+            lastTimeBonus =
+                levelTimeBonus.ClaimBonus(
+                    levelTimer.ElapsedWholeSeconds
+                );
+
+            if (lastTimeBonus > 0)
+            {
+                levelState.AddCoins(
+                    lastTimeBonus
+                );
+            }
         }
 
         UpdatePanelUI(
@@ -400,6 +429,12 @@ public class LevelCompletePanelController : MonoBehaviour
 
             timeText.text =
                 $"Time: {seconds / 60}:{seconds % 60:00}";
+        }
+
+        if (timeBonusText != null)
+        {
+            timeBonusText.text =
+                $"Time bonus: +{lastTimeBonus}";
         }
 
         UpdateStars(
