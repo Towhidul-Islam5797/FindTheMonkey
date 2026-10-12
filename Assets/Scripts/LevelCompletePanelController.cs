@@ -48,6 +48,11 @@ public class LevelCompletePanelController : MonoBehaviour
     [SerializeField]
     private TMP_Text timeBonusText;
 
+    [Header("Time Bonus Animation")]
+    [Tooltip("Optional. Flies the +N time bonus onto the coin reward text.")]
+    [SerializeField]
+    private TimeBonusFlyAnimation timeBonusFly;
+
     // -------------------------------------------------------
     // STARS
     // -------------------------------------------------------
@@ -116,6 +121,7 @@ public class LevelCompletePanelController : MonoBehaviour
     private LevelTimer levelTimer;
     private LevelTimeBonus levelTimeBonus;
     private int lastTimeBonus;
+    private int lastCoinReward;
 
     // -------------------------------------------------------
     // UNITY
@@ -201,6 +207,11 @@ public class LevelCompletePanelController : MonoBehaviour
 
     private void UnsubscribeFromLevelState()
     {
+        if (timeBonusFly != null)
+        {
+            timeBonusFly.OnArrived -= HandleTimeBonusArrived;
+        }
+
         if (levelState == null)
             return;
 
@@ -214,6 +225,15 @@ public class LevelCompletePanelController : MonoBehaviour
     private void HandleMonkeyFound()
     {
         ShowPanel();
+    }
+
+    private void HandleTimeBonusArrived()
+    {
+        if (coinRewardText != null)
+        {
+            coinRewardText.text =
+                $"+{lastCoinReward + lastTimeBonus}";
+        }
     }
 
     public void ShowPanel()
@@ -317,6 +337,8 @@ public class LevelCompletePanelController : MonoBehaviour
             }
         }
 
+        lastCoinReward = coinReward;
+
         UpdatePanelUI(
             earnedStars,
             coinReward
@@ -324,6 +346,14 @@ public class LevelCompletePanelController : MonoBehaviour
 
         OpenPanel();
         UpdateButtonStates();
+
+        if (timeBonusFly != null &&
+            lastTimeBonus > 0)
+        {
+            timeBonusFly.OnArrived -= HandleTimeBonusArrived;
+            timeBonusFly.OnArrived += HandleTimeBonusArrived;
+            timeBonusFly.Play(lastTimeBonus);
+        }
 
         if (pauseGameWhenOpened)
         {
