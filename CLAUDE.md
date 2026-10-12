@@ -3,7 +3,7 @@
 Single-player kids' hide-and-seek game for Android and iOS.
 Unity 6000.3.6f1, URP 2D, Input System, TextMesh Pro. Portrait only.
 All gameplay is built on a Canvas with UI objects (RectTransform), reference resolution 1080x1920.
-Facts below were checked against the real code at commit 78035b2 (Sprint 01a). Sprint 01b and 01c are described from the approved plans and were not re-read in the code. Items marked (not verified) were not checked.
+Facts below were checked against the real code up to commit 232478d (Sprint 02). Items marked (not verified) were not checked.
 
 ## 0. Read this first
 These rules apply in every permission mode, including Accept edits and any auto-approval mode.
@@ -58,9 +58,10 @@ A map scene (for example JungleMap) holds everything for that world:
 | ArrivalLayerTrigger | Old script, unused. Arrival markers are now plain RectTransforms listed in CharacterPathMover. | none |
 | HidingObject | One tappable object. Handles tap, slide, reveal or return. Decides right or wrong. | CharacterPathMover, LevelState |
 | LevelState | Current run: tries, stars, rewards. Saves totals. Fires events. | MapLevelManager |
-| LevelCompletePanelController | Shows the win panel (stars, rewards, tries, time spent). Calculates coin reward, completes the level. | LevelState, MapLevelManager, LevelTimer |
+| LevelCompletePanelController | Shows the win panel (stars, rewards, tries, time spent, time bonus). Calculates coin reward, completes the level. | LevelState, MapLevelManager, LevelTimer |
 | GameplayHUD | Shows score, coins, bananas, tries, stars, and the timer. Listens to LevelState and LevelTimer events. | LevelState, LevelTimer |
 | LevelTimer | Countdown from 60 and elapsed time. Waits for the monkey to stop, then counts. Stops when the monkey is found. Never ends the level. | CharacterPathMover (reads IsMovementComplete), LevelState |
+| LevelTimeBonus | Turns the elapsed time into a time tier and a bonus coin amount. Saves the best tier per level. | MapLevelManager (MapId, CurrentLevel, CalculateCumulativeReward) |
 | MenuWindowController | Pause menu: open, close, restart, main menu. | scenes |
 | ShopManager, ShopItemUI | Shop window. Buys skins with coins or bananas. Stores the selected item. | LevelState totals |
 | PlayerSkinController | Applies the selected skin by swapping the animator override. | ShopManager |
@@ -97,6 +98,7 @@ Never reorder steps 10 and 11.
 - The timer never ends the level, never blocks a tap, and never changes stars or rewards. A time bonus is a separate future sprint.
 - LevelTimer is optional. If a scene has none, the HUD and the panel show nothing extra and nothing breaks.
 - Each of the three map scenes has a LevelTimer component, a TimerText on the HUD, and a TimeText on the level-complete panel (found by reading the scene files; not verified in the Inspector).
+- The time bonus is claimed in LevelCompletePanelController.ShowPanel, after the star coin reward. Default tiers: within 20 s = tier 3, 40 s = tier 2, 60 s = tier 1. Total bonus coins are 3, 2, 1 for tiers 3, 2, 1, paid only for an improvement over the best saved tier, like the stars. Slow players keep their normal reward. Tiers and totals are Inspector fields on LevelTimeBonus, set per scene.
 
 ### 2.5 Events (LevelState)
 OnScoreChanged, OnTotalScoreChanged, OnBananaChanged, OnCoinChanged, OnTryChanged, OnStarsChanged, OnScoreRewarded, OnBananaRewarded, OnMonkeyFound.
@@ -111,6 +113,7 @@ Any timer that uses Time.deltaTime pauses automatically. Do not use unscaled tim
 - MapLevelManager, per map id (Jungle, Beach, Snow):
   {map}_SelectedLevel, {map}_UnlockedLevel, {map}_LevelStars_{n}, {map}_LevelCompleted_{n}, plus star-reward-claimed flags.
 - ShopManager: SelectedItemKey holds the selected skin id.
+- LevelTimeBonus: {map}_LevelBestTimeTier_{n} holds the best time tier (0 to 3) for each level.
 - Sound, music and vibration toggles are not saved yet.
 - To reset saved data during development, use Assets/Editor/GameDataDebugWindow (it clears PlayerPrefs). Do not add reset code to the game.
 
@@ -212,7 +215,7 @@ Stop and ask the developer before continuing if:
 9. BeachMap and SnowMap open without errors.
 10. The HUD shows 1:00 and does not move while the monkey walks. It starts counting down when the monkey stops.
 11. The pause menu freezes the timer. Finding the monkey stops it.
-12. The level-complete panel shows Time: M:SS. If you wait past 0:00 first, the panel time keeps counting past 1:00.
+12. The level-complete panel shows Time: M:SS. If you wait past 0:00 first, the panel time keeps counting past 1:00. The panel also shows Time bonus: +3 on a first completion under 20 seconds, and +0 on a repeat. A repeat of a 3-star level also pays +0 for score, bananas and coins, which is correct.
 13. Restart from the level-complete panel and Next both load a level that starts properly (countdown, monkey moves, timer waits and then counts). Check this in all three maps.
 14. The Unity Console shows no new red errors.
 
@@ -226,7 +229,7 @@ Stop and ask the developer before continuing if:
 
 ### In scope now (Phase 2: polish, monetization, release builds)
 - Play timer: done (Sprint 01a to 01c). It starts when the monkey stops, never ends the level, and the level-complete panel shows the time spent.
-- Time bonus: faster completion gives extra coins (planned Sprint 02).
+- Time bonus: done (Sprint 02). Fast finishes earn bonus coins by time tier, paid only on improvement.
 - Harder hiding in later levels (partial visibility, varied positions, faster movement).
 - Hint system, and coins that are useful (hints, extra tries).
 - Difficulty balancing: early levels easy, later levels challenging.
