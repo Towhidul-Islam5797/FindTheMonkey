@@ -2,7 +2,7 @@
 - Project name: FindTheMonkey
 - Unity version: Unity 6000.3.6f1
 - Active game object:
-  - Name: LevelController
+  - Name: Levels
   - Tag: Untagged
-  - Layer: Default
+  - Layer: UI
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
