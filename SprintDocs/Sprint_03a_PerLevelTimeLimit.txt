@@ -1,0 +1,98 @@
+SPRINT 03a - PER-LEVEL TIME LIMIT
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Let each level (Level_1 to Level_5 in JungleMap, BeachMap, SnowMap) have
+its own countdown time. Before this sprint the timer had one time limit
+per scene. The time bonus tiers are not part of this sprint (see 03b).
+
+DESIGN DECISIONS
+- A tiny component, LevelSettings, sits on each level root. It only
+  holds numbers. LevelTimer reads the active level's number.
+- 0 means "use the LevelTimer value in the scene". A level with no
+  LevelSettings also uses the scene value. Scenes that were not set up
+  behave exactly as before.
+- LevelSettings.Current points to the settings of the active level. It
+  is set in OnEnable and cleared in OnDisable. If two levels are enabled
+  at once it logs a warning and the last one wins.
+- The timer sets the level's time in Start(), so the HUD shows this
+  level's time during the 3-2-1-GO countdown, and again when the timer
+  starts.
+- No core script changed. MapWindowController still calls
+  StartTimerWhenMovementEnds and nothing else. LevelCompletePanelController,
+  GameplayHUD and LevelTimeBonus are unchanged.
+- The timer still never ends a level or blocks a tap (invariant 14).
+- No PlayerPrefs key was added, renamed or removed.
+
+CHANGES
+- New: Assets/Scripts/LevelSettings.cs (and its .meta file)
+  [DisallowMultipleComponent]. Field timeLimitSeconds (Min 0, default 0),
+  public TimeLimitSeconds, public static Current, OnEnable and OnDisable.
+- Edited: Assets/Scripts/LevelTimer.cs
+  Tooltip on timeLimitSeconds updated.
+  New private property CurrentTimeLimit (level value if above 0, else
+  timeLimitSeconds).
+  New Start(): sets remainingSeconds = CurrentTimeLimit and calls
+  NotifyIfSecondsChanged().
+  StartTimer() and StartTimerWhenMovementEnds() now use CurrentTimeLimit.
+  Awake, Update, StopTimer and the field timeLimitSeconds are unchanged.
+- No scene or prefab edits by the assistant. No other script changes.
+
+INSPECTOR STEPS (by hand, each of JungleMap, BeachMap, SnowMap)
+- Add the LevelSettings component to each of Level_1 to Level_5
+  (15 components in total).
+- Set Time Limit Seconds on each. Leave 0 to use the LevelTimer value.
+- Keep only one level root active when saving the scene, to avoid the
+  "two levels active" warning at load.
+- Save the scene. Include LevelSettings.cs.meta in the commit.
+
+DONE CONDITIONS AND RESULTS
+Write PASS or FAIL after each line.
+Code:
+- Only LevelSettings.cs (new) and LevelTimer.cs changed: PASS
+- Diff reviewed against the plan, no other lines changed: PASS
+- Compiles without red errors in the Unity Console: not checked
+Play mode:
+- A level with 30 seconds shows 0:30 on the HUD during 3-2-1-GO: not
+  tested yet
+- It counts down from 30 after the monkey stops: not tested yet
+- A level with 0, or with no LevelSettings, still shows 1:00: not
+  tested yet
+- Restart and Next start the next level with its own time: not tested
+  yet
+- Pause menu still freezes the timer and finding the monkey stops it:
+  not tested yet
+- Checked in JungleMap, BeachMap and SnowMap: not tested yet
+- No new red errors in the Unity Console: not checked
+
+KNOWN ISSUES / NOTES
+- The time bonus tiers (20 / 40 / 60 seconds) are still one set per
+  scene. A level with a 30 second limit keeps tier 1 up to 60 seconds, so
+  the tiers can be longer than the countdown. Tying the tiers to the
+  level is the next step (03b).
+- If a scene is saved with two level roots both active, a warning
+  "Two levels are active at once" can print once at load. The result is
+  still correct. It is a log line only.
+- Not verified: that GameplayHUD is subscribed to OnSecondsChanged
+  before LevelTimer.Start runs. If the HUD shows 1:00 during the
+  countdown, check this first.
+- LevelSettings.Current is static. If Enter Play Mode Options has
+  domain reload turned off, a stale value could carry into the next run.
+  OnDisable clears it, so this should be harmless. Not checked.
+- The assistant cannot run Unity. Nothing here has been seen running.
+- AGENTS.md shows as modified in git. It is written by Unity's AI
+  Assistant and was not touched. Do not commit it.
+
+NOT DONE YET
+- Add LevelSettings to the levels in all three scenes and set the times.
+- Play-mode tests (above).
+- Per-level time bonus tiers and bonus totals (Sprint 03b).
+- Update CLAUDE.md after the test: new script in the script map, and a
+  note that LevelTimer reads LevelSettings.
+- Sprint 02b Play-mode tests are still open (see its doc).
+
+NEXT
+- Set up the components, run the smoke test and fill in the results
+  above. Then plan Sprint 03b. It starts with a plan and waits for
+  approval.

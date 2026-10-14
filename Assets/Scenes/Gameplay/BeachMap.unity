@@ -3314,7 +3314,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &308535181
 GameObject:
@@ -5959,6 +5959,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 622881671}
+  - component: {fileID: 622881672}
   m_Layer: 5
   m_Name: Level_5
   m_TagString: Untagged
@@ -5990,6 +5991,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &622881672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622881670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d972919c63954946a1fd67dedb21711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
+  timeLimitSeconds: 30
 --- !u!1 &630780056
 GameObject:
   m_ObjectHideFlags: 0
@@ -7056,6 +7070,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &797106652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 797106653}
+  m_Layer: 5
+  m_Name: --------------------------------- (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &797106653
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 797106652}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2047660899}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &802528175
 GameObject:
   m_ObjectHideFlags: 0
@@ -8289,7 +8338,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &890551590
 GameObject:
@@ -11739,6 +11788,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1329477466}
+  - component: {fileID: 1329477467}
   m_Layer: 5
   m_Name: Level_4
   m_TagString: Untagged
@@ -11770,6 +11820,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1329477467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329477465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d972919c63954946a1fd67dedb21711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
+  timeLimitSeconds: 30
 --- !u!1 &1329614303
 GameObject:
   m_ObjectHideFlags: 0
@@ -11847,6 +11910,9 @@ MonoBehaviour:
   triesText: {fileID: 372210945}
   timeText: {fileID: 713692454}
   timeBonusText: {fileID: 1771201183}
+  bonusShowDelaySeconds: 0.5
+  bonusHoldSeconds: 1.5
+  bonusHideDelaySeconds: 0.4
   starObjects:
   - {fileID: 0}
   - {fileID: 0}
@@ -12744,7 +12810,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1418983714
 GameObject:
@@ -14419,7 +14485,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1584376921
 GameObject:
@@ -15369,7 +15435,7 @@ GameObject:
   - component: {fileID: 1771201184}
   - component: {fileID: 1771201183}
   m_Layer: 5
-  m_Name: TImerBonusText
+  m_Name: TimerBonusText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15391,8 +15457,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 263.00015, y: -357.75034}
-  m_SizeDelta: {x: -642, y: 80}
+  m_AnchoredPosition: {x: 96.78766, y: -519}
+  m_SizeDelta: {x: -713.4247, y: 80}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1771201183
 MonoBehaviour:
@@ -15414,7 +15480,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +1000
+  m_text: +50
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 74689ca7a244fec4e8aef21ae94ccde4, type: 2}
   m_sharedMaterial: {fileID: -1781927087642280860, guid: 74689ca7a244fec4e8aef21ae94ccde4, type: 2}
@@ -15599,7 +15665,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1848260272
 GameObject:
@@ -16860,6 +16926,7 @@ RectTransform:
   - {fileID: 1258582176}
   - {fileID: 867331223}
   - {fileID: 1771201182}
+  - {fileID: 797106653}
   - {fileID: 1390724461}
   - {fileID: 1274364761}
   m_Father: {fileID: 1947976170}
@@ -18234,6 +18301,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7189807759376353859}
+  - component: {fileID: 7189807759376353860}
   m_Layer: 5
   m_Name: Level_2
   m_TagString: Untagged
@@ -18250,6 +18318,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7189807759843634009}
+  - component: {fileID: 7189807759843634010}
   m_Layer: 5
   m_Name: Level_3
   m_TagString: Untagged
@@ -19471,6 +19540,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5804910080759718694}
+  - component: {fileID: 5804910080759718695}
   m_Layer: 5
   m_Name: Level_1
   m_TagString: Untagged
@@ -20380,6 +20450,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &5804910080759718695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3510568655520682001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d972919c63954946a1fd67dedb21711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
+  timeLimitSeconds: 20
 --- !u!224 &5827011762942011127
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21049,6 +21132,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7189807759376353860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283851509082601844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d972919c63954946a1fd67dedb21711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
+  timeLimitSeconds: 20
 --- !u!224 &7189807759843634009
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21073,6 +21169,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7189807759843634010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 283851509554845806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d972919c63954946a1fd67dedb21711, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
+  timeLimitSeconds: 30
 --- !u!114 &7436640701991328223
 MonoBehaviour:
   m_ObjectHideFlags: 0

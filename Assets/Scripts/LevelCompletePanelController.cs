@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -48,10 +49,18 @@ public class LevelCompletePanelController : MonoBehaviour
     [SerializeField]
     private TMP_Text timeBonusText;
 
-    [Header("Time Bonus Animation")]
-    [Tooltip("Optional. Flies the +N time bonus onto the coin reward text.")]
-    [SerializeField]
-    private TimeBonusFlyAnimation timeBonusFly;
+    [Header("Time Bonus Popup")]
+    [Tooltip("Seconds to wait after the panel opens before the bonus label appears.")]
+    [SerializeField, Min(0f)]
+    private float bonusShowDelaySeconds = 0.5f;
+
+    [Tooltip("Seconds the bonus label stays visible before the coin text updates.")]
+    [SerializeField, Min(0f)]
+    private float bonusHoldSeconds = 1.0f;
+
+    [Tooltip("Seconds to wait after the coin text updates before the label hides.")]
+    [SerializeField, Min(0f)]
+    private float bonusHideDelaySeconds = 0.4f;
 
     // -------------------------------------------------------
     // STARS
@@ -207,11 +216,6 @@ public class LevelCompletePanelController : MonoBehaviour
 
     private void UnsubscribeFromLevelState()
     {
-        if (timeBonusFly != null)
-        {
-            timeBonusFly.OnArrived -= HandleTimeBonusArrived;
-        }
-
         if (levelState == null)
             return;
 
@@ -227,13 +231,26 @@ public class LevelCompletePanelController : MonoBehaviour
         ShowPanel();
     }
 
-    private void HandleTimeBonusArrived()
+    private IEnumerator PlayTimeBonusPopup()
     {
-        if (coinRewardText != null)
-        {
-            coinRewardText.text =
-                $"+{lastCoinReward + lastTimeBonus}";
-        }
+        yield return new WaitForSecondsRealtime(
+            bonusShowDelaySeconds
+        );
+
+        timeBonusText.gameObject.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(
+            bonusHoldSeconds
+        );
+
+        coinRewardText.text =
+            $"+{lastCoinReward + lastTimeBonus}";
+
+        yield return new WaitForSecondsRealtime(
+            bonusHideDelaySeconds
+        );
+
+        timeBonusText.gameObject.SetActive(false);
     }
 
     public void ShowPanel()
@@ -347,12 +364,11 @@ public class LevelCompletePanelController : MonoBehaviour
         OpenPanel();
         UpdateButtonStates();
 
-        if (timeBonusFly != null &&
-            lastTimeBonus > 0)
+        if (lastTimeBonus > 0 &&
+            timeBonusText != null &&
+            coinRewardText != null)
         {
-            timeBonusFly.OnArrived -= HandleTimeBonusArrived;
-            timeBonusFly.OnArrived += HandleTimeBonusArrived;
-            timeBonusFly.Play(lastTimeBonus);
+            StartCoroutine(PlayTimeBonusPopup());
         }
 
         if (pauseGameWhenOpened)
@@ -463,8 +479,9 @@ public class LevelCompletePanelController : MonoBehaviour
 
         if (timeBonusText != null)
         {
-            timeBonusText.text =
-                $"Time bonus: +{lastTimeBonus}";
+            timeBonusText.text = $"+{lastTimeBonus}";
+
+            timeBonusText.gameObject.SetActive(false);
         }
 
         UpdateStars(

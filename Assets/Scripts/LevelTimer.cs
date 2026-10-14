@@ -10,7 +10,7 @@ public class LevelTimer : MonoBehaviour
     private LevelState levelState;
 
     [Header("Timer")]
-    [Tooltip("Time given for each level, in seconds.")]
+    [Tooltip("Default time for every level, in seconds. A LevelSettings on the active level overrides it.")]
     [SerializeField, Min(1f)]
     private float timeLimitSeconds = 60f;
 
@@ -26,6 +26,20 @@ public class LevelTimer : MonoBehaviour
     public int ElapsedWholeSeconds => Mathf.FloorToInt(elapsedSeconds);
 
     public event Action<int> OnSecondsChanged;
+
+    private float CurrentTimeLimit
+    {
+        get
+        {
+            if (LevelSettings.Current != null &&
+                LevelSettings.Current.TimeLimitSeconds > 0f)
+            {
+                return LevelSettings.Current.TimeLimitSeconds;
+            }
+
+            return timeLimitSeconds;
+        }
+    }
 
     private void Awake()
     {
@@ -45,6 +59,12 @@ public class LevelTimer : MonoBehaviour
     {
         if (levelState != null)
             levelState.OnMonkeyFound -= StopTimer;
+    }
+
+    private void Start()
+    {
+        remainingSeconds = CurrentTimeLimit;
+        NotifyIfSecondsChanged();
     }
 
     private void Update()
@@ -67,7 +87,7 @@ public class LevelTimer : MonoBehaviour
 
     public void StartTimer()
     {
-        remainingSeconds = timeLimitSeconds;
+        remainingSeconds = CurrentTimeLimit;
         elapsedSeconds = 0f;
         IsRunning = true;
         NotifyIfSecondsChanged();
@@ -75,7 +95,7 @@ public class LevelTimer : MonoBehaviour
 
     public void StartTimerWhenMovementEnds(CharacterPathMover mover)
     {
-        remainingSeconds = timeLimitSeconds;
+        remainingSeconds = CurrentTimeLimit;
         IsRunning = false;
         watchedMover = mover;
         NotifyIfSecondsChanged();

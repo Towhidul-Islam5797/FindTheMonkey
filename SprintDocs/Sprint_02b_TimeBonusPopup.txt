@@ -1,0 +1,95 @@
+SPRINT 02b - TIME BONUS POPUP
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Show the time bonus on the level-complete panel as a short popup
+sequence. The "Time bonus: +N" label appears, then the coin reward text
+updates to include the bonus, then the label hides. Display only. The
+bonus coins are already saved in Sprint 02.
+
+DESIGN DECISIONS
+- A first attempt used a flying "+N" text (TimeBonusFlyAnimation). It
+  needed a second text object and extra wiring per scene, and it was not
+  working in the scenes. It was replaced by a simple popup sequence that
+  reuses the existing Time Bonus Text and Coin Reward Text.
+- The sequence uses WaitForSecondsRealtime, because the panel sets
+  Time.timeScale = 0.
+- Order: wait show delay, show the label, wait hold, set the coin text to
+  "+" followed by star coins plus bonus, wait hide delay, hide the label.
+- The label is hidden when the panel is built. It is shown only when the
+  bonus is greater than 0. With a bonus of 0 it never shows.
+- The star, coin and time bonus calculation and its order are unchanged.
+  The bonus still adds to coins only (LevelState.AddCoins), not score,
+  bananas or stars.
+- No new PlayerPrefs key. No existing key was renamed or removed.
+
+CHANGES
+- Edited: Assets/Scripts/LevelCompletePanelController.cs (only file)
+  Added: using System.Collections.
+  Added: Header "Time Bonus Popup" with bonusShowDelaySeconds (0.5),
+  bonusHoldSeconds (1.0), bonusHideDelaySeconds (0.4), all [Min(0f)].
+  Added: private field lastCoinReward, set before UpdatePanelUI.
+  Added: PlayTimeBonusPopup() coroutine.
+  Added: in ShowPanel, after OpenPanel() and UpdateButtonStates(),
+  StartCoroutine(PlayTimeBonusPopup()) when lastTimeBonus > 0 and both
+  timeBonusText and coinRewardText are assigned.
+  Added: in UpdatePanelUI, the timeBonusText object is hidden after its
+  text is set.
+- The fly animation was added and then removed in this sprint:
+  TimeBonusFlyAnimation.cs was created, then deleted by hand in Unity
+  together with its .meta file and its scene components.
+- No script other than LevelCompletePanelController.cs was changed in
+  the final result.
+
+INSPECTOR STEPS (by hand, each of JungleMap, BeachMap, SnowMap)
+- Remove the TimeBonusFlyAnimation component (done), then delete the
+  script in Unity (done).
+- Check that Time Bonus Text and Coin Reward Text are assigned on
+  LevelCompletePanelController (checked in the scene files: all three
+  maps are assigned).
+- Set the Time Bonus Popup values. The scenes currently hold 0.5 show
+  delay, 1.5 hold, 0.4 hide delay.
+- Save the scene.
+
+DONE CONDITIONS AND RESULTS
+Write PASS or FAIL after each line.
+Scene files (checked by reading the .unity files, not in Play mode):
+- No reference to the old fly script in any scene: PASS
+- No missing-script components in any scene: PASS
+- Every slot on LevelCompletePanelController points to an existing
+  object: PASS
+- Time Bonus Text and Coin Reward Text assigned in all three maps: PASS
+Play mode:
+- First completion under 20 seconds: label appears after the show
+  delay, coin text changes to base plus 3, label hides: not tested yet
+- Repeat of the same level: label never shows, coin text unchanged:
+  not tested yet
+- Restart and Next during the popup still load the level: not tested yet
+- Done in JungleMap, BeachMap and SnowMap: not tested yet
+- No new red errors in the Unity Console: not checked
+
+KNOWN ISSUES / NOTES
+- Star Objects is empty (3 empty slots) in BeachMap and JungleMap. The
+  same at the last commit, not caused by this sprint. The code skips
+  empty entries, so stars are not shown or hidden by the script there.
+- Restart Button and Next Button are empty on JungleMap. Same at the last
+  commit. The code skips them. Next is just never greyed out on the last
+  level. The OnClick events are still wired.
+- CLAUDE.md smoke test step 12 says the panel shows "Time bonus: +0" on a
+  repeat. After this sprint the label is hidden on a repeat. Update the
+  line after the test.
+- AGENTS.md showed as modified in git. It is written by Unity's AI
+  Assistant and was not touched. Do not commit it.
+- The assistant cannot run Unity. The popup has not been seen running.
+
+NOT DONE YET
+- Play-mode tests (above).
+- Update CLAUDE.md after the test (step 12 and the script notes).
+- Per-level time settings (design options were prepared, no option chosen
+  yet).
+
+NEXT
+- Run the smoke test and fill in the results above. Then decide the
+  per-level time settings option. It starts with a plan and waits for
+  approval.
