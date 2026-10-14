@@ -21,6 +21,15 @@ public class LevelTimeBonus : MonoBehaviour
     [SerializeField, Min(1)]
     private int oneTierMaxSeconds = 60;
 
+    [Header("Tiers From Level Time")]
+    [Tooltip("When the active level has a time limit in LevelSettings, tier 3 is this fraction of that limit.")]
+    [SerializeField, Range(0.05f, 1f)]
+    private float threeTierFraction = 0.33f;
+
+    [Tooltip("When the active level has a time limit in LevelSettings, tier 2 is this fraction of that limit.")]
+    [SerializeField, Range(0.05f, 1f)]
+    private float twoTierFraction = 0.66f;
+
     [Header("Cumulative Coin Bonus Totals")]
     [Tooltip("Total bonus coins for reaching tier 1.")]
     [SerializeField, Min(0)]
@@ -34,6 +43,11 @@ public class LevelTimeBonus : MonoBehaviour
     [SerializeField, Min(0)]
     private int threeTierTotalBonus = 3;
 
+    private void OnValidate()
+    {
+        twoTierFraction = Mathf.Max(twoTierFraction, threeTierFraction);
+    }
+
     public int ClaimBonus(int elapsedSeconds)
     {
         if (mapLevelManager == null)
@@ -46,12 +60,24 @@ public class LevelTimeBonus : MonoBehaviour
         int previousBestTier = PlayerPrefs.GetInt(key, 0);
         int earnedTier = GetTier(elapsedSeconds);
 
+        int oneTotal = oneTierTotalBonus;
+        int twoTotal = twoTierTotalBonus;
+        int threeTotal = threeTierTotalBonus;
+
+        if (LevelSettings.Current != null &&
+            LevelSettings.Current.OverrideBonusCoins)
+        {
+            oneTotal = LevelSettings.Current.OneTierTotalBonus;
+            twoTotal = LevelSettings.Current.TwoTierTotalBonus;
+            threeTotal = LevelSettings.Current.ThreeTierTotalBonus;
+        }
+
         int bonus = mapLevelManager.CalculateCumulativeReward(
             previousBestTier,
             earnedTier,
-            oneTierTotalBonus,
-            twoTierTotalBonus,
-            threeTierTotalBonus
+            oneTotal,
+            twoTotal,
+            threeTotal
         );
 
         if (earnedTier > previousBestTier)
@@ -65,13 +91,27 @@ public class LevelTimeBonus : MonoBehaviour
 
     private int GetTier(int elapsedSeconds)
     {
-        if (elapsedSeconds <= threeTierMaxSeconds)
+        int threeLimit = threeTierMaxSeconds;
+        int twoLimit = twoTierMaxSeconds;
+        int oneLimit = oneTierMaxSeconds;
+
+        if (LevelSettings.Current != null &&
+            LevelSettings.Current.TimeLimitSeconds > 0f)
+        {
+            float limit = LevelSettings.Current.TimeLimitSeconds;
+
+            threeLimit = Mathf.RoundToInt(limit * threeTierFraction);
+            twoLimit = Mathf.RoundToInt(limit * twoTierFraction);
+            oneLimit = Mathf.RoundToInt(limit);
+        }
+
+        if (elapsedSeconds <= threeLimit)
             return 3;
 
-        if (elapsedSeconds <= twoTierMaxSeconds)
+        if (elapsedSeconds <= twoLimit)
             return 2;
 
-        if (elapsedSeconds <= oneTierMaxSeconds)
+        if (elapsedSeconds <= oneLimit)
             return 1;
 
         return 0;

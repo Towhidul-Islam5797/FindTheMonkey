@@ -10,6 +10,37 @@ public class LevelSettings : MonoBehaviour
 
     public float TimeLimitSeconds => timeLimitSeconds;
 
+    [Header("Time Bonus Coins")]
+    [Tooltip("Turn on to use the coin totals below for this level instead of the LevelTimeBonus values in the scene.")]
+    [SerializeField]
+    private bool overrideBonusCoins = false;
+
+    [Tooltip("Total bonus coins for reaching tier 1.")]
+    [SerializeField, Min(0)]
+    private int oneTierTotalBonus = 1;
+
+    [Tooltip("Total bonus coins for reaching tier 2.")]
+    [SerializeField, Min(0)]
+    private int twoTierTotalBonus = 2;
+
+    [Tooltip("Total bonus coins for reaching tier 3.")]
+    [SerializeField, Min(0)]
+    private int threeTierTotalBonus = 3;
+
+    public bool OverrideBonusCoins => overrideBonusCoins;
+
+    public int OneTierTotalBonus => oneTierTotalBonus;
+
+    public int TwoTierTotalBonus => twoTierTotalBonus;
+
+    public int ThreeTierTotalBonus => threeTierTotalBonus;
+
+    private void OnValidate()
+    {
+        twoTierTotalBonus = Mathf.Max(twoTierTotalBonus, oneTierTotalBonus);
+        threeTierTotalBonus = Mathf.Max(threeTierTotalBonus, twoTierTotalBonus);
+    }
+
     public static LevelSettings Current { get; private set; }
 
     private void OnEnable()
