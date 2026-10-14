@@ -11832,7 +11832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d972919c63954946a1fd67dedb21711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
-  timeLimitSeconds: 40
+  timeLimitSeconds: 60
 --- !u!1 &1329614303
 GameObject:
   m_ObjectHideFlags: 0
@@ -20462,7 +20462,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d972919c63954946a1fd67dedb21711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
-  timeLimitSeconds: 20
+  timeLimitSeconds: 60
 --- !u!224 &5827011762942011127
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21144,7 +21144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d972919c63954946a1fd67dedb21711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
-  timeLimitSeconds: 20
+  timeLimitSeconds: 60
 --- !u!224 &7189807759843634009
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21181,7 +21181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d972919c63954946a1fd67dedb21711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
-  timeLimitSeconds: 20
+  timeLimitSeconds: 60
 --- !u!114 &7436640701991328223
 MonoBehaviour:
   m_ObjectHideFlags: 0
