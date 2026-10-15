@@ -21,11 +21,15 @@ public class LevelTimer : MonoBehaviour
 
     public bool IsRunning { get; private set; }
 
+    public bool IsTimeUp { get; private set; }
+
     public int DisplaySeconds => Mathf.CeilToInt(remainingSeconds);
 
     public int ElapsedWholeSeconds => Mathf.FloorToInt(elapsedSeconds);
 
     public event Action<int> OnSecondsChanged;
+
+    public event Action OnTimeUp;
 
     private float CurrentTimeLimit
     {
@@ -40,6 +44,10 @@ public class LevelTimer : MonoBehaviour
             return timeLimitSeconds;
         }
     }
+
+    private bool ShouldEndLevelAtZero =>
+        LevelSettings.Current != null &&
+        LevelSettings.Current.EndLevelWhenTimeRunsOut;
 
     private void Awake()
     {
@@ -83,6 +91,15 @@ public class LevelTimer : MonoBehaviour
         remainingSeconds = Mathf.Max(0f, remainingSeconds - Time.deltaTime);
 
         NotifyIfSecondsChanged();
+
+        if (remainingSeconds <= 0f &&
+            !IsTimeUp &&
+            ShouldEndLevelAtZero)
+        {
+            IsTimeUp = true;
+            IsRunning = false;
+            OnTimeUp?.Invoke();
+        }
     }
 
     public void StartTimer()
@@ -90,6 +107,7 @@ public class LevelTimer : MonoBehaviour
         remainingSeconds = CurrentTimeLimit;
         elapsedSeconds = 0f;
         IsRunning = true;
+        IsTimeUp = false;
         NotifyIfSecondsChanged();
     }
 
@@ -97,6 +115,7 @@ public class LevelTimer : MonoBehaviour
     {
         remainingSeconds = CurrentTimeLimit;
         IsRunning = false;
+        IsTimeUp = false;
         watchedMover = mover;
         NotifyIfSecondsChanged();
     }

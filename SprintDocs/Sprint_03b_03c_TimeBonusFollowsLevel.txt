@@ -1,0 +1,114 @@
+SPRINT 03b AND 03c - TIME BONUS FOLLOWS THE LEVEL
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+03b: the time bonus tiers follow the level's own time limit (set in
+Sprint 03a), instead of one fixed 20 / 40 / 60 for the whole scene.
+03c: each level can have its own bonus coin totals.
+Both were built together because they touch the same two scripts.
+
+DESIGN DECISIONS
+- A level that has a time limit in LevelSettings gets tiers as fractions
+  of that limit: tier 3 = limit x 0.33, tier 2 = limit x 0.66, tier 1 =
+  the full limit. Each is rounded with Mathf.RoundToInt. With a 60 second
+  limit this gives 20 / 40 / 60, the same as before.
+- A level with no LevelSettings, or with Time Limit Seconds at 0, keeps
+  the old scene tier limits (threeTierMaxSeconds, twoTierMaxSeconds,
+  oneTierMaxSeconds). Those fields and their names are unchanged.
+- Bonus coin totals come from LevelSettings only when Override Bonus
+  Coins is turned on. Otherwise the scene values on LevelTimeBonus are
+  used. The override is off by default.
+- The totals are cumulative, the same meaning as in LevelTimeBonus.
+  Improving a tier pays the difference. A lower or equal tier pays 0.
+- MapLevelManager.CalculateCumulativeReward is reused as before. It
+  clamps the payout to 0, so lowering a level's totals later never takes
+  coins away.
+- OnValidate keeps the numbers in order: in LevelSettings the totals
+  cannot go down from tier 1 to 3; in LevelTimeBonus tier 2 cannot be
+  below tier 3.
+- The save key, GetBestTierKey and the ClaimBonus signature are
+  unchanged. No PlayerPrefs key was added, renamed or removed. The saved
+  value is a tier number from 0 to 3, not seconds.
+- The star, coin and time bonus calculation and its order in
+  LevelCompletePanelController are unchanged. The bonus still adds to
+  coins only.
+
+CHANGES
+- Edited: Assets/Scripts/LevelSettings.cs
+  New section Time Bonus Coins: overrideBonusCoins (default off),
+  oneTierTotalBonus (1), twoTierTotalBonus (2), threeTierTotalBonus (3),
+  all Min 0. Read-only properties OverrideBonusCoins, OneTierTotalBonus,
+  TwoTierTotalBonus, ThreeTierTotalBonus. New OnValidate().
+- Edited: Assets/Scripts/LevelTimeBonus.cs
+  New section Tiers From Level Time: threeTierFraction (0.33) and
+  twoTierFraction (0.66), both Range 0.05 to 1.
+  New OnValidate(): twoTierFraction is at least threeTierFraction.
+  ClaimBonus: picks oneTotal, twoTotal and threeTotal (scene values, or
+  the level's values when the override is on) and passes them to
+  CalculateCumulativeReward.
+  GetTier: works out threeLimit, twoLimit and oneLimit (scene values, or
+  the level's time limit times the fractions) and uses them in the
+  existing checks.
+- No scene or prefab edits by the assistant. No core script changes. No
+  other script changes.
+
+INSPECTOR STEPS (by hand, each of JungleMap, BeachMap, SnowMap)
+- On each level's LevelSettings (Level_1 to Level_5), set Time Limit
+  Seconds if not set yet. The tiers then follow it.
+- For a level with its own bonus coins, tick Override Bonus Coins and set
+  the three totals.
+- Check the two fractions on LevelTimeBonus (0.33 and 0.66 by default).
+- Save the scene.
+
+DONE CONDITIONS AND RESULTS
+Write PASS or FAIL after each line.
+Code:
+- Only LevelSettings.cs and LevelTimeBonus.cs changed: PASS
+- Diff reviewed against the approved plan, plus the one extra OnValidate
+  you asked for: PASS
+- Compiles without red errors in the Unity Console: not checked
+Play mode (reset the save first with Assets/Editor/GameDataDebugWindow,
+because the bonus pays only on improvement):
+- Level with a 30 second limit, finished in 9 seconds: tier 3: not
+  tested yet
+- Same level finished in 20 seconds: tier 2: not tested yet
+- Same level finished in 30 seconds: tier 1: not tested yet
+- Slower than the level limit: Time bonus: +0: not tested yet
+- Level with Override Bonus Coins on (for example 2 / 4 / 6): panel bonus
+  matches the level's totals: not tested yet
+- Level with no LevelSettings, finished in under 20 seconds: still +3:
+  not tested yet
+- Improving a tier pays only the difference: not tested yet
+- Checked in JungleMap, BeachMap and SnowMap: not tested yet
+- No new red errors in the Unity Console: not checked
+
+KNOWN ISSUES / NOTES
+- Rounding can make two tier limits equal on very short limits. A limit
+  of 3 gives 1 / 2 / 3. A limit of 1 gives 0 / 1 / 1. Nothing breaks,
+  but the better tiers become hard or impossible. Keep limits
+  reasonably long.
+- A stored best tier stands for a different number of seconds if a
+  level's time or fractions change later. This is safe for the save,
+  but a player may no longer match the tier they earned.
+- If a level's totals are lowered later, a player who already holds a
+  higher tier simply gets 0 until they improve.
+- The CLAUDE.md line "Total bonus coins are 3, 2, 1 ... Tiers and totals
+  are Inspector fields on LevelTimeBonus, set per scene" is out of date.
+  Tiers and totals can now come from LevelSettings per level.
+- AGENTS.md shows as modified in git. It is written by Unity's AI
+  Assistant and was not touched. Do not commit it.
+- The assistant cannot run Unity. Nothing here has been seen running.
+
+NOT DONE YET
+- Set Time Limit Seconds and the optional overrides on all 15 levels.
+- Play-mode tests (above).
+- Update CLAUDE.md after the test: LevelSettings in the script map,
+  section 2.4a time bonus bullet, and smoke test step 12.
+- Sprint 02b and 03a Play-mode tests are still open (see their docs).
+- Balancing of the actual times and coin values (a balancing sprint).
+
+NEXT
+- Set up the levels, run the smoke test and fill in the results above.
+  Then choose the next Phase 2 item from CLAUDE.md. It starts with a
+  plan and waits for approval.

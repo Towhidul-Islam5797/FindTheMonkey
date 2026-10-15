@@ -100,6 +100,14 @@ Never reorder steps 10 and 11.
 - Each of the three map scenes has a LevelTimer component, a TimerText on the HUD, and a TimeText on the level-complete panel (found by reading the scene files; not verified in the Inspector).
 - The time bonus is claimed in LevelCompletePanelController.ShowPanel, after the star coin reward. Default tiers: within 20 s = tier 3, 40 s = tier 2, 60 s = tier 1. Total bonus coins are 3, 2, 1 for tiers 3, 2, 1, paid only for an improvement over the best saved tier, like the stars. Slow players keep their normal reward. Tiers and totals are Inspector fields on LevelTimeBonus, set per scene.
 
+### 2.4b Time-out loss (added in Sprint 04)
+- Off by default. Set per level with End Level When Time Runs Out on that level's LevelSettings.
+- With no LevelSettings, or the box off, everything in 2.4a stays true: at 0:00 play continues.
+- With the box on, LevelTimer raises OnTimeUp once at 0:00 and stops running. IsTimeUp is reset when the timer starts.
+- LevelCompletePanelController listens to OnTimeUp. It turns off every HidingObject component (taps stop), shows the panel as "Level N Failed!" with 0 stars and +0 rewards, hides Next, and keeps Restart as the retry.
+- A loss saves nothing. It never calls CompleteCurrentLevel, MarkMonkeyFound, AddCoins or ClaimBonus, so it never unlocks a level or lowers a best result.
+- The win path and its calculation order (2.4) are unchanged.
+
 ### 2.5 Events (LevelState)
 OnScoreChanged, OnTotalScoreChanged, OnBananaChanged, OnCoinChanged, OnTryChanged, OnStarsChanged, OnScoreRewarded, OnBananaRewarded, OnMonkeyFound.
 UI and new features listen to these events. Do not poll LevelState every frame.
@@ -133,7 +141,7 @@ Any timer that uses Time.deltaTime pauses automatically. Do not use unscaled tim
 | 11 | Only one hiding object may move at a time (the static activeMovingObject lock in HidingObject). Keep it. | Prevents two taps from running at once and breaking the try count. |
 | 12 | The Animator field on CharacterPathMover must be assigned in every level's Player. | If it is empty the code does nothing and shows no error. The monkey stays in Idle while walking. |
 | 13 | Every level root has its own Player. MapWindowController finds the active level's CharacterPathMover. Never assign one Player by hand. Never add a starter script to each level. | Per-level wiring was tried and was too complex and fragile. |
-| 14 | LevelTimer must never end a level or block a tap. At 0:00 play continues. | Core design: no game-over. |
+| 14 | LevelTimer must never end a level or block a tap, unless the level's LevelSettings has End Level When Time Runs Out turned on (off by default). With it off, play continues at 0:00. | Core design: no game-over. The loss is opt-in per level (2.4b). |
 
 ## 4. Hard rules (never, in any mode)
 - Never edit .unity, .prefab, or .meta files, ProjectSettings, Packages, Library, Temp, .git, or .claude.
@@ -218,6 +226,7 @@ Stop and ask the developer before continuing if:
 12. The level-complete panel shows Time: M:SS. If you wait past 0:00 first, the panel time keeps counting past 1:00. The panel also shows Time bonus: +3 on a first completion under 20 seconds, and +0 on a repeat. A repeat of a 3-star level also pays +0 for score, bananas and coins, which is correct.
 13. Restart from the level-complete panel and Next both load a level that starts properly (countdown, monkey moves, timer waits and then counts). Check this in all three maps.
 14. The Unity Console shows no new red errors.
+15. Tick End Level When Time Runs Out on a level and let the timer reach 0:00. The panel shows Level N Failed!, 0 stars and +0. Taps do nothing and Next is hidden. Nothing is saved: check with GameDataDebugWindow. Restart starts the level properly. With the box off, play continues at 0:00 as in step 10.
 
 ## 9. Unity and UI rules
 - Everything in gameplay is Canvas UI. Use RectTransform, Image, Button, TMP_Text. Do not write world-space code (SpriteRenderer, Collider2D, Transform.position) for gameplay objects.

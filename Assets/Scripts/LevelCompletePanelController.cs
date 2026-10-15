@@ -152,11 +152,13 @@ public class LevelCompletePanelController : MonoBehaviour
     {
         ResolveReferences();
         SubscribeToLevelState();
+        SubscribeToLevelTimer();
     }
 
     private void OnDisable()
     {
         UnsubscribeFromLevelState();
+        UnsubscribeFromLevelTimer();
     }
 
     private void Update()
@@ -222,6 +224,23 @@ public class LevelCompletePanelController : MonoBehaviour
         levelState.OnMonkeyFound -= HandleMonkeyFound;
     }
 
+    private void SubscribeToLevelTimer()
+    {
+        if (levelTimer == null)
+            return;
+
+        levelTimer.OnTimeUp -= HandleTimeUp;
+        levelTimer.OnTimeUp += HandleTimeUp;
+    }
+
+    private void UnsubscribeFromLevelTimer()
+    {
+        if (levelTimer == null)
+            return;
+
+        levelTimer.OnTimeUp -= HandleTimeUp;
+    }
+
     // -------------------------------------------------------
     // COMPLETION
     // -------------------------------------------------------
@@ -229,6 +248,36 @@ public class LevelCompletePanelController : MonoBehaviour
     private void HandleMonkeyFound()
     {
         ShowPanel();
+    }
+
+    private void HandleTimeUp()
+    {
+        if (panelShown)
+            return;
+
+        ResolveReferences();
+
+        if (!ValidateRequiredReferences())
+            return;
+
+        panelShown = true;
+
+        HidingObject[] hidingObjects =
+            FindObjectsByType<HidingObject>(
+                FindObjectsSortMode.None
+            );
+
+        for (int i = 0; i < hidingObjects.Length; i++)
+        {
+            hidingObjects[i].enabled = false;
+        }
+
+        ShowFailedPanel();
+
+        if (pauseGameWhenOpened)
+        {
+            Time.timeScale = 0f;
+        }
     }
 
     private IEnumerator PlayTimeBonusPopup()
@@ -544,6 +593,43 @@ public class LevelCompletePanelController : MonoBehaviour
             nextButton.interactable =
                 mapLevelManager.HasNextLevel();
         }
+    }
+
+    private void ShowFailedPanel()
+    {
+        if (titleText != null)
+            titleText.text = $"Level {mapLevelManager.CurrentLevel} Failed!";
+
+        if (scoreRewardText != null)
+            scoreRewardText.text = "+0";
+
+        if (bananaRewardText != null)
+            bananaRewardText.text = "+0";
+
+        if (coinRewardText != null)
+            coinRewardText.text = "+0";
+
+        if (triesText != null)
+            triesText.text = $"Tries: {levelState.TryCount}";
+
+        if (timeText != null && levelTimer != null)
+        {
+            int seconds = levelTimer.ElapsedWholeSeconds;
+            timeText.text = $"Time: {seconds / 60}:{seconds % 60:00}";
+        }
+
+        if (timeBonusText != null)
+            timeBonusText.gameObject.SetActive(false);
+
+        UpdateStars(0);
+
+        if (restartButton != null)
+            restartButton.interactable = true;
+
+        if (nextButton != null)
+            nextButton.gameObject.SetActive(false);
+
+        OpenPanel();
     }
 
     // -------------------------------------------------------

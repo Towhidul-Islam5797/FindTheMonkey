@@ -2995,6 +2995,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
   timeLimitSeconds: 60
+  overrideBonusCoins: 0
+  oneTierTotalBonus: 1
+  twoTierTotalBonus: 2
+  threeTierTotalBonus: 3
+  endLevelWhenTimeRunsOut: 1
 --- !u!1 &221733632
 GameObject:
   m_ObjectHideFlags: 0
@@ -12226,6 +12231,8 @@ MonoBehaviour:
   threeTierMaxSeconds: 20
   twoTierMaxSeconds: 40
   oneTierMaxSeconds: 60
+  threeTierFraction: 0.33
+  twoTierFraction: 0.66
   oneTierTotalBonus: 1
   twoTierTotalBonus: 2
   threeTierTotalBonus: 3
@@ -14145,6 +14152,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
   timeLimitSeconds: 40
+  overrideBonusCoins: 0
+  oneTierTotalBonus: 1
+  twoTierTotalBonus: 2
+  threeTierTotalBonus: 3
+  endLevelWhenTimeRunsOut: 1
 --- !u!1 &1507013368
 GameObject:
   m_ObjectHideFlags: 0
@@ -20672,6 +20684,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
   timeLimitSeconds: 60
+  overrideBonusCoins: 0
+  oneTierTotalBonus: 1
+  twoTierTotalBonus: 2
+  threeTierTotalBonus: 3
+  endLevelWhenTimeRunsOut: 1
 --- !u!224 &5824036132413085961
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21292,6 +21309,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
   timeLimitSeconds: 60
+  overrideBonusCoins: 0
+  oneTierTotalBonus: 1
+  twoTierTotalBonus: 2
+  threeTierTotalBonus: 3
+  endLevelWhenTimeRunsOut: 1
 --- !u!224 &7189807759843634009
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21329,6 +21351,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelSettings
   timeLimitSeconds: 60
+  overrideBonusCoins: 0
+  oneTierTotalBonus: 1
+  twoTierTotalBonus: 2
+  threeTierTotalBonus: 3
+  endLevelWhenTimeRunsOut: 1
 --- !u!114 &7438494143578138145
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -35,6 +35,13 @@ public class LevelSettings : MonoBehaviour
 
     public int ThreeTierTotalBonus => threeTierTotalBonus;
 
+    [Header("Time Limit Rule")]
+    [Tooltip("Turn on to lose this level when the timer reaches 0:00.")]
+    [SerializeField]
+    private bool endLevelWhenTimeRunsOut = false;
+
+    public bool EndLevelWhenTimeRunsOut => endLevelWhenTimeRunsOut;
+
     private void OnValidate()
     {
         twoTierTotalBonus = Mathf.Max(twoTierTotalBonus, oneTierTotalBonus);

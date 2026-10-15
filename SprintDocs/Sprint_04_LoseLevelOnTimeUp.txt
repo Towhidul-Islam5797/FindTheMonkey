@@ -1,0 +1,134 @@
+SPRINT 04 - LOSE A LEVEL WHEN THE TIMER RUNS OUT
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+A level can now be lost when the timer reaches 0:00. The loss reuses the
+existing level-complete panel. It is a per-level option, off by default.
+A level without LevelSettings, or with the new checkbox off, behaves
+exactly as before: at 0:00 the timer stays at 0:00 and play continues.
+
+DESIGN DECISIONS
+- New checkbox End Level When Time Runs Out on LevelSettings, default off.
+- LevelTimer raises a new event, OnTimeUp, once, when the remaining time
+  is 0 and the active LevelSettings has the checkbox on. IsTimeUp is
+  reset in StartTimer() and StartTimerWhenMovementEnds().
+- LevelCompletePanelController listens to OnTimeUp. HandleTimeUp() sets
+  panelShown, disables every HidingObject component (this stops taps
+  without editing HidingObject), shows the failed panel, then pauses the
+  game the same way ShowPanel does.
+- The failed panel shows: title "Level N Failed!", 0 stars, +0 for score,
+  bananas and coins, the tries text and the time text as on a win, and no
+  time bonus. The Next button is hidden. The existing Restart button stays
+  active and is the retry. No new button, no new Inspector field.
+- The loss path does not call CompleteCurrentLevel, MarkMonkeyFound,
+  AddCoins or ClaimBonus, and saves nothing. A lost level never lowers a
+  previous best, never unlocks the next level and never pays anything.
+- The win path is unchanged: ShowPanel, UpdatePanelUI (including the
+  "Level N Complete!" title), and the order of the star, coin and time
+  bonus calculation.
+- HandleTimeUp keeps the ResolveReferences and ValidateRequiredReferences
+  guard before it sets panelShown, the same guard ShowPanel uses.
+- Dropped from the first plan: an extra failedRetryButton field. The
+  existing Restart button already calls the right method.
+
+CHANGES (additions only, 0 lines removed, 112 lines added)
+- Edited: Assets/Scripts/LevelSettings.cs (7 lines)
+  New section Time Limit Rule: endLevelWhenTimeRunsOut (default off) and
+  the read-only property EndLevelWhenTimeRunsOut.
+- Edited: Assets/Scripts/LevelTimer.cs (19 lines)
+  New: IsTimeUp, event OnTimeUp, private property ShouldEndLevelAtZero.
+  Update(): after NotifyIfSecondsChanged(), a block that sets
+  IsTimeUp = true, IsRunning = false and invokes OnTimeUp.
+  StartTimer() and StartTimerWhenMovementEnds(): IsTimeUp = false.
+- Edited: Assets/Scripts/LevelCompletePanelController.cs (86 lines)
+  New: SubscribeToLevelTimer(), UnsubscribeFromLevelTimer(),
+  HandleTimeUp(), ShowFailedPanel(). OnEnable calls
+  SubscribeToLevelTimer(); OnDisable calls UnsubscribeFromLevelTimer().
+- No scene or prefab edits by the assistant. No core script changes.
+  CLAUDE.md was not edited.
+
+INSPECTOR STEPS (by hand, each of JungleMap, BeachMap, SnowMap)
+- On each level that should be lost on timeout (Level_1 to Level_5),
+  make sure the level has a LevelSettings component, then tick End Level
+  When Time Runs Out. Set Time Limit Seconds as well if not set yet.
+- Confirm the panel's Restart button On Click is
+  MenuWindowController.RestartLevel.
+- Save the scene. Changes made in Play mode are lost.
+
+DONE CONDITIONS AND RESULTS
+Code:
+- Only the three named files changed, additions only: PASS
+- Diff reviewed against the approved plan (with the dropped
+  failedRetryButton): PASS
+- Compiles without red errors in the Unity Console: PASS (the panel
+  works in Play mode, so the scripts compiled)
+Play mode:
+- SnowMap Level_3, box ticked, timer reaches 0:00: the failed panel
+  opens: PASS (reported by the developer)
+- Box off or no LevelSettings: play continues at 0:00 as before: not
+  tested yet
+- Failed panel texts (title, 0 stars, +0, tries, time) and Next hidden:
+  not tested yet
+- Taps do nothing behind the failed panel: not tested yet
+- Nothing saved after a loss (stars, totals, unlock; check with
+  GameDataDebugWindow): not tested yet
+- A previously won level that is lost later keeps its best stars: not
+  tested yet
+- Restart from the failed panel starts the level properly (countdown,
+  monkey moves, timer waits then counts; Next visible again after a
+  win): not tested yet
+- Pause menu and finding the monkey still work with the rule on: not
+  tested yet
+- Win path unchanged (panel, stars, rewards, time bonus): not tested yet
+- Checked in JungleMap, BeachMap and SnowMap: not tested yet
+- No new red errors in the Unity Console: not checked
+
+KNOWN ISSUES / NOTES
+- The first test showed no failed panel because the checkbox was still
+  off on that level. This is the intended default, not a bug.
+- CLAUDE.md invariant 14 and section 2.4a say the timer never ends a
+  level. That is now only true when the checkbox is off. Update CLAUDE.md
+  by hand after the tests.
+- If a wrong-tap slide is in progress at 0:00, HidingObject.OnDisable
+  stops its coroutine and the object stays displaced behind the panel.
+  Restart reloads the scene, so it should be harmless. Check during the
+  tests.
+- The failed panel only hides the star objects. Whether it shows empty
+  stars depends on the panel in the scene. Grey background stars would be
+  a scene or prefab change by hand.
+- The controller subscribes to LevelTimer in OnEnable. If the LevelTimer
+  does not exist yet at that moment, it is not subscribed. This is the
+  same limit the file already has for LevelState.
+- Win-path Restart and Next behaviour after a loss depends on the known
+  debt "Start flag" in CLAUDE.md section 11. Verify the restart in Play
+  mode.
+- AGENTS.md shows as modified in git. It is written by Unity's AI
+  Assistant and was not touched. Do not commit it.
+- The assistant cannot run Unity. Only the SnowMap Level_3 result above
+  was seen, and it was reported by the developer.
+
+NOT DONE YET
+- Tick the checkbox on the levels that should use the rule, in all three
+  maps.
+- Play-mode tests (above) and the smoke test in CLAUDE.md section 8.
+- Update CLAUDE.md: invariant 14, section 2.4a, the script map entries
+  for LevelTimer and LevelCompletePanelController, and a smoke test step
+  for the loss path.
+- Decide whether a 0-star loss should look different (grey stars, title
+  colour). Separate sprint.
+
+COMMIT MESSAGE (not committed)
+Sprint 04: lose a level when the timer runs out
+
+- LevelSettings: add EndLevelWhenTimeRunsOut checkbox (default off)
+- LevelTimer: add IsTimeUp and OnTimeUp, raised at 0:00 only when the
+  level rule is on
+- LevelCompletePanelController: on time up, disable hiding objects and
+  show the panel as "Level N Failed!" with 0 stars and +0 rewards; no
+  save, no unlock, no bonus
+
+NEXT
+- Run the tests above and fill in the results. Then choose the next
+  Phase 2 item from CLAUDE.md. It starts with a plan and waits for
+  approval.
