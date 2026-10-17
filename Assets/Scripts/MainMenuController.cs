@@ -4,9 +4,13 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
+    private const string StartSelectedLevelKey = "StartSelectedLevel";
+
     public void PlayGame()
     {
         //SceneManager.LoadScene("WorldSelection"); Gameplay
+        PlayerPrefs.SetInt(StartSelectedLevelKey, 1);
+        PlayerPrefs.Save();
         SceneManager.LoadScene("JungleMap");
 
     }

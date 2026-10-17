@@ -1,0 +1,116 @@
+SPRINT 04B - START FLOW FIX
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+After main-menu Play, and after panel Restart or Next, the level must start
+on its own with 3-2-1-GO and the monkey walk. Before this sprint it only
+started after pressing Start in the pause menu. Snow's panel Restart
+already worked.
+
+CAUSE (confirmed by reading the code and the scene wiring)
+- MapWindowController.TryStartSelectedLevelWithCountdown reads the
+  PlayerPrefs int "StartSelectedLevel". If it is not 1 it stops, and the
+  monkey stays in Idle. It clears the flag to 0 just before the countdown.
+- Only MenuWindowController.StartCurrentLevel and
+  MapWindowController.SelectLevel set it to 1.
+- MainMenuController.PlayGame, LevelCompletePanelController.
+  RestartCurrentLevel and LevelCompletePanelController.LoadNextLevel did
+  not set it.
+- Scene wiring: panel Restart in JungleMap and BeachMap calls
+  LevelCompletePanelController.RestartCurrentLevel. In SnowMap it calls
+  MenuWindowController.RestartLevel, which is why Snow worked. Panel Next
+  calls LevelCompletePanelController.LoadNextLevel in all three maps.
+  The Sprint 04 failed panel reuses the Restart button as retry.
+
+DESIGN DECISIONS
+- Set the flag to 1 and save, right before the scene load, in the three
+  methods that were missing it.
+- Each file declares its own private const string StartSelectedLevelKey
+  = "StartSelectedLevel", the same way MenuWindowController and
+  MapWindowController already do. No shared helper.
+- No core script, scene, prefab or Inspector change.
+
+CHANGES (additions only, 0 lines removed, 12 lines added)
+- Edited: Assets/Scripts/MainMenuController.cs (4 lines)
+  Line 7: the key constant. Line 8: blank line.
+  PlayGame lines 12 and 13: PlayerPrefs.SetInt(StartSelectedLevelKey, 1)
+  and PlayerPrefs.Save(), before SceneManager.LoadScene("JungleMap").
+- Edited: Assets/Scripts/LevelCompletePanelController.cs (8 lines)
+  Line 9: the key constant. Line 10: blank line.
+  RestartCurrentLevel lines 658 to 660: SetInt, Save, blank line, after
+  Time.timeScale = 1f and before mapLevelManager.RestartCurrentLevel().
+  LoadNextLevel lines 682 to 684: the same, before
+  mapLevelManager.LoadNextLevel().
+- Small difference from the plan: each method also got one blank line
+  after the two calls, to match the spacing around it.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 1: StartGame is still called only from MapWindowController. PASS
+- 4: Reward order unchanged. PASS
+- 6: No PlayerPrefs key renamed or deleted. An existing key is written.
+  PASS
+- 7 and 8: No serialized field, file or class renamed or added. PASS
+- 10 and 14: The loss path is unchanged and saves no progress.
+  PlayerPrefs.Save only writes values that are already set. PASS
+
+INSPECTOR STEPS
+- None.
+
+DONE CONDITIONS AND RESULTS
+Code:
+- Only the two named scripts changed, additions only: PASS
+- Diff reviewed against the approved plan: PASS
+- Compiles without red errors in the Unity Console: not checked
+Play mode (all three maps):
+- Main menu Play: 3-2-1-GO, monkey walks, timer counts after it stops:
+  not tested yet
+- Panel Next and panel Restart: the same: not tested yet
+- Pause-menu Start and Restart, and the map picker, still work: not
+  tested yet
+- After a time-out loss, Restart restarts with the countdown and nothing
+  is saved (check with GameDataDebugWindow): not tested yet
+- No new red errors in the Unity Console: not checked
+
+KNOWN ISSUES / NOTES
+- MapLevelManager.LoadNextLevel can return without a reload (no next
+  level, or next level locked). The flag then stays 1 until the next scene
+  load. Every later path sets it again, or sets it to 0 (GoToMainMenu).
+  A leftover 1 only causes a countdown on the next map load. No real risk
+  seen. MapLevelManager was not changed.
+- LoadNextLevel already sets Time.timeScale = 1 before that early return,
+  which unpauses the open panel. This is unchanged from before.
+- In JungleMap the panel's nextButton field is empty, so Next is not
+  hidden on a time-out loss. With this fix, pressing it there still loads
+  the next level only if it is already unlocked, now with a countdown.
+  Sprint 04c handles the empty fields.
+- Editor Play directly on a map scene still does not start by itself.
+  Out of scope.
+- The assistant cannot run Unity. No Play-mode result above has been seen.
+
+KNOWN DEBT
+- The key string "StartSelectedLevel" is now declared in four files:
+  MapWindowController, MenuWindowController, MainMenuController,
+  LevelCompletePanelController. Not refactored on purpose.
+- CLAUDE.md section 11 says the panel Restart calls
+  MenuWindowController.RestartLevel. That is only true in SnowMap.
+  CLAUDE.md was not edited in this sprint.
+
+NOT DONE YET
+- Play-mode tests above and the smoke test in CLAUDE.md section 8.
+- Sprint 04c: empty panel fields in JungleMap and BeachMap (starObjects,
+  and in Jungle restartButton and nextButton).
+- Update CLAUDE.md section 11 (start flag, panel Restart wiring) by hand.
+
+COMMIT MESSAGE (not committed)
+Sprint 04b: start the level after Play, Restart and Next
+
+- MainMenuController.PlayGame: set StartSelectedLevel to 1 before loading
+  JungleMap
+- LevelCompletePanelController.RestartCurrentLevel and LoadNextLevel: set
+  StartSelectedLevel to 1 before the scene reload, so 3-2-1-GO runs
+- Add SprintDocs/Sprint_04b_StartFlowFix.txt
+
+NEXT
+- Run the tests above and fill in the results. Then Sprint 04c starts
+  with a plan and waits for approval.

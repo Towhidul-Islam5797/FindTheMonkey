@@ -6,6 +6,8 @@ using UnityEngine.UI;
 [DisallowMultipleComponent]
 public class LevelCompletePanelController : MonoBehaviour
 {
+    private const string StartSelectedLevelKey = "StartSelectedLevel";
+
     // -------------------------------------------------------
     // REQUIRED REFERENCES
     // -------------------------------------------------------
@@ -653,6 +655,9 @@ public class LevelCompletePanelController : MonoBehaviour
 
         Time.timeScale = 1f;
 
+        PlayerPrefs.SetInt(StartSelectedLevelKey, 1);
+        PlayerPrefs.Save();
+
         mapLevelManager.RestartCurrentLevel();
     }
 
@@ -673,6 +678,9 @@ public class LevelCompletePanelController : MonoBehaviour
         }
 
         Time.timeScale = 1f;
+
+        PlayerPrefs.SetInt(StartSelectedLevelKey, 1);
+        PlayerPrefs.Save();
 
         mapLevelManager.LoadNextLevel();
     }
