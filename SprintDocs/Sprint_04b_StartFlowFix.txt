@@ -61,16 +61,16 @@ DONE CONDITIONS AND RESULTS
 Code:
 - Only the two named scripts changed, additions only: PASS
 - Diff reviewed against the approved plan: PASS
-- Compiles without red errors in the Unity Console: not checked
-Play mode (all three maps):
+- Compiles without red errors in the Unity Console: PASS (reported by
+  the developer)
+Play mode (all three maps, all reported by the developer):
 - Main menu Play: 3-2-1-GO, monkey walks, timer counts after it stops:
-  not tested yet
-- Panel Next and panel Restart: the same: not tested yet
-- Pause-menu Start and Restart, and the map picker, still work: not
-  tested yet
+  PASS
+- Panel Next and panel Restart: the same: PASS
+- Pause-menu Start and Restart, and the map picker, still work: PASS
 - After a time-out loss, Restart restarts with the countdown and nothing
-  is saved (check with GameDataDebugWindow): not tested yet
-- No new red errors in the Unity Console: not checked
+  is saved (check with GameDataDebugWindow): PASS
+- No new red errors in the Unity Console: PASS
 
 KNOWN ISSUES / NOTES
 - MapLevelManager.LoadNextLevel can return without a reload (no next
@@ -86,7 +86,8 @@ KNOWN ISSUES / NOTES
   Sprint 04c handles the empty fields.
 - Editor Play directly on a map scene still does not start by itself.
   Out of scope.
-- The assistant cannot run Unity. No Play-mode result above has been seen.
+- The assistant cannot run Unity. The Play-mode results above were
+  reported by the developer.
 
 KNOWN DEBT
 - The key string "StartSelectedLevel" is now declared in four files:
@@ -97,7 +98,6 @@ KNOWN DEBT
   CLAUDE.md was not edited in this sprint.
 
 NOT DONE YET
-- Play-mode tests above and the smoke test in CLAUDE.md section 8.
 - Sprint 04c: empty panel fields in JungleMap and BeachMap (starObjects,
   and in Jungle restartButton and nextButton).
 - Update CLAUDE.md section 11 (start flag, panel Restart wiring) by hand.
@@ -112,5 +112,4 @@ Sprint 04b: start the level after Play, Restart and Next
 - Add SprintDocs/Sprint_04b_StartFlowFix.txt
 
 NEXT
-- Run the tests above and fill in the results. Then Sprint 04c starts
-  with a plan and waits for approval.
+- Sprint 04c starts with a plan and waits for approval.

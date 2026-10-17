@@ -1,0 +1,113 @@
+SPRINT 04D - INACTIVE STARS ON THE LEVEL-COMPLETE PANEL
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Stars that were not earned should show the grey inactive_star image
+instead of a blank slot. A loss shows 3 grey stars. A 2-star win shows
+2 gold stars and 1 grey star.
+
+CAUSE
+- Sprint 04c filled starObjects in JungleMap and BeachMap. Since then,
+  UpdateStars hides the stars that were not earned (SetActive false).
+- Before 04c the field was empty there, so the panel always showed 3 gold
+  stars, even for a 1-star win or a loss.
+- Assets/Art/UI & UX/inactive_star.png was never used in any scene,
+  including at HEAD and in git history.
+
+DESIGN DECISIONS
+- Idea from the developer: place an inactive star at the exact position
+  of each gold star, behind it. When the code hides a gold star, the grey
+  one shows.
+- No code change. UpdateStars already does the hiding.
+- The inactive stars are siblings in StarGroup, placed directly before
+  each gold star, so UI draws them first (behind). StarGroup has no
+  layout group, so extra siblings do not move anything.
+- The inactive stars are not in starObjects, so the code never hides
+  them.
+- Each inactive star is a copy of its gold star: same RectTransform,
+  CanvasRenderer and Image values. Only the sprite differs.
+- Creating new objects is outside the standing scene-edit rules. The
+  developer approved this directly in chat. The edit was made by a script
+  in the scratchpad, after a dry run with safety checks.
+
+CHANGES (228 lines added and 0 removed per scene, 684 lines in total)
+- Edited: Assets/Scenes/Gameplay/JungleMap.unity
+- Edited: Assets/Scenes/Gameplay/BeachMap.unity
+- Edited: Assets/Scenes/Gameplay/SnowMap.unity
+  In each scene, under Canvas/LevelCompletePanel/CompleteBox/StarGroup:
+  new GameObjects Star_1_Inactive, Star_2_Inactive, Star_3_Inactive,
+  each with RectTransform, CanvasRenderer and Image (inactive_star).
+  New file IDs (the same in all three scenes):
+  Star_1_Inactive: GO 2021425168, RectTransform 1762262247,
+                   CanvasRenderer 2073420791, Image 2096118563
+  Star_2_Inactive: GO 1114976411, RectTransform 1858434296,
+                   CanvasRenderer 1060249916, Image 1962233238
+  Star_3_Inactive: GO 1003235878, RectTransform 1812718712,
+                   CanvasRenderer 1467887651, Image 1534683762
+  StarGroup's child list gained the three new RectTransforms, each
+  directly before its gold star.
+- Not touched: the gold stars, starObjects, every other object and
+  field, all scripts. CLAUDE.md was not edited.
+
+HIERARCHY NOW (all three scenes)
+  StarGroup
+    Star_1_Inactive
+    Star_1
+    Star_2_Inactive
+    Star_2
+    Star_3_Inactive
+    Star_3
+
+VERIFICATION BY THE ASSISTANT (file level)
+- Diff against a copy taken just before the edit: 228 added, 0 removed
+  per scene: PASS
+- The hierarchy reads back as above in all three scenes: PASS
+- Inactive stars use inactive_star.png; gold stars still use star.png:
+  PASS
+- Each inactive star matches its gold star in every value except the
+  sprite: PASS
+- starObjects still points to the gold Star_1 to Star_3: PASS
+- New file IDs did not exist in the scene before: PASS (checked by the
+  script)
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 7: No serialized field, script or class renamed or removed. PASS
+- 9: The new objects are Canvas UI (RectTransform and Image). PASS
+- No code, reward, save or loss rule changed. PASS
+
+INSPECTOR STEPS
+- None to do. Reload the three scenes in Unity if asked, without saving
+  an older open copy over the files.
+
+DONE CONDITIONS AND RESULTS
+Inspector (all three scenes):
+- StarGroup shows the order above, and the inactive stars use
+  inactive_star: not yet run
+Play mode (all three maps):
+- Loss: 3 grey stars: not yet run
+- 1-star win: 1 gold and 2 grey: not yet run
+- 2-star win: 2 gold and 1 grey: not yet run
+- 3-star win: 3 gold, no grey edge around them: not yet run
+- No new red errors in the Unity Console: not yet run
+
+KNOWN ISSUES / NOTES
+- inactive_star.png is 48 x 46 px. The Image takes the gold star's rect
+  size, so it is stretched to match. Check that it looks right.
+- If the gold star has transparent edges, grey may show around it on a
+  3-star win. Check visually.
+- The Sprint 04c scene changes are not committed yet. The git diff of
+  JungleMap and BeachMap therefore shows both sprints together.
+- The assistant cannot run Unity. Only file-level checks were done.
+
+NOT DONE YET
+- Inspector check and Play-mode tests above, in all three maps.
+- Commit Sprint 04c and 04d.
+
+COMMIT MESSAGE (not committed)
+Sprint 04d: show inactive stars behind the panel stars
+
+- JungleMap, BeachMap, SnowMap: add Star_1_Inactive to Star_3_Inactive
+  (inactive_star image) behind each gold star in StarGroup
+- Unearned stars now show grey instead of a blank slot; no code change
+- Add SprintDocs/Sprint_04d_InactiveStars.txt

@@ -1,0 +1,108 @@
+SPRINT 04C - PANEL FIELD WIRING
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Fill the empty Inspector fields on LevelCompletePanelController in
+JungleMap and BeachMap, so the panel shows the earned stars, and so the
+time-out loss in JungleMap hides the Next button.
+
+PROBLEM (found by reading the scene files)
+- JungleMap: starObjects (all 3), restartButton and nextButton were empty
+  ({fileID: 0}).
+- BeachMap: starObjects (all 3) were empty. restartButton and nextButton
+  were already set.
+- SnowMap: all fields already set. No change.
+- Effect: with empty starObjects, UpdateStars cannot show or hide stars,
+  so the star result is not visible. With an empty nextButton,
+  ShowFailedPanel cannot hide Next on a time-out loss in JungleMap.
+
+DESIGN DECISIONS
+- Scene-only change. Assign existing objects only. Nothing created,
+  deleted, renamed or moved. No script changes.
+- Targets match SnowMap's wiring: the three Star objects under
+  Canvas/LevelCompletePanel/CompleteBox/StarGroup, and the Button
+  components on CompleteBox/RestartButton and CompleteBox/NextLevelButton.
+- Done under the developer's standing scene-edit permission, with the
+  scene, object and field named in the approved plan.
+- Edits were located by surrounding text, not by line number.
+
+CHANGES (8 lines changed, 0 added, 0 removed)
+- Edited: Assets/Scenes/Gameplay/JungleMap.unity (5 lines)
+  LevelCompletePanelController on object 1329614303:
+  starObjects[0] = Star_1 (GameObject 1950226619)
+  starObjects[1] = Star_2 (GameObject 332402453)
+  starObjects[2] = Star_3 (GameObject 2062570529)
+  restartButton  = RestartButton, Button component 431361319
+                   (On Click: LevelCompletePanelController.RestartCurrentLevel)
+  nextButton     = NextLevelButton, Button component 332708435
+                   (On Click: LevelCompletePanelController.LoadNextLevel)
+- Edited: Assets/Scenes/Gameplay/BeachMap.unity (3 lines)
+  LevelCompletePanelController on object 1329614303:
+  starObjects[0] = Star_1 (GameObject 159221617)
+  starObjects[1] = Star_2 (GameObject 902849603)
+  starObjects[2] = Star_3 (GameObject 1576262922)
+- Not touched: SnowMap, scripts, On Click wiring, every other object and
+  field. CLAUDE.md was not edited.
+
+VERIFICATION BY THE ASSISTANT (file level)
+- git diff of the scenes shows exactly 8 changed lines: 5 in JungleMap,
+  3 in BeachMap, nothing else: PASS
+- Values read back from both files match the list above: PASS
+- Each file ID resolves to the intended object (Star_1 to Star_3
+  GameObjects, and UnityEngine.UI.Button components on RestartButton and
+  NextLevelButton): PASS
+- Each target name exists once in its scene, under
+  Canvas/LevelCompletePanel/CompleteBox: PASS
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 4: Reward order unchanged (no code change). PASS
+- 6: No PlayerPrefs key touched. PASS
+- 7: No serialized field renamed or removed. Fields were only filled.
+  PASS
+- 9: Targets are Canvas UI objects. PASS
+- 10 and 14: Loss rules unchanged. PASS
+
+INSPECTOR STEPS
+- None to do. Reload JungleMap and BeachMap in Unity if asked, without
+  saving an older open copy over the files.
+
+DONE CONDITIONS AND RESULTS
+Inspector:
+- JungleMap and BeachMap panel controller shows all fields filled: not
+  yet run
+Play mode (JungleMap and BeachMap):
+- A win shows 3, 2 or 1 stars matching 1, 2, 3 or more tries: not yet run
+- A time-out loss shows 0 stars and hides Next: not yet run
+- Restart and Next still start the level with 3-2-1-GO: not yet run
+- After a win following a loss, Next is visible again (it is hidden on
+  the failed panel and the scene reloads): not yet run
+- No new red errors in the Unity Console: not yet run
+
+KNOWN ISSUES / NOTES
+- The assistant cannot run Unity. Only file-level checks were done.
+- Unity was not confirmed closed or in Edit mode at the time of the
+  edit. If an open, unsaved copy of either scene is saved later, it will
+  overwrite this change. Check the Inspector after reloading.
+- SnowMap's panel Restart still calls MenuWindowController.RestartLevel,
+  while Jungle and Beach call LevelCompletePanelController.
+  RestartCurrentLevel. Both now start the level. Left as is.
+
+NOT DONE YET
+- Inspector check and Play-mode tests above, then the smoke test in
+  CLAUDE.md section 8.
+- Update CLAUDE.md by hand: section 4 (standing scene-edit permission)
+  and section 11 (start flag and panel Restart wiring).
+
+COMMIT MESSAGE (not committed)
+Sprint 04c: wire level-complete panel fields in Jungle and Beach
+
+- JungleMap: assign starObjects, restartButton and nextButton on
+  LevelCompletePanelController
+- BeachMap: assign starObjects on LevelCompletePanelController
+- Add SprintDocs/Sprint_04c_PanelFieldWiring.txt
+
+NEXT
+- Run the checks above and fill in the results. Then choose the next
+  Phase 2 item from CLAUDE.md. It starts with a plan and waits for
+  approval.
