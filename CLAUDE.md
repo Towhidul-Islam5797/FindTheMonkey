@@ -67,6 +67,7 @@ A map scene (for example JungleMap) holds everything for that world:
 | PlayerSkinController | Applies the selected skin by swapping the animator override. | ShopManager |
 | GameFeedbackManager | Music, sound effects, vibration. Singleton. | HidingObject, UI |
 | UIButtonTapSound | Click sound on buttons. | GameFeedbackManager |
+| AdsManager | AdMob setup (child-directed) and the interstitial ad. Singleton, optional. | LevelCompletePanelController calls it |
 
 Editor-only: Assets/Editor/GameDataDebugWindow shows, edits and resets saved data.
 
@@ -107,6 +108,15 @@ Never reorder steps 10 and 11.
 - LevelCompletePanelController listens to OnTimeUp. It turns off every HidingObject component (taps stop), shows the panel as "Level N Failed!" with 0 stars and +0 rewards, hides Next, and keeps Restart as the retry.
 - A loss saves nothing. It never calls CompleteCurrentLevel, MarkMonkeyFound, AddCoins or ClaimBonus, so it never unlocks a level or lowers a best result.
 - The win path and its calculation order (2.4) are unchanged.
+
+### 2.4c Ads (added in Sprint 05)
+- AdsManager lives on its own GameObject in the Bootstrap scene and survives scene loads (DontDestroyOnLoad).
+- On start it sets TagForChildDirectedTreatment.True and MaxAdContentRating.G, then initializes AdMob and loads one interstitial. Ads run only on Android and iOS builds (and in the Editor when the Build Profile is Android or iOS).
+- The interstitial shows only from LevelCompletePanelController.LoadNextLevel (the Next button), on every levelsBetweenInterstitials-th tap (default 3, session count only, not saved). If no ad is ready, the count stays and the next tap tries again.
+- When the ad closes or fails to show, the next level loads. Without an ad the next level loads at once.
+- No ads on Restart, after a loss, during the countdown, or while searching.
+- AdsManager is optional. Without it (for example Play mode started in a map scene) Next loads the next level directly.
+- Ad unit IDs are Inspector fields. They default to Google's public test IDs. The App IDs are set by hand in Assets > Google Mobile Ads > Settings.
 
 ### 2.5 Events (LevelState)
 OnScoreChanged, OnTotalScoreChanged, OnBananaChanged, OnCoinChanged, OnTryChanged, OnStarsChanged, OnScoreRewarded, OnBananaRewarded, OnMonkeyFound.
@@ -244,7 +254,8 @@ Stop and ask the developer before continuing if:
 - Difficulty balancing: early levels easy, later levels challenging.
 - UI check on different phone sizes.
 - Skin and costume polish, audio and vibration polish.
-- AdMob (rewarded and interstitial), release builds.
+- AdMob interstitial: done (Sprint 05, test IDs only). See 2.4c.
+- AdMob rewarded ad, consent (UMP), real AdMob account and IDs, release builds.
 
 ### Out of scope
 - Moving or animated environments (Forest, Beach, Snow redesign).
@@ -260,7 +271,11 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 
 ## 11. Known debt
 - Empty placeholder scenes: WorldSelection, LevelSelection, MonkeyCollection, Rewards, Settings.
-- Missing features: hint system, AdMob, daily rewards.
+- Missing features: hint system, rewarded ad, daily rewards.
+- Ads use Google's test IDs only. Real App IDs and ad unit IDs are needed before release.
+- No consent (UMP) flow yet. Needed before release.
+- The interstitial count is per session. There is no frequency cap across sessions.
+- On iOS, music keeps playing under an interstitial. Pausing audio during ads is left for the audio polish sprint.
 - Play button skips the menus and loads JungleMap (MainMenuController).
 - Unused scripts: ArrivalLayerTrigger, LevelProgressionController, MapLevelLoader, GameplayInputBlocker, GameplayInputGuard.
 - Hard-coded SelectLevel1() to SelectLevel10() in MapLevelManager and MapWindowController. Scenes hold 5 levels per map.

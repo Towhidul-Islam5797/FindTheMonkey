@@ -1,0 +1,86 @@
+SPRINT 05 - ADMOB SETUP AND INTERSTITIAL AD (TEST IDS ONLY)
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Plugin: Google Mobile Ads Unity plugin 11.6.0 (installed by the developer)
+
+GOAL
+Show a test interstitial ad when the player taps Next on the
+level-complete panel, every few levels, then continue to the next level.
+If no ad is ready, or AdsManager is missing, Next works as before.
+Ads are child-directed from the first build (kids' game, ages 5 and up).
+
+DEVELOPER DECISIONS
+- One new script, AdsManager, approved for this sprint.
+- Four files approved (plus AdsManager.cs.meta created by Unity).
+- No rewarded ad, no banner, no consent (UMP) code in this sprint.
+- When the count is reached but no ad is ready, the count stays, so the
+  next Next tries again.
+- A second call while an ad is open is ignored. The first call's
+  callback still runs once.
+- Load retry: if no ad is loaded and no load is running, Next starts a
+  new load and continues at once.
+
+CHANGES
+1. New: Assets/Scripts/AdsManager.cs
+   - Singleton like GameFeedbackManager (Instance, DontDestroyOnLoad,
+     duplicates destroyed).
+   - Start (Android and iOS only): RaiseAdEventsOnUnityMainThread = true,
+     RequestConfiguration with TagForChildDirectedTreatment.True and
+     MaxAdContentRating.G, then MobileAds.Initialize, then the first
+     interstitial load.
+   - Inspector fields: androidInterstitialId, iosInterstitialId (Google
+     test IDs as defaults), levelsBetweenInterstitials (default 3, Min 1),
+     showDebugLogs.
+   - ShowInterstitialThen(Action onFinished): counts calls (session only),
+     shows the ad on the Nth call when CanShowAd() is true, otherwise
+     calls onFinished at once. On close or show failure: destroy the ad,
+     load a new one, call onFinished once.
+   - isLoading flag for the retry. A newly loaded ad replaces and
+     destroys any old ad object.
+   - Debug.Log lines for load success, load failure, show, close and
+     show failure.
+2. LevelCompletePanelController.cs, LoadNextLevel only: the final
+   mapLevelManager.LoadNextLevel() call now goes through
+   AdsManager.Instance.ShowInterstitialThen when AdsManager exists.
+   Restart, HandleTimeUp and the failed panel are unchanged.
+3. CLAUDE.md: AdsManager in 2.3, new section 2.4c (ads), scope (10) and
+   known debt (11) updated, including the iOS music note.
+4. This file.
+
+INSPECTOR STEPS (by the developer)
+a) Assets > Google Mobile Ads > Settings: Android App ID
+   ca-app-pub-3940256099942544~3347511713, iOS App ID
+   ca-app-pub-3940256099942544~1458002511.
+b) Bootstrap scene: add an empty GameObject named AdsManager with the
+   AdsManager component.
+c) Assets > External Dependency Manager > Android Resolver > Force Resolve.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 1 to 3, 11, 13: no change to StartGame, taps, the right/wrong check or
+  the movement lock.
+- 4: the ad runs only after Next, long after the coin reward and
+  CompleteCurrentLevel. Order 2.4 unchanged.
+- 5: no second LevelState or MapLevelManager. AdsManager is in Bootstrap.
+- 6: no PlayerPrefs key added, renamed or removed. The ad count is not
+  saved.
+- 7: no serialized field, file or class renamed or removed.
+- 8: AdsManager is optional. Null check on AdsManager.Instance.
+- 10, 14: no game-over added. No ad after a loss.
+
+DONE CONDITIONS AND RESULTS
+To be filled in after the developer's tests:
+- No red errors in the Unity Console after compile: not tested yet
+- Editor (Build Profile Android), play from Bootstrap: placeholder ad on
+  the 3rd Next, then the next level starts with the countdown:
+  not tested yet
+- Editor, play straight from JungleMap (no AdsManager): Next works:
+  not tested yet
+- Restart never shows an ad: not tested yet
+- Loss panel never shows an ad (Next hidden, Restart only): not tested yet
+- Android device: ad shows with the "Test Ad" label: not tested yet
+
+KNOWN DEBT CARRIED OVER
+- Test IDs only. Real App IDs and ad unit IDs needed before release.
+- No consent (UMP) flow. Needed before release.
+- Interstitial count is per session, no cap across sessions.
+- On iOS, music keeps playing under an interstitial (audio polish sprint).

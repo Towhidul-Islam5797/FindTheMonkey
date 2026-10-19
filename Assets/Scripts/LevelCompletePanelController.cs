@@ -682,7 +682,16 @@ public class LevelCompletePanelController : MonoBehaviour
         PlayerPrefs.SetInt(StartSelectedLevelKey, 1);
         PlayerPrefs.Save();
 
-        mapLevelManager.LoadNextLevel();
+        if (AdsManager.Instance != null)
+        {
+            AdsManager.Instance.ShowInterstitialThen(
+                mapLevelManager.LoadNextLevel
+            );
+        }
+        else
+        {
+            mapLevelManager.LoadNextLevel();
+        }
     }
 
     // -------------------------------------------------------
