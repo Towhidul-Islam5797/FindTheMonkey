@@ -1,0 +1,89 @@
+SPRINT 04E - LOCK EVERYTHING AT 0:00
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Rule from the developer: when the timer reaches 0:00 the level is lost.
+Nothing may move or react after that, whether the tapped object is right
+or wrong.
+
+RESULT
+The existing code already follows the rule. No code or scene change was
+made in this sprint. This sprint was a code check plus Play-mode tests.
+
+CODE CHECK (read fully: HidingObject.cs, LevelCompletePanelController.cs
+HandleTimeUp; no other script reads taps or starts MoveObjectRoutine)
+1. New taps after 0:00: blocked.
+   HandleTimeUp disables every HidingObject component. A disabled
+   component gets no OnPointerClick from the EventSystem (HidingObject
+   OnPointerClick) and no Update call (the manual raycast fallback in
+   HidingObject.Update). Both paths end in TryReveal, the only place that
+   starts MoveObjectRoutine.
+2. A slide already running at 0:00: stopped.
+   HidingObject.OnDisable calls StopAllCoroutines, clears isMoving and
+   releases the movement lock. The right/wrong check and RevealMonkey run
+   only after the slide-out finishes (MoveObjectRoutine), and RevealMonkey
+   is the only caller of LevelState.MarkMonkeyFound. A stopped slide never
+   reaches them.
+   Same frame: Unity runs all Update calls before it resumes coroutines,
+   so OnTimeUp (raised in LevelTimer.Update) always wins over a slide that
+   would finish in that frame.
+3. If the monkey is found before 0:00, OnMonkeyFound stops the timer, so
+   OnTimeUp never fires. That is a normal win.
+
+WHY "0:01" CAN GIVE A WIN OR A LOSS
+The HUD rounds the remaining time up (LevelTimer.DisplaySeconds uses
+CeilToInt). "0:01" means anything from 0.99 down to 0.01 seconds left.
+A tap early in that second can finish its slide before 0:00 (win). A tap
+late in that second is cut off at 0:00 (loss). Both follow the rule.
+
+KNOWN BEHAVIOUR (accepted, not bugs)
+- A wrong object that is still sliding at 0:00 freezes where it is,
+  behind the failed panel. Restart reloads the scene and resets it.
+- A tap in the very frame of 0:00 can still add +1 try, because
+  RegisterTry runs when the slide starts. It cannot reveal anything.
+- A child can tap the right object while the HUD shows 0:01 and still
+  lose. Possible future options, each a separate small sprint: round the
+  HUD down, or let a slide that already started finish. Not requested.
+- The lock depends on HandleTimeUp running. It returns early if the panel
+  is already shown or if levelState, mapLevelManager or
+  levelCompletePanel is missing. All are set in the three map scenes.
+
+CHANGES
+- None to code or scenes.
+- Added: SprintDocs/Sprint_04e_LockAtZero.txt
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- No change, so all invariants hold as before. Invariant 14 and section
+  2.4b describe this behaviour.
+
+DONE CONDITIONS AND RESULTS
+Play mode, BeachMap (all reported by the developer, with screenshots):
+- Right object tapped at 0:01, slide finished in time: Level 4 Complete,
+  3 stars, Tries 1, Time 0:59, monkey found: PASS (expected win)
+- Wrong object (rock) tapped at 0:01, cut off at 0:00: Level 4 Failed,
+  grey stars, +0, Next hidden: PASS
+- Wrong object (chair) tapped at 0:00: Level 4 Failed, grey stars, +0,
+  Next hidden: PASS
+- Right object tapped at 0:00: Level 1 Failed, grey stars, +0, no monkey
+  reveal, Next hidden: PASS
+- Console: the "lock released" lines at time-up come from OnDisable,
+  which confirms the slide was stopped: PASS
+Not tested:
+- The same tests in JungleMap and SnowMap (same code, same panel setup).
+- The frozen object position and "further taps do nothing" were not
+  shown in the screenshots.
+
+ALSO CONFIRMED BY THESE TESTS
+- Sprint 04d: a loss shows 3 grey stars; a 3-star win shows gold stars
+  with no grey edge (BeachMap).
+- Sprint 04 and 04c: on a loss Next is hidden and all rewards show +0
+  (BeachMap).
+
+COMMIT MESSAGE (not committed)
+Sprint 04e: confirm the level locks at 0:00
+
+- Code check: no tap, slide or reveal can happen after time-up
+- Play-mode tests in BeachMap for right and wrong taps near 0:00
+- No code or scene change
+- Add SprintDocs/Sprint_04e_LockAtZero.txt
