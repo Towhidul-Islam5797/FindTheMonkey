@@ -1,5 +1,6 @@
 using System;
 using GoogleMobileAds.Api;
+using GoogleMobileAds.Common;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -68,13 +69,11 @@ public class AdsManager : MonoBehaviour
     private void Start()
     {
 #if UNITY_ANDROID || UNITY_IOS
-        MobileAds.RaiseAdEventsOnUnityMainThread = true;
-
         RequestConfiguration requestConfiguration =
             new RequestConfiguration
             {
-                TagForChildDirectedTreatment =
-                    TagForChildDirectedTreatment.True,
+                AgeRestrictedTreatment =
+                    AgeRestrictedTreatment.Child,
                 MaxAdContentRating =
                     MaxAdContentRating.G
             };
@@ -91,9 +90,12 @@ public class AdsManager : MonoBehaviour
 
         MobileAds.Initialize(initStatus =>
         {
-            DebugLog("Mobile Ads initialized.");
+            MobileAdsEventExecutor.ExecuteInUpdate(() =>
+            {
+                DebugLog("Mobile Ads initialized.");
 
-            LoadInterstitial();
+                LoadInterstitial();
+            });
         });
 #endif
     }
@@ -134,33 +136,36 @@ public class AdsManager : MonoBehaviour
             new AdRequest(),
             (InterstitialAd ad, LoadAdError error) =>
             {
-                isLoading = false;
-
-                if (error != null ||
-                    ad == null)
+                MobileAdsEventExecutor.ExecuteInUpdate(() =>
                 {
-                    DebugLog(
-                        "Interstitial failed to load: " +
-                        error
-                    );
+                    isLoading = false;
 
-                    return;
-                }
+                    if (error != null ||
+                        ad == null)
+                    {
+                        DebugLog(
+                            "Interstitial failed to load: " +
+                            error
+                        );
 
-                if (interstitialAd != null)
-                {
-                    interstitialAd.Destroy();
-                }
+                        return;
+                    }
 
-                interstitialAd = ad;
+                    if (interstitialAd != null)
+                    {
+                        interstitialAd.Destroy();
+                    }
 
-                interstitialAd.OnAdFullScreenContentClosed +=
-                    HandleAdClosed;
+                    interstitialAd = ad;
 
-                interstitialAd.OnAdFullScreenContentFailed +=
-                    HandleAdFailedToShow;
+                    interstitialAd.OnAdFullScreenContentClosed +=
+                        HandleAdClosed;
 
-                DebugLog("Interstitial loaded.");
+                    interstitialAd.OnAdFullScreenContentFailed +=
+                        HandleAdFailedToShow;
+
+                    DebugLog("Interstitial loaded.");
+                });
             }
         );
     }
@@ -207,21 +212,27 @@ public class AdsManager : MonoBehaviour
 
     private void HandleAdClosed()
     {
-        DebugLog("Interstitial closed.");
+        MobileAdsEventExecutor.ExecuteInUpdate(() =>
+        {
+            DebugLog("Interstitial closed.");
 
-        FinishAd();
+            FinishAd();
+        });
     }
 
     private void HandleAdFailedToShow(
         AdError error
     )
     {
-        DebugLog(
-            "Interstitial failed to show: " +
-            error
-        );
+        MobileAdsEventExecutor.ExecuteInUpdate(() =>
+        {
+            DebugLog(
+                "Interstitial failed to show: " +
+                error
+            );
 
-        FinishAd();
+            FinishAd();
+        });
     }
 
     private void FinishAd()

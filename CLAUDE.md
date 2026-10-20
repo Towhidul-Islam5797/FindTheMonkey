@@ -112,7 +112,7 @@ Never reorder steps 10 and 11.
 
 ### 2.4c Ads (added in Sprint 05)
 - AdsManager lives on its own GameObject in the Bootstrap scene and survives scene loads (DontDestroyOnLoad).
-- On start it sets TagForChildDirectedTreatment.True and MaxAdContentRating.G, then initializes AdMob and loads one interstitial. Ads run only on Android and iOS builds (and in the Editor when the Build Profile is Android or iOS).
+- On start it sets AgeRestrictedTreatment.Child (child-directed) and MaxAdContentRating.G, then initializes AdMob and loads one interstitial. Every plugin callback body runs inside MobileAdsEventExecutor.ExecuteInUpdate, so game code stays on the Unity main thread (Sprint 05c; the old TagForChildDirectedTreatment and RaiseAdEventsOnUnityMainThread are obsolete in 11.6.0). Ads run only on Android and iOS builds (and in the Editor when the Build Profile is Android or iOS).
 - The interstitial shows only from LevelCompletePanelController.LoadNextLevel (the Next button), on every levelsBetweenInterstitials-th tap (default 3, session count only, not saved). If no ad is ready, the count stays and the next tap tries again.
 - When the ad closes or fails to show, the next level loads. Without an ad the next level loads at once.
 - No ads on Restart, after a loss, during the countdown, or while searching.

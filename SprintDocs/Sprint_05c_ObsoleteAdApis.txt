@@ -1,0 +1,55 @@
+SPRINT 05C - REPLACE THE OBSOLETE ADMOB APIS IN ADSMANAGER
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Plugin: Google Mobile Ads Unity plugin 11.6.0
+
+GOAL
+Remove three CS0618 warnings (platform Android):
+- AdsManager.cs(71,9): MobileAds.RaiseAdEventsOnUnityMainThread is
+  obsolete. Use MobileAdsEventExecutor.ExecuteInUpdate() instead.
+- AdsManager.cs(76,17) and (77,21): TagForChildDirectedTreatment is
+  obsolete. Use AgeRestrictedTreatment instead.
+
+FOUND IN THE 11.6.0 DLLS (read only)
+- GoogleMobileAds.Core.dll, namespace GoogleMobileAds.Api:
+  enum AgeRestrictedTreatment { Unspecified = 0, Child = 1, Teen = 2 }
+  RequestConfiguration field AgeRestrictedTreatment (AgeRestrictedTreatment?)
+  Old enum TagForChildDirectedTreatment { Unspecified = -1, False = 0,
+  True = 1 }
+  Read with .NET reflection. CHANGELOG line 48 confirms the deprecation.
+- Child-directed on = AgeRestrictedTreatment.Child.
+  (Teen is for users under the age of consent.)
+- MobileAdsEventExecutor with ExecuteInUpdate is defined in
+  GoogleMobileAds.Common.dll. Namespace GoogleMobileAds.Common, found from
+  the DLL's own strings (its only namespaces are GoogleMobileAds.Common and
+  GoogleMobileAds.Api). Reflection could not load that DLL outside Unity;
+  the Unity compile confirms it.
+
+CHANGES
+1. Assets/Scripts/AdsManager.cs
+   - Added using GoogleMobileAds.Common; (approved by the developer).
+   - Removed MobileAds.RaiseAdEventsOnUnityMainThread = true;
+   - TagForChildDirectedTreatment = TagForChildDirectedTreatment.True
+     replaced by AgeRestrictedTreatment = AgeRestrictedTreatment.Child.
+     MaxAdContentRating.G kept.
+   - The bodies of the Initialize callback, the InterstitialAd.Load
+     callback, HandleAdClosed and HandleAdFailedToShow now run inside
+     MobileAdsEventExecutor.ExecuteInUpdate(() => { ... }). Their content
+     is unchanged.
+   Effect: game code still runs on the Unity main thread, one frame after
+   the plugin callback instead of in the same frame.
+2. CLAUDE.md 2.4c: API names updated.
+3. This file.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 6, 7: no PlayerPrefs key, serialized field, file or class renamed.
+- 8: AdsManager is still optional. LevelCompletePanelController untouched.
+- No gameplay code changed. Ads are still child-directed with rating G.
+
+DONE CONDITIONS AND RESULTS
+To be filled in after the developer's check:
+- Unity compiles with no red errors: not tested yet
+- The three CS0618 warnings are gone: not tested yet
+- The iosInterstitialId CS0414 warning on Android remains (expected)
+- Console still shows "Mobile Ads initialized." and "Interstitial
+  loaded." when playing from Bootstrap: not tested yet
