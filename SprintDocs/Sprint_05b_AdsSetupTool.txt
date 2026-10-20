@@ -1,0 +1,64 @@
+SPRINT 05B - ONE-CLICK ADS SETUP TOOL (EDITOR ONLY)
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Replace the Sprint 05 Inspector steps with one Editor menu item:
+Tools > Monkey Rush > Set Up Ads. The tool changes assets and the
+Bootstrap scene through Unity's Editor API when the developer runs it.
+No .unity, .prefab, .meta or .asset file was edited directly.
+
+FOUND BEFORE PLANNING (read only)
+- App ID fields in GoogleMobileAdsSettings.asset: adMobAndroidAppId,
+  adMobIOSAppId. Both already held the test IDs (Sprint 05a, 7218b43).
+- Bootstrap scene: Assets/Scenes/System/Bootstrap.unity (build index 0).
+- EDM 2.1.0 (Google.JarResolver.dll) has the menu item
+  Assets/External Dependency Manager/Android Resolver/Force Resolve.
+  The tool calls it with EditorApplication.ExecuteMenuItem, so there is
+  no compile dependency on EDM.
+
+DEVELOPER DECISIONS
+- Tool approved. Steps 3 and 4 swapped: the Android switch runs before
+  Force Resolve.
+- Play-mode guard and scene restore kept.
+
+CHANGES
+1. New: Assets/Editor/AdsSetupTool.cs
+   Step 0: stops with an error in Play mode.
+   Step 1: App IDs through SerializedObject. Writes only if the field is
+           empty or holds another Google test ID. A real ID is logged and
+           left. Saves only if something changed.
+   Step 2: asks to save modified scenes (cancel stops the tool), opens
+           Bootstrap, adds an AdsManager GameObject only if no AdsManager
+           component exists, saves the scene, then restores the scenes
+           that were open before.
+   Step 3: if the platform is not Android, a dialog offers the switch.
+           Switches only on Yes.
+   Step 4: runs EDM Force Resolve, or logs the hand step if the menu item
+           is missing.
+   One log line per step: done, already set, or skipped: reason.
+2. CLAUDE.md: Editor-only line in 2.3, tool mentioned in 2.4c.
+3. This file.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- Editor-only code. No runtime script changed. AdsManager.cs and
+  LevelCompletePanelController.cs untouched.
+- 5: the tool adds AdsManager to Bootstrap only, never to a map scene,
+  and never adds a second LevelState or MapLevelManager.
+- 6, 7: no PlayerPrefs key, serialized field, file or class renamed.
+- All other invariants: gameplay code not touched.
+
+DONE CONDITIONS AND RESULTS
+To be filled in after the developer runs the tool:
+- Compiles with no red errors: not tested yet
+- First run prints one line per step: not tested yet
+- Second run prints "already set" for steps 1 to 3: not tested yet
+- Bootstrap contains one AdsManager GameObject: not tested yet
+- Sprint 05 tests (3rd Next ad, JungleMap direct, Restart, loss, device):
+  not tested yet
+
+KNOWN DEBT CARRIED OVER
+- Same as Sprint 05: test IDs only, no consent (UMP), per-session count,
+  iOS music under ads.
+- Force Resolve runs every time the tool runs. It is safe but can take a
+  moment.

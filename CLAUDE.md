@@ -70,6 +70,7 @@ A map scene (for example JungleMap) holds everything for that world:
 | AdsManager | AdMob setup (child-directed) and the interstitial ad. Singleton, optional. | LevelCompletePanelController calls it |
 
 Editor-only: Assets/Editor/GameDataDebugWindow shows, edits and resets saved data.
+Editor-only: Assets/Editor/AdsSetupTool (Tools > Monkey Rush > Set Up Ads) sets the test App IDs, adds AdsManager to Bootstrap, offers the Android switch, and runs EDM Force Resolve. Safe to run more than once.
 
 ### 2.4 Gameplay flow, step by step
 1. A map scene loads. MapLevelManager activates the selected Level root.
@@ -116,7 +117,7 @@ Never reorder steps 10 and 11.
 - When the ad closes or fails to show, the next level loads. Without an ad the next level loads at once.
 - No ads on Restart, after a loss, during the countdown, or while searching.
 - AdsManager is optional. Without it (for example Play mode started in a map scene) Next loads the next level directly.
-- Ad unit IDs are Inspector fields. They default to Google's public test IDs. The App IDs are set by hand in Assets > Google Mobile Ads > Settings.
+- Ad unit IDs are Inspector fields. They default to Google's public test IDs. The App IDs are set in Assets > Google Mobile Ads > Settings, by hand or with Tools > Monkey Rush > Set Up Ads (Sprint 05b), which also adds AdsManager to Bootstrap.
 
 ### 2.5 Events (LevelState)
 OnScoreChanged, OnTotalScoreChanged, OnBananaChanged, OnCoinChanged, OnTryChanged, OnStarsChanged, OnScoreRewarded, OnBananaRewarded, OnMonkeyFound.
