@@ -45,9 +45,13 @@ public class LevelHint : MonoBehaviour
     [SerializeField]
     private Button adHintButton;
 
+    [Tooltip("How many ad hints the player can use in one level. Counted separately from coin hints.")]
+    [SerializeField, Min(1)]
+    private int adHintsPerLevel = 1;
+
     [Tooltip("When ticked, the ad hint button appears only when the player has fewer coins than the hint cost.")]
     [SerializeField]
-    private bool showAdHintOnlyWithoutCoins = true;
+    private bool showAdHintOnlyWithoutCoins = false;
 
     // -------------------------------------------------------
     // PULSE
@@ -78,6 +82,7 @@ public class LevelHint : MonoBehaviour
     private LevelTimer levelTimer;
     private bool lastMovementComplete;
     private int hintsUsed;
+    private int adHintsUsed;
 
     private RectTransform pulseTarget;
     private Vector3 pulseOriginalScale;
@@ -172,6 +177,14 @@ public class LevelHint : MonoBehaviour
         StopPulse();
     }
 
+    private void OnValidate()
+    {
+        if (Application.isPlaying)
+        {
+            RefreshButton();
+        }
+    }
+
     private void Update()
     {
         /*
@@ -185,6 +198,7 @@ public class LevelHint : MonoBehaviour
                 FindFirstObjectByType<CharacterPathMover>();
 
             hintsUsed = 0;
+            adHintsUsed = 0;
             lastMovementComplete = false;
 
             RefreshButton();
@@ -229,12 +243,16 @@ public class LevelHint : MonoBehaviour
     private bool CanUseHint()
     {
         return CanGiveHint() &&
+               hintsUsed < hintsPerLevel &&
                levelState.TotalCoins >= hintCost;
     }
 
     private bool CanUseAdHint()
     {
         if (!CanGiveHint())
+            return false;
+
+        if (adHintsUsed >= adHintsPerLevel)
             return false;
 
         if (AdsManager.Instance == null ||
@@ -259,9 +277,6 @@ public class LevelHint : MonoBehaviour
 
         if (levelTimer != null &&
             levelTimer.IsTimeUp)
-            return false;
-
-        if (hintsUsed >= hintsPerLevel)
             return false;
 
         if (pulseRoutine != null)
@@ -385,11 +400,11 @@ public class LevelHint : MonoBehaviour
             return;
         }
 
-        hintsUsed++;
+        adHintsUsed++;
 
         DebugLog(
             $"Ad hint rewarded on '{correctObject.name}'. " +
-            $"HintsUsed={hintsUsed}."
+            $"AdHintsUsed={adHintsUsed}."
         );
 
         pulseRoutine = StartCoroutine(

@@ -1,0 +1,83 @@
+SPRINT 07C - AD HINT BUTTON IN THE THREE MAP SCENES
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Put the ad hint button (watch a rewarded ad for a free hint) into all
+three map scenes and connect it to LevelHint (Sprint 07b code).
+
+DEVELOPER WORK (BeachMap, by hand)
+- Canvas/AdHintButton: Image (green, Art/UI & UX/AdHint.png), Button
+  (interactable, no OnClick entry), UIButtonTapSound. Anchored to the
+  right edge (anchor 1, 0.5), y +299, 150 x 120.
+- Child AdIcon: Image (Art/UI & UX/VideoAdRewardsIcon.png), 100 x 100.
+- Placed right after HintButton, before MapWindow.
+- New art files AdHint.png and VideoAdRewardsIcon.png (+ .meta).
+
+DEVELOPER DECISIONS
+- Button on the right side as designed (developer's choice).
+- 5 files approved (3 scenes, CLAUDE.md, this file).
+- All three scenes saved and closed in Unity before the edit.
+
+CHANGES (direct scene edits)
+1. JungleMap.unity and SnowMap.unity:
+   - AdHintButton subtree copied from BeachMap: 10 entries (AdHintButton
+     GameObject, RectTransform, CanvasRenderer, Image, Button,
+     UIButtonTapSound; AdIcon GameObject, RectTransform, CanvasRenderer,
+     Image) with new unique fileIDs. Only outside reference: the parent,
+     mapped to each scene's own Canvas.
+   - One line in the Canvas children list: AdHintButton right after
+     HintButton.
+   - LevelHint: adHintButton set to the new Button; added
+     showAdHintOnlyWithoutCoins: 1.
+   - 212 lines added, 0 removed per scene.
+2. BeachMap.unity: one line, LevelHint adHintButton {fileID: 0} -> the
+   AdHintButton Button.
+3. CLAUDE.md 2.4d: where the ad hint button lives and its art files.
+4. This file.
+
+CHECKS
+- Full property comparison of the AdHintButton subtree: JungleMap and
+  SnowMap identical to BeachMap (apart from IDs).
+- adHintButton points to the AdHintButton Button in all three scenes;
+  showAdHintOnlyWithoutCoins = 1 in all three.
+- Canvas order in all three: background, Levels, HintButton,
+  AdHintButton, MapWindow, CountdownPanel, HUD, Timer, MenuWindow,
+  LevelCompletePanel, shop.
+- Backups of the three scenes from before this edit were kept in the
+  session scratchpad.
+
+DESIGN CHANGE IN THIS SPRINT (developer decision after the first test)
+- The ad hint button ignores coins: showAdHintOnlyWithoutCoins set to 0
+  in all three scenes, default false in LevelHint.cs.
+- Separate limits: 1 coin hint (hintsPerLevel) and 1 ad hint (new field
+  adHintsPerLevel = 1) per level. A level can have both.
+- An ad closed early does not use up the ad hint.
+- LevelHint.cs changes: new field adHintsPerLevel and counter
+  adHintsUsed (reset with hintsUsed when a new level's Player becomes
+  active); the hintsUsed check moved from CanGiveHint to CanUseHint;
+  CanUseAdHint checks adHintsUsed; HandleAdFinished counts adHintsUsed;
+  new OnValidate refreshes both buttons when an Inspector value changes
+  during Play (the live checkbox toggle did nothing before).
+- CLAUDE.md 2.4d and smoke test step 17 updated.
+- 5 files approved for this change (3 scenes, LevelHint.cs, CLAUDE.md).
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 5: no LevelState or MapLevelManager added.
+- 9: Canvas UI only.
+- LevelHint.cs changed only for the design change above. A hint still
+  decides nothing (3) and only works after the monkey stops (2). No
+  PlayerPrefs key added (6); adHintsPerLevel has a default (8).
+
+DONE CONDITIONS AND RESULTS
+To be filled in after the developer's test (smoke test step 17, play
+from Bootstrap with the Android profile, fewer than 3 coins):
+- Scenes reload with no errors, button visible in all three: not tested yet
+- Ad button hidden while the monkey walks, shown when it stops: not tested yet
+- Tap pauses the game and shows the test rewarded ad: not tested yet
+- Full watch: right object pulses, no coins spent: not tested yet
+- Close early: no hint, game resumes: not tested yet
+- Console order of "Reward earned." and "Rewarded closed.": not tested yet
+- Ad button appears whatever the coin count: not tested yet
+- After a rewarded ad hint, the coin hint still works once: not tested yet
+- Ad button does not cover a hiding object in any level: not tested yet

@@ -1,0 +1,319 @@
+fileFormatVersion: 2
+guid: c6e0df7c828945c47a1897c2b2170ae0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -347138420185051174
+    second: VideoAdRewardsIcon_0
+  - first:
+      213: -1404823984755959568
+    second: VideoAdRewardsIcon_1
+  - first:
+      213: 7195361537611561888
+    second: VideoAdRewardsIcon_2
+  - first:
+      213: -5926084757543362700
+    second: VideoAdRewardsIcon_3
+  - first:
+      213: -566119351923263845
+    second: VideoAdRewardsIcon_4
+  - first:
+      213: -2428557348060922936
+    second: VideoAdRewardsIcon_5
+  - first:
+      213: -5609263256746310873
+    second: VideoAdRewardsIcon_6
+  - first:
+      213: 3055904187863319865
+    second: VideoAdRewardsIcon_7
+  - first:
+      213: -5188151167761603840
+    second: VideoAdRewardsIcon_8
+  - first:
+      213: -9119623332234540947
+    second: VideoAdRewardsIcon_9
+  - first:
+      213: -621342398473890500
+    second: VideoAdRewardsIcon_10
+  - first:
+      213: -5147696403061914880
+    second: VideoAdRewardsIcon_11
+  - first:
+      213: -6207696512257751448
+    second: VideoAdRewardsIcon_12
+  - first:
+      213: -8898799564907859965
+    second: VideoAdRewardsIcon_13
+  - first:
+      213: -7013930381927457673
+    second: VideoAdRewardsIcon_14
+  - first:
+      213: -2842469505770400905
+    second: VideoAdRewardsIcon_15
+  - first:
+      213: 3833234102140188069
+    second: VideoAdRewardsIcon_16
+  - first:
+      213: 1429675184123076437
+    second: VideoAdRewardsIcon_17
+  - first:
+      213: 8211010438121116294
+    second: VideoAdRewardsIcon_18
+  - first:
+      213: 1876216725497736857
+    second: VideoAdRewardsIcon_19
+  - first:
+      213: -5270158633915823391
+    second: VideoAdRewardsIcon_20
+  - first:
+      213: -5362719880242669235
+    second: VideoAdRewardsIcon_21
+  - first:
+      213: 484213682741088067
+    second: VideoAdRewardsIcon_22
+  - first:
+      213: -4958055099789085050
+    second: VideoAdRewardsIcon_23
+  - first:
+      213: 6142391403156681350
+    second: VideoAdRewardsIcon_24
+  - first:
+      213: -2042266034722300462
+    second: VideoAdRewardsIcon_25
+  - first:
+      213: 7462268598732765220
+    second: VideoAdRewardsIcon_26
+  - first:
+      213: 3945457453151267348
+    second: VideoAdRewardsIcon_27
+  - first:
+      213: -8585954683449614084
+    second: VideoAdRewardsIcon_28
+  - first:
+      213: 495181770405307597
+    second: VideoAdRewardsIcon_29
+  - first:
+      213: -7830592935531891234
+    second: VideoAdRewardsIcon_30
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: VideoAdRewardsIcon_0
+      rect:
+        serializedVersion: 2
+        x: 174
+        y: 135
+        width: 988
+        height: 924
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adfcaf03277be2bf0800000000000000
+      internalID: -347138420185051174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5022129a5a6f3294cad6f0751dee394f
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceOnImport
+        value: False
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":1,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      VideoAdRewardsIcon_0: -347138420185051174
+      VideoAdRewardsIcon_1: -1404823984755959568
+      VideoAdRewardsIcon_10: -621342398473890500
+      VideoAdRewardsIcon_11: -5147696403061914880
+      VideoAdRewardsIcon_12: -6207696512257751448
+      VideoAdRewardsIcon_13: -8898799564907859965
+      VideoAdRewardsIcon_14: -7013930381927457673
+      VideoAdRewardsIcon_15: -2842469505770400905
+      VideoAdRewardsIcon_16: 3833234102140188069
+      VideoAdRewardsIcon_17: 1429675184123076437
+      VideoAdRewardsIcon_18: 8211010438121116294
+      VideoAdRewardsIcon_19: 1876216725497736857
+      VideoAdRewardsIcon_2: 7195361537611561888
+      VideoAdRewardsIcon_20: -5270158633915823391
+      VideoAdRewardsIcon_21: -5362719880242669235
+      VideoAdRewardsIcon_22: 484213682741088067
+      VideoAdRewardsIcon_23: -4958055099789085050
+      VideoAdRewardsIcon_24: 6142391403156681350
+      VideoAdRewardsIcon_25: -2042266034722300462
+      VideoAdRewardsIcon_26: 7462268598732765220
+      VideoAdRewardsIcon_27: 3945457453151267348
+      VideoAdRewardsIcon_28: -8585954683449614084
+      VideoAdRewardsIcon_29: 495181770405307597
+      VideoAdRewardsIcon_3: -5926084757543362700
+      VideoAdRewardsIcon_30: -7830592935531891234
+      VideoAdRewardsIcon_4: -566119351923263845
+      VideoAdRewardsIcon_5: -2428557348060922936
+      VideoAdRewardsIcon_6: -5609263256746310873
+      VideoAdRewardsIcon_7: 3055904187863319865
+      VideoAdRewardsIcon_8: -5188151167761603840
+      VideoAdRewardsIcon_9: -9119623332234540947
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

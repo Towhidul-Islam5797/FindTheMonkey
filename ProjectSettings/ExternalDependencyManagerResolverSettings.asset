@@ -16,9 +16,9 @@ MonoBehaviour:
     verboseLogging:
       value: 0
     enableAutoResolution:
-      value: 1
+      value: 0
     autoResolveOnBuild:
-      value: 1
+      value: 0
     autoResolutionDisabledWarning:
       value: 1
     promptBeforeAutoResolution:
