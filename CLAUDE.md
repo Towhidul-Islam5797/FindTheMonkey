@@ -68,6 +68,7 @@ A map scene (for example JungleMap) holds everything for that world:
 | GameFeedbackManager | Music, sound effects, vibration. Singleton. | HidingObject, UI |
 | UIButtonTapSound | Click sound on buttons. | GameFeedbackManager |
 | AdsManager | AdMob setup (child-directed) and the interstitial ad. Singleton, optional. | LevelCompletePanelController calls it |
+| LevelHint | Hint button: spends coins and pulses the object that hides the monkey. Optional, one per map scene. | LevelState, CharacterPathMover, HidingObject (RelatedMovePoint), LevelTimer |
 
 Editor-only: Assets/Editor/GameDataDebugWindow shows, edits and resets saved data.
 Editor-only: Assets/Editor/AdsSetupTool (Tools > Monkey Rush > Set Up Ads) sets the test App IDs, adds AdsManager to Bootstrap, offers the Android switch, and runs EDM Force Resolve. Safe to run more than once.
@@ -118,6 +119,14 @@ Never reorder steps 10 and 11.
 - No ads on Restart, after a loss, during the countdown, or while searching.
 - AdsManager is optional. Without it (for example Play mode started in a map scene) Next loads the next level directly.
 - Ad unit IDs are Inspector fields. They default to Google's public test IDs. The App IDs are set in Assets > Google Mobile Ads > Settings, by hand or with Tools > Monkey Rush > Set Up Ads (Sprint 05b), which also adds AdsManager to Bootstrap.
+
+### 2.4d Hint (added in Sprint 06)
+- LevelHint sits on the GameplayHUD (wired in Sprint 06b). It connects its Hint button by code, so the button needs no OnClick entry.
+- The button works only when the monkey has stopped, the monkey is not found, the time is not up, a hint is left (hintsPerLevel, default 1) and the player has hintCost coins (default 3). Otherwise it is greyed out. The cost text shows hintCost.
+- A hint finds the active HidingObject whose RelatedMovePoint == CharacterPathMover.CurrentArrivedPoint, then spends the coins with LevelState.SpendCoins, then pulses that object's scale (pulseSeconds, pulseScale, pulseCount). If no object matches, no coins are spent.
+- A hint never reveals the monkey, never counts as a try and never changes stars or rewards. The right/wrong decision in HidingObject is unchanged (invariant 3).
+- The hint count resets when a new level's Player becomes active. The pulse uses Time.deltaTime, so it freezes with the pause menu.
+- Known gap: a hint can still be bought while a hiding object is sliding (the movement lock in HidingObject is private).
 
 ### 2.5 Events (LevelState)
 OnScoreChanged, OnTotalScoreChanged, OnBananaChanged, OnCoinChanged, OnTryChanged, OnStarsChanged, OnScoreRewarded, OnBananaRewarded, OnMonkeyFound.
@@ -238,6 +247,7 @@ Stop and ask the developer before continuing if:
 13. Restart from the level-complete panel and Next both load a level that starts properly (countdown, monkey moves, timer waits and then counts). Check this in all three maps.
 14. The Unity Console shows no new red errors.
 15. Tick End Level When Time Runs Out on a level and let the timer reach 0:00. The panel shows Level N Failed!, 0 stars and +0. Taps do nothing and Next is hidden. Nothing is saved: check with GameDataDebugWindow. Restart starts the level properly. With the box off, play continues at 0:00 as in step 10.
+16. Hint (after Sprint 06b): the Hint button is grey while the monkey walks and with fewer than 3 coins. Tapping it with 3 or more coins takes 3 coins, pulses the right object, and the button turns grey for the rest of the level. Stars and tries are unchanged. Restart or Next gives a fresh hint.
 
 ## 9. Unity and UI rules
 - Everything in gameplay is Canvas UI. Use RectTransform, Image, Button, TMP_Text. Do not write world-space code (SpriteRenderer, Collider2D, Transform.position) for gameplay objects.
@@ -251,7 +261,7 @@ Stop and ask the developer before continuing if:
 - Play timer: done (Sprint 01a to 01c). It starts when the monkey stops, never ends the level, and the level-complete panel shows the time spent.
 - Time bonus: done (Sprint 02). Fast finishes earn bonus coins by time tier, paid only on improvement.
 - Harder hiding in later levels (partial visibility, varied positions, faster movement).
-- Hint system, and coins that are useful (hints, extra tries).
+- Hint system: logic done (Sprint 06), button in the scenes is Sprint 06b. Extra tries for coins not started.
 - Difficulty balancing: early levels easy, later levels challenging.
 - UI check on different phone sizes.
 - Skin and costume polish, audio and vibration polish.
@@ -272,7 +282,7 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 
 ## 11. Known debt
 - Empty placeholder scenes: WorldSelection, LevelSelection, MonkeyCollection, Rewards, Settings.
-- Missing features: hint system, rewarded ad, daily rewards.
+- Missing features: hint button in the scenes (Sprint 06b), rewarded ad, daily rewards.
 - Ads use Google's test IDs only. Real App IDs and ad unit IDs are needed before release.
 - No consent (UMP) flow yet. Needed before release.
 - The interstitial count is per session. There is no frequency cap across sessions.

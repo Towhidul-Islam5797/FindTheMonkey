@@ -140,6 +140,8 @@ public class HidingObject : MonoBehaviour, IPointerClickHandler
         }
     }
 
+    public RectTransform RelatedMovePoint => relatedMovePoint;
+
     // -------------------------------------------------------
     // UNITY
     // -------------------------------------------------------

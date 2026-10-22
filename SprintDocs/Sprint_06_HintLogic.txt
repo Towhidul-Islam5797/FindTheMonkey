@@ -1,0 +1,66 @@
+SPRINT 06 - HINT LOGIC (COINS GET A USE)
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+A Hint button that spends coins and makes the object hiding the monkey
+pulse, so the child can find it. Code only in this sprint. The button is
+put into the three map scenes in Sprint 06b.
+
+DEVELOPER DECISIONS
+- Cost 3 coins, 1 hint per level, no effect on stars or tries.
+- Same allow-rules as tapping. Find the object before spending coins.
+- Button greys out and shows the cost.
+- Pulse length and pulse size are Inspector fields (tunable in Play mode).
+- Approved: one read-only property in HidingObject.cs, 4 files total.
+
+CHANGES
+1. Assets/Scripts/HidingObject.cs: one line added after
+   IsAnotherObjectMoving:
+   public RectTransform RelatedMovePoint => relatedMovePoint;
+   Nothing else in the file changed.
+2. New: Assets/Scripts/LevelHint.cs
+   - Fields: levelState (auto-found), hintButton, costText, hintCost = 3,
+     hintsPerLevel = 1, pulseSeconds = 1.5, pulseScale = 1.15,
+     pulseCount = 3 (added so the number of pulses can be tuned too),
+     showDebugLogs. All optional.
+   - Connects hintButton.onClick by code (no OnClick entry needed).
+   - Button interactable only when: monkey stopped, monkey not found,
+     time not up, a hint is left, pulse not running, enough coins.
+     Refreshed on OnCoinChanged, OnMonkeyFound, OnTimeUp, when the
+     monkey stops, after a hint and after the pulse.
+   - UseHint: finds the active HidingObject whose RelatedMovePoint ==
+     CurrentArrivedPoint, then SpendCoins(hintCost), then pulses its
+     scale with Time.deltaTime and restores the exact original scale.
+     No match: no coins spent.
+   - The hint count resets when a new level's CharacterPathMover becomes
+     active (polls only the mover, like LevelTimer).
+3. CLAUDE.md: LevelHint in 2.3, new section 2.4d, smoke test step 16,
+   scope (10) and debt (11) updated.
+4. This file.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 2: the hint works only after IsMovementComplete.
+- 3: the right/wrong comparison in HidingObject is unchanged. The hint
+  reads the same two values to find the object, but decides nothing.
+- 4, order 2.4: not touched. A hint never calls MarkMonkeyFound.
+- 6: no PlayerPrefs key added. Coins are saved by the existing
+  SpendCoins.
+- 7: no field, file or class renamed. One public property added.
+- 8: every new field is optional; LevelHint is optional per scene.
+- 9: scale pulse on the RectTransform, Canvas UI only.
+- 10, 14: no game-over. The hint stops at time-up.
+- 11: the movement lock is untouched.
+- 13: no starter script per level; the active Player is found.
+
+KNOWN GAPS
+- A hint can be bought while a hiding object is sliding, because the
+  movement lock in HidingObject is private. Worst case: the child taps
+  the right object and buys a hint during its slide, so 3 coins are
+  spent just before the win. A second read-only property would close
+  this; not approved in this sprint.
+
+DONE CONDITIONS AND RESULTS
+To be filled in after Sprint 06b (the button is not in a scene yet):
+- Unity compiles with no red errors: not tested yet
+- Smoke test step 16: not tested yet
