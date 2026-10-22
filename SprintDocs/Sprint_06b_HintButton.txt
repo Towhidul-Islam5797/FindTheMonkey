@@ -1,0 +1,61 @@
+SPRINT 06B - HINT BUTTON IN THE THREE MAP SCENES
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+Put the Sprint 06 Hint button into JungleMap, BeachMap and SnowMap with
+one Editor menu item: Tools > Monkey Rush > Add Hint Button.
+
+FOUND BEFORE CODING (read only)
+- All three map scenes: Canvas/HUD holds GameplayHUD, with children
+  Horizontal Layout (Score, Coin, Banana) and Menu (pause button).
+- JungleMap: Canvas/HUD is a top bar (979 x 120, anchored top-left,
+  y -80) with a HorizontalLayoutGroup. A child of HUD would be placed in
+  that row, so the approved Canvas/HUD/HintButton could not sit
+  bottom-right.
+- Map scene buttons use UIButtonTapSound.
+
+DEVELOPER DECISIONS
+- Button at Canvas/HintButton, a direct child of Canvas, sibling right
+  after HUD (later panels and windows draw on top), bottom-right,
+  240 x 240, 40 px margin.
+- Separate HintLabel ("HINT") and CostText (the number LevelHint sets).
+- LevelHint and UIButtonTapSound on the button. 3 files.
+- Since 2026-10-22 scene files may be edited directly (CLAUDE.md
+  section 4). Creating a new button with many linked components is still
+  done through an Editor tool, because hand-written scene IDs break
+  easily.
+
+CHANGES
+1. New: Assets/Editor/HintSetupTool.cs
+   - Stops in Play mode. Asks to save modified scenes; cancel stops it.
+   - For each map scene: if any LevelHint exists, logs "already set".
+     If no root Canvas with a HUD child exists, logs "skipped".
+     Otherwise creates Canvas/HintButton (Image with the built-in
+     UISprite, Button), children HintLabel and CostText (TMP, default
+     TMP font, black, centered, no raycast), adds UIButtonTapSound and
+     LevelHint, sets LevelHint.hintButton and costText through
+     SerializedObject, saves the scene and logs "done".
+   - Restores the scenes that were open before.
+   - LevelHint keeps its defaults: cost 3, 1 hint, pulse 1.5 s at 1.15,
+     3 pulses.
+2. CLAUDE.md: Editor-only line in 2.3, 2.4d describes where the button
+   lives and why.
+3. This file.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 5: no LevelState or MapLevelManager added.
+- 7: nothing renamed.
+- 8, 13: LevelHint finds LevelState, LevelTimer and the active Player by
+  itself; no starter script per level.
+- 9: Canvas UI only (RectTransform, Image, Button, TMP_Text).
+- No gameplay script changed.
+
+DONE CONDITIONS AND RESULTS
+To be filled in after the developer runs the tool:
+- Compiles with no red errors: not tested yet
+- First run logs "done" for JungleMap, BeachMap and SnowMap: not tested yet
+- Second run logs "already set" three times: not tested yet
+- Smoke test step 16 in all three maps: not tested yet
+- The button is hidden behind the pause menu, map window and
+  level-complete panel: not tested yet

@@ -72,6 +72,7 @@ A map scene (for example JungleMap) holds everything for that world:
 
 Editor-only: Assets/Editor/GameDataDebugWindow shows, edits and resets saved data.
 Editor-only: Assets/Editor/AdsSetupTool (Tools > Monkey Rush > Set Up Ads) sets the test App IDs, adds AdsManager to Bootstrap, offers the Android switch, and runs EDM Force Resolve. Safe to run more than once.
+Editor-only: Assets/Editor/HintSetupTool (Tools > Monkey Rush > Add Hint Button) adds Canvas/HintButton with LevelHint and UIButtonTapSound to JungleMap, BeachMap and SnowMap. Skips a scene that already has a LevelHint.
 
 ### 2.4 Gameplay flow, step by step
 1. A map scene loads. MapLevelManager activates the selected Level root.
@@ -121,7 +122,7 @@ Never reorder steps 10 and 11.
 - Ad unit IDs are Inspector fields. They default to Google's public test IDs. The App IDs are set in Assets > Google Mobile Ads > Settings, by hand or with Tools > Monkey Rush > Set Up Ads (Sprint 05b), which also adds AdsManager to Bootstrap.
 
 ### 2.4d Hint (added in Sprint 06)
-- LevelHint sits on the GameplayHUD (wired in Sprint 06b). It connects its Hint button by code, so the button needs no OnClick entry.
+- LevelHint sits on Canvas/HintButton in each map scene (added in Sprint 06b by HintSetupTool). The button is a direct child of Canvas, placed right after HUD in the sibling order so later panels and windows draw on top of it. Canvas/HUD is a top bar with a HorizontalLayoutGroup, so the button cannot live inside HUD. Children: HintLabel ("HINT") and CostText (the cost number, set by LevelHint). LevelHint connects its button by code, so the button needs no OnClick entry.
 - The button works only when the monkey has stopped, the monkey is not found, the time is not up, a hint is left (hintsPerLevel, default 1) and the player has hintCost coins (default 3). Otherwise it is greyed out. The cost text shows hintCost.
 - A hint finds the active HidingObject whose RelatedMovePoint == CharacterPathMover.CurrentArrivedPoint, then spends the coins with LevelState.SpendCoins, then pulses that object's scale (pulseSeconds, pulseScale, pulseCount). If no object matches, no coins are spent.
 - A hint never reveals the monkey, never counts as a try and never changes stars or rewards. The right/wrong decision in HidingObject is unchanged (invariant 3).
@@ -164,8 +165,12 @@ Any timer that uses Time.deltaTime pauses automatically. Do not use unscaled tim
 | 14 | LevelTimer must never end a level or block a tap, unless the level's LevelSettings has End Level When Time Runs Out turned on (off by default). With it off, play continues at 0:00. | Core design: no game-over. The loss is opt-in per level (2.4b). |
 
 ## 4. Hard rules (never, in any mode)
-- Never edit .unity, .prefab, or .meta files, ProjectSettings, Packages, Library, Temp, .git, or .claude.
-  Describe the Inspector steps for the developer to do by hand.
+- Never edit .prefab or .meta files, ProjectSettings, Packages, Library, Temp, .git, or .claude.
+  Describe the Inspector steps for those by hand.
+- Scene files (.unity) may be edited directly (developer decision, 2026-10-22), when the approved plan names the scene. Three safety habits apply to every scene edit:
+  1. The scene must be closed in Unity, or saved with no unsaved changes, before the edit.
+  2. After the edit, show the git diff of the scene. Only the intended changes may appear; anything else: say so and stop.
+  3. The developer reloads the scene in Unity and checks the Console.
 - Never run git commit, git push, git reset, git clean, git checkout --, or git add . or git add -A.
   Give the developer a ready-to-copy commit message instead.
 - Never delete files. Never run rm -rf or any command that deletes in bulk.
@@ -180,7 +185,7 @@ Any timer that uses Time.deltaTime pauses automatically. Do not use unscaled tim
 
 ## 5. Stop conditions: stop and ask
 Stop and ask the developer before continuing if:
-1. The task needs a scene, prefab, or Project Settings change.
+1. The task needs a prefab or Project Settings change.
 2. The change would touch more than 3 files.
 3. The change would alter the order in section 2.4, or break an invariant in section 3.
 4. The task touches LevelState, MapLevelManager, HidingObject, CharacterPathMover, or MapWindowController, and the plan did not name that file.
@@ -212,7 +217,7 @@ Stop and ask the developer before continuing if:
 ### After every task
 1. List the exact lines changed in each file.
 2. Check the invariants in section 3 against the change.
-3. Tell the developer which Inspector steps they must do by hand.
+3. Tell the developer which Inspector steps they must do by hand, and list every scene change that was made directly.
 4. Remind the developer to check the Unity Console for red errors, then run the smoke test in section 8.
 5. Give a ready-to-copy commit message. Do not commit.
 6. Write SprintDocs/Sprint_NN_Name.txt when the sprint ends: goals, changes, done conditions, results.
@@ -224,7 +229,7 @@ Stop and ask the developer before continuing if:
 | Compile error after your edit | Read the exact error. Fix only that. After 2 failed attempts, stop and ask. |
 | Unity shows empty Inspector slots after your edit | Stop. A serialized field was renamed or removed. Tell the developer to run git restore on the file. |
 | You edited a file outside the plan | Say so at once. Tell the developer to run git restore on that file. |
-| A scene or prefab needs a change | Stop. Give the developer exact Inspector steps. |
+| A prefab needs a change | Stop. Give the developer exact Inspector steps. |
 | The task is bigger than the plan | Stop. Propose splitting it into smaller sprints. |
 | The monkey shows the Idle animation while walking | Check that the Animator field on CharacterPathMover is assigned. The code fails silently. Tell the developer. |
 | Existing code looks wrong or conflicts with this file | Report it. Do not fix it unless asked. |
