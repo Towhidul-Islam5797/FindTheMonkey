@@ -67,7 +67,7 @@ A map scene (for example JungleMap) holds everything for that world:
 | PlayerSkinController | Applies the selected skin by swapping the animator override. | ShopManager |
 | GameFeedbackManager | Music, sound effects, vibration. Singleton. | HidingObject, UI |
 | UIButtonTapSound | Click sound on buttons. | GameFeedbackManager |
-| AdsManager | AdMob setup (child-directed) and the interstitial ad. Singleton, optional. | LevelCompletePanelController calls it |
+| AdsManager | AdMob setup (child-directed), the interstitial ad and the rewarded ad. Singleton, optional. | LevelCompletePanelController calls it; LevelHint will call the rewarded ad (Sprint 07b) |
 | LevelHint | Hint button: spends coins and pulses the object that hides the monkey. Optional, one per map scene. | LevelState, CharacterPathMover, HidingObject (RelatedMovePoint), LevelTimer |
 
 Editor-only: Assets/Editor/GameDataDebugWindow shows, edits and resets saved data.
@@ -120,6 +120,7 @@ Never reorder steps 10 and 11.
 - No ads on Restart, after a loss, during the countdown, or while searching.
 - AdsManager is optional. Without it (for example Play mode started in a map scene) Next loads the next level directly.
 - Ad unit IDs are Inspector fields. They default to Google's public test IDs. The App IDs are set in Assets > Google Mobile Ads > Settings, by hand or with Tools > Monkey Rush > Set Up Ads (Sprint 05b), which also adds AdsManager to Bootstrap.
+- Rewarded ad (Sprint 07): loaded after initialization next to the interstitial, reloaded after every show. Test IDs in androidRewardedId and iosRewardedId. IsRewardedReady says whether one can be shown; OnRewardedReadyChanged fires on load, show and close. ShowRewardedThen(Action<bool>) calls back exactly once: true only if the reward was earned, false if the ad was closed early, failed or was not ready. A second call while one is open is ignored. Nothing calls it until Sprint 07b (ad hint button in LevelHint).
 
 ### 2.4d Hint (added in Sprint 06)
 - LevelHint sits on Canvas/HintButton in each map scene (added in Sprint 06b by HintSetupTool). The button is a direct child of Canvas, placed right after Levels and before MapWindow in the sibling order, so MapWindow, CountdownPanel, HUD and every later panel draw on top of it and block taps on it. Canvas/HUD is a top bar with a HorizontalLayoutGroup, so the button cannot live inside HUD. Children: HintLabel ("HINT") and CostText (the cost number, set by LevelHint). LevelHint connects its button by code, so the button needs no OnClick entry.
@@ -292,6 +293,8 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 - No consent (UMP) flow yet. Needed before release.
 - The interstitial count is per session. There is no frequency cap across sessions.
 - On iOS, music keeps playing under an interstitial. Pausing audio during ads is left for the audio polish sprint.
+- On iOS the game keeps running under full-screen ads. Sprint 07b must pause gameplay (Time.timeScale = 0) while the rewarded ad is open and restore it after, or the level timer can run out during the ad.
+- Rewarded ad: the code expects the reward callback before the closed callback. Check this order in the Sprint 07b device test.
 - Play button skips the menus and loads JungleMap (MainMenuController).
 - Unused scripts: ArrivalLayerTrigger, LevelProgressionController, MapLevelLoader, GameplayInputBlocker, GameplayInputGuard.
 - Hard-coded SelectLevel1() to SelectLevel10() in MapLevelManager and MapWindowController. Scenes hold 5 levels per map.

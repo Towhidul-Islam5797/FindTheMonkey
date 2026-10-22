@@ -41,8 +41,9 @@ CHANGES
    - Logs: Rewarded loaded, failed to load, Showing rewarded, Reward
      earned, Rewarded closed, failed to show.
 2. CLAUDE.md: 2.3 AdsManager row, 2.4c rewarded bullet, 11 known-debt
-   line about the iOS pause. Held back until Sprint 06b is committed, so
-   the two sprints do not mix in one file.
+   line about the iOS pause, plus a debt line about the reward-before-close
+   order. Added after Sprint 06b/06c was committed. Note: commit f93ad3f
+   (Sprint 06c) already contains AdsManager.cs and this file.
 3. This file.
 
 INVARIANTS CHECKED (CLAUDE.md section 3)
@@ -56,8 +57,12 @@ RISK
   and no hint is given. Checked in the Sprint 07b device test.
 
 DONE CONDITIONS AND RESULTS
-To be filled in after the developer's check:
-- Compiles with no red errors: not tested yet
-- Play from Bootstrap (Android profile): Console shows "Interstitial
-  loaded." and "Rewarded loaded.": not tested yet
+Developer's check (Editor, Android profile, play from Bootstrap,
+Console screenshot 2026-10-22):
+- Compiles with no red errors: PASS (0 errors; 2 known warnings: URP
+  global settings, Unity Account API)
+- Console shows "Mobile Ads initialized.", "Interstitial loaded." and
+  "Rewarded loaded.": PASS
 - Interstitial on the 3rd Next still works: not tested yet
+- Showing the rewarded ad: not possible yet (nothing calls it until
+  Sprint 07b)
