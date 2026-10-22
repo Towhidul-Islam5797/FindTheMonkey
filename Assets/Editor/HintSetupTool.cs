@@ -102,7 +102,7 @@ public static class HintSetupTool
 
         Debug.Log(
             $"[HintSetupTool] {scene.name}: done " +
-            "(Canvas/HintButton added after HUD and saved)."
+            "(Canvas/HintButton added after Levels and saved)."
         );
     }
 
@@ -158,7 +158,13 @@ public static class HintSetupTool
             buttonObject.GetComponent<RectTransform>();
 
         buttonRect.SetParent(canvas, false);
-        buttonRect.SetSiblingIndex(hud.GetSiblingIndex() + 1);
+        Transform levels = canvas.Find("Levels");
+
+        buttonRect.SetSiblingIndex(
+            levels != null
+                ? levels.GetSiblingIndex() + 1
+                : hud.GetSiblingIndex()
+        );
 
         buttonRect.anchorMin = new Vector2(1f, 0f);
         buttonRect.anchorMax = new Vector2(1f, 0f);

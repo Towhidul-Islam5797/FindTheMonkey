@@ -1,0 +1,63 @@
+SPRINT 07 - REWARDED AD IN ADSMANAGER (CODE ONLY, TEST IDS)
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Plugin: Google Mobile Ads Unity plugin 11.6.0
+
+GOAL
+Add a rewarded ad to AdsManager so Sprint 07b can offer "watch an ad for
+a free hint" on a second Hint button. Nothing calls it in this sprint.
+
+DEVELOPER DECISIONS
+- Two hint buttons: the coin hint stays as it is; a separate ad hint
+  button (designed by the developer in one scene, copied by Claude) comes
+  in Sprint 07b and 07c.
+- Reward = the same free hint. Shares the 1 hint per level.
+- Gameplay paused (Time.timeScale = 0) while the rewarded ad is open:
+  Sprint 07b, LevelHint.
+- Reward-before-close order is checked in the 07b device test.
+- 3 files approved.
+
+CHANGES
+1. Assets/Scripts/AdsManager.cs (additions only, interstitial unchanged)
+   - Inspector fields under [Header("Rewarded Ad Unit IDs")]:
+     androidRewardedId = ca-app-pub-3940256099942544/5224354917
+     iosRewardedId     = ca-app-pub-3940256099942544/1712485313
+   - Private state: rewardedAd, isRewardedLoading, isRewardedShowing,
+     rewardEarned, pendingOnRewardedFinished.
+   - public bool IsRewardedReady: loaded, not showing, CanShowAd().
+   - public event Action OnRewardedReadyChanged: fired on load, show and
+     close.
+   - Start: isRewardedLoading = true next to isLoading; the Initialize
+     callback calls LoadRewarded() after LoadInterstitial().
+   - GetRewardedId(): Android or iOS ID, empty on other platforms.
+   - LoadRewarded(): RewardedAd.Load, callback in ExecuteInUpdate,
+     destroys an old ad, subscribes closed/failed, logs, fires the event.
+   - ShowRewardedThen(Action<bool> onFinished): ignores a second call
+     while showing; not ready -> starts a load if none runs and calls
+     onFinished(false) at once; ready -> shows, the reward callback sets
+     rewardEarned = true.
+   - Closed or failed to show: destroy, reload, fire the event, then call
+     onFinished(rewardEarned) exactly once.
+   - Logs: Rewarded loaded, failed to load, Showing rewarded, Reward
+     earned, Rewarded closed, failed to show.
+2. CLAUDE.md: 2.3 AdsManager row, 2.4c rewarded bullet, 11 known-debt
+   line about the iOS pause. Held back until Sprint 06b is committed, so
+   the two sprints do not mix in one file.
+3. This file.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- No gameplay script changed. Nothing calls the rewarded ad yet.
+- 6, 7: no PlayerPrefs key, no rename. New serialized fields have
+  defaults, so the Bootstrap AdsManager needs no Inspector change (8).
+
+RISK
+- The code expects the reward callback before the closed callback. If a
+  device reports them the other way round, ShowRewardedThen returns false
+  and no hint is given. Checked in the Sprint 07b device test.
+
+DONE CONDITIONS AND RESULTS
+To be filled in after the developer's check:
+- Compiles with no red errors: not tested yet
+- Play from Bootstrap (Android profile): Console shows "Interstitial
+  loaded." and "Rewarded loaded.": not tested yet
+- Interstitial on the 3rd Next still works: not tested yet
