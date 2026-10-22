@@ -129,6 +129,7 @@ Never reorder steps 10 and 11.
 - A hint never reveals the monkey, never counts as a try and never changes stars or rewards. The right/wrong decision in HidingObject is unchanged (invariant 3).
 - The hint count resets when a new level's Player becomes active. The pulse uses Time.deltaTime, so it freezes with the pause menu.
 - Known gap: a hint can still be bought while a hiding object is sliding (the movement lock in HidingObject is private).
+- Ad hint (Sprint 07b): optional adHintButton on LevelHint (wired in Sprint 07c). It is shown (SetActive) only when the normal hint rules allow a hint, AdsManager exists, AdsManager.IsRewardedReady is true and, with showAdHintOnlyWithoutCoins ticked (default), the player has fewer than hintCost coins. Otherwise it is hidden. A tap sets Time.timeScale = 0, hides both buttons and calls AdsManager.ShowRewardedThen. When the ad finishes, Time.timeScale is restored; only if the reward was earned does the same pulse run, without spending coins. The ad hint shares hintsPerLevel with the coin hint. OnDisable restores Time.timeScale if an ad is still open.
 
 ### 2.5 Events (LevelState)
 OnScoreChanged, OnTotalScoreChanged, OnBananaChanged, OnCoinChanged, OnTryChanged, OnStarsChanged, OnScoreRewarded, OnBananaRewarded, OnMonkeyFound.
@@ -254,6 +255,7 @@ Stop and ask the developer before continuing if:
 14. The Unity Console shows no new red errors.
 15. Tick End Level When Time Runs Out on a level and let the timer reach 0:00. The panel shows Level N Failed!, 0 stars and +0. Taps do nothing and Next is hidden. Nothing is saved: check with GameDataDebugWindow. Restart starts the level properly. With the box off, play continues at 0:00 as in step 10.
 16. Hint (after Sprint 06b): the Hint button is grey while the monkey walks and with fewer than 3 coins. Tapping it with 3 or more coins takes 3 coins, pulses the right object, and the button turns grey for the rest of the level. Stars and tries are unchanged. Restart or Next gives a fresh hint.
+17. Ad hint (after Sprint 07c, play from Bootstrap with the Android profile): with fewer than 3 coins and the monkey stopped, the ad hint button appears. Tapping it pauses the game (timer stops) and shows the test rewarded ad. Watching to the end pulses the right object and spends no coins; closing early gives no hint. Afterwards the game runs again and both hint buttons are done for the level. With 3 or more coins the ad hint button stays hidden (default setting).
 
 ## 9. Unity and UI rules
 - Everything in gameplay is Canvas UI. Use RectTransform, Image, Button, TMP_Text. Do not write world-space code (SpriteRenderer, Collider2D, Transform.position) for gameplay objects.
@@ -293,8 +295,8 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 - No consent (UMP) flow yet. Needed before release.
 - The interstitial count is per session. There is no frequency cap across sessions.
 - On iOS, music keeps playing under an interstitial. Pausing audio during ads is left for the audio polish sprint.
-- On iOS the game keeps running under full-screen ads. Sprint 07b must pause gameplay (Time.timeScale = 0) while the rewarded ad is open and restore it after, or the level timer can run out during the ad.
-- Rewarded ad: the code expects the reward callback before the closed callback. Check this order in the Sprint 07b device test.
+- On iOS the game keeps running under full-screen ads. LevelHint pauses gameplay (Time.timeScale = 0) while the rewarded ad is open and restores it after (Sprint 07b). Not yet checked on an iOS device. The interstitial does not pause gameplay, but it only shows from Next, when no level is running.
+- Rewarded ad: the code expects the reward callback before the closed callback. Check this order in the device test after Sprint 07c.
 - Play button skips the menus and loads JungleMap (MainMenuController).
 - Unused scripts: ArrivalLayerTrigger, LevelProgressionController, MapLevelLoader, GameplayInputBlocker, GameplayInputGuard.
 - Hard-coded SelectLevel1() to SelectLevel10() in MapLevelManager and MapWindowController. Scenes hold 5 levels per map.

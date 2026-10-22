@@ -37,6 +37,19 @@ public class LevelHint : MonoBehaviour
     private int hintsPerLevel = 1;
 
     // -------------------------------------------------------
+    // AD HINT
+    // -------------------------------------------------------
+
+    [Header("Ad Hint")]
+    [Tooltip("Optional button that shows a rewarded ad for a free hint. Its click is connected by code; do not add an OnClick entry.")]
+    [SerializeField]
+    private Button adHintButton;
+
+    [Tooltip("When ticked, the ad hint button appears only when the player has fewer coins than the hint cost.")]
+    [SerializeField]
+    private bool showAdHintOnlyWithoutCoins = true;
+
+    // -------------------------------------------------------
     // PULSE
     // -------------------------------------------------------
 
@@ -70,6 +83,9 @@ public class LevelHint : MonoBehaviour
     private Vector3 pulseOriginalScale;
     private Coroutine pulseRoutine;
 
+    private bool waitingForAd;
+    private float timeScaleBeforeAd = 1f;
+
     // -------------------------------------------------------
     // UNITY
     // -------------------------------------------------------
@@ -99,6 +115,18 @@ public class LevelHint : MonoBehaviour
             hintButton.onClick.AddListener(UseHint);
         }
 
+        if (adHintButton != null)
+        {
+            adHintButton.onClick.RemoveListener(UseAdHint);
+            adHintButton.onClick.AddListener(UseAdHint);
+        }
+
+        if (AdsManager.Instance != null)
+        {
+            AdsManager.Instance.OnRewardedReadyChanged -= RefreshButton;
+            AdsManager.Instance.OnRewardedReadyChanged += RefreshButton;
+        }
+
         if (costText != null)
         {
             costText.text = hintCost.ToString();
@@ -123,6 +151,22 @@ public class LevelHint : MonoBehaviour
         if (hintButton != null)
         {
             hintButton.onClick.RemoveListener(UseHint);
+        }
+
+        if (adHintButton != null)
+        {
+            adHintButton.onClick.RemoveListener(UseAdHint);
+        }
+
+        if (AdsManager.Instance != null)
+        {
+            AdsManager.Instance.OnRewardedReadyChanged -= RefreshButton;
+        }
+
+        if (waitingForAd)
+        {
+            waitingForAd = false;
+            Time.timeScale = timeScaleBeforeAd;
         }
 
         StopPulse();
@@ -184,6 +228,25 @@ public class LevelHint : MonoBehaviour
 
     private bool CanUseHint()
     {
+        return CanGiveHint() &&
+               levelState.TotalCoins >= hintCost;
+    }
+
+    private bool CanUseAdHint()
+    {
+        if (!CanGiveHint())
+            return false;
+
+        if (AdsManager.Instance == null ||
+            !AdsManager.Instance.IsRewardedReady)
+            return false;
+
+        return !showAdHintOnlyWithoutCoins ||
+               levelState.TotalCoins < hintCost;
+    }
+
+    private bool CanGiveHint()
+    {
         if (levelState == null ||
             characterPathMover == null)
             return false;
@@ -204,15 +267,20 @@ public class LevelHint : MonoBehaviour
         if (pulseRoutine != null)
             return false;
 
-        return levelState.TotalCoins >= hintCost;
+        return !waitingForAd;
     }
 
     private void RefreshButton()
     {
-        if (hintButton == null)
-            return;
+        if (hintButton != null)
+        {
+            hintButton.interactable = CanUseHint();
+        }
 
-        hintButton.interactable = CanUseHint();
+        if (adHintButton != null)
+        {
+            adHintButton.gameObject.SetActive(CanUseAdHint());
+        }
     }
 
     private void HandleCoinChanged(int totalCoins)
@@ -255,6 +323,73 @@ public class LevelHint : MonoBehaviour
         DebugLog(
             $"Hint used on '{correctObject.name}'. " +
             $"Cost={hintCost}, HintsUsed={hintsUsed}."
+        );
+
+        pulseRoutine = StartCoroutine(
+            PulseRoutine(
+                correctObject.transform as RectTransform
+            )
+        );
+
+        RefreshButton();
+    }
+
+    public void UseAdHint()
+    {
+        if (!CanUseAdHint())
+            return;
+
+        if (FindCorrectObject() == null)
+        {
+            DebugLog(
+                "No hiding object matches the monkey's point. " +
+                "No ad shown."
+            );
+
+            return;
+        }
+
+        /*
+         * On iOS the game keeps running under a full-screen ad,
+         * so gameplay is paused until the ad closes.
+         */
+        timeScaleBeforeAd = Time.timeScale;
+        Time.timeScale = 0f;
+        waitingForAd = true;
+
+        DebugLog("Ad hint requested.");
+
+        RefreshButton();
+
+        AdsManager.Instance.ShowRewardedThen(HandleAdFinished);
+    }
+
+    private void HandleAdFinished(bool rewardEarned)
+    {
+        if (this == null || !waitingForAd)
+            return;
+
+        waitingForAd = false;
+        Time.timeScale = timeScaleBeforeAd;
+
+        HidingObject correctObject =
+            rewardEarned && CanGiveHint()
+                ? FindCorrectObject()
+                : null;
+
+        if (correctObject == null)
+        {
+            DebugLog("Ad hint not rewarded.");
+
+            RefreshButton();
+            return;
+        }
+
+        hintsUsed++;
+
+        DebugLog(
+            $"Ad hint rewarded on '{correctObject.name}'. " +
+            $"HintsUsed={hintsUsed}."
         );
 
         pulseRoutine = StartCoroutine(

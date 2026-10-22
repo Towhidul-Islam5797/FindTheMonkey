@@ -1,0 +1,61 @@
+SPRINT 07B - AD HINT IN LEVELHINT (CODE ONLY)
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+
+GOAL
+A second Hint button: watch a rewarded ad, get the same free hint
+(pulse), without spending coins. Code only. The button itself is designed
+by the developer in one map scene and copied and wired in Sprint 07c.
+
+DEVELOPER DECISIONS
+- Two hint buttons: coin hint stays as it is; separate ad hint button.
+- showAdHintOnlyWithoutCoins = true by default (ad button only when the
+  player has fewer than hintCost coins). Inspector checkbox to try both.
+- Gameplay paused during the rewarded ad (iOS keeps running under ads).
+- Same pulse, shares the 1 hint per level.
+- 3 files approved.
+
+CHANGES
+1. Assets/Scripts/LevelHint.cs
+   - New fields under [Header("Ad Hint")]: adHintButton (optional Button),
+     showAdHintOnlyWithoutCoins = true.
+   - New state: waitingForAd, timeScaleBeforeAd.
+   - OnEnable/OnDisable: connect/disconnect adHintButton.onClick, and
+     AdsManager.Instance.OnRewardedReadyChanged -> RefreshButton (only if
+     AdsManager exists). OnDisable restores Time.timeScale if an ad is
+     still open.
+   - CanUseHint split: CanGiveHint() holds the shared rules (monkey
+     stopped, not found, time not up, hint left, no pulse, not waiting for
+     an ad); CanUseHint() = CanGiveHint() + enough coins (same result as
+     before); new CanUseAdHint() = CanGiveHint() + AdsManager exists +
+     IsRewardedReady + (fewer than hintCost coins when the box is ticked).
+   - RefreshButton: coin button as before; the ad button is shown or
+     hidden with SetActive(CanUseAdHint()). Works when either button is
+     missing.
+   - New UseAdHint(): checks the rules and that the correct object
+     exists, stores Time.timeScale and sets it to 0, hides both buttons,
+     calls AdsManager.Instance.ShowRewardedThen(HandleAdFinished).
+   - New HandleAdFinished(bool): ignores late calls, restores
+     Time.timeScale; only if the reward was earned and a hint is still
+     allowed: hintsUsed++ and the same pulse, no coins spent.
+   - Unchanged: UseHint (coins), FindCorrectObject, pulse, all other
+     scripts.
+2. CLAUDE.md: 2.4d ad hint bullet, smoke test step 17, section 11 iOS
+   pause line updated (done in 07b, not checked on iOS yet), reward order
+   check moved to the device test after 07c.
+3. This file.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 2: the ad hint follows the same rules (only after the monkey stops).
+- 3: the hint decides nothing; HidingObject is unchanged.
+- 6: no PlayerPrefs key added.
+- 7, 8: no rename; adHintButton is optional (null handled), so scenes
+  without it behave exactly as before.
+- 2.6: Time.timeScale is always restored (ad finished, or OnDisable).
+- 10, 14: no game-over; the ad hint is blocked at time-up.
+
+DONE CONDITIONS AND RESULTS
+To be filled in after the developer's check:
+- Compiles with no red errors: not tested yet
+- With no adHintButton assigned, smoke test 16 is unchanged: not tested yet
+- Full ad hint test (smoke test 17): after Sprint 07c
