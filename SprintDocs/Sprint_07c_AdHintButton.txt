@@ -72,12 +72,21 @@ INVARIANTS CHECKED (CLAUDE.md section 3)
 DONE CONDITIONS AND RESULTS
 To be filled in after the developer's test (smoke test step 17, play
 from Bootstrap with the Android profile, fewer than 3 coins):
-- Scenes reload with no errors, button visible in all three: not tested yet
-- Ad button hidden while the monkey walks, shown when it stops: not tested yet
-- Tap pauses the game and shows the test rewarded ad: not tested yet
-- Full watch: right object pulses, no coins spent: not tested yet
-- Close early: no hint, game resumes: not tested yet
-- Console order of "Reward earned." and "Rewarded closed.": not tested yet
-- Ad button appears whatever the coin count: not tested yet
-- After a rewarded ad hint, the coin hint still works once: not tested yet
-- Ad button does not cover a hiding object in any level: not tested yet
+Developer's check, 2026-10-24 (Editor, Android profile, from Bootstrap,
+96 coins; reported as passed by the developer):
+- Compiles with no red errors: PASS
+- Both buttons show when the monkey stops (ad button with 96 coins, so
+  it ignores coins): PASS
+- Full watch of the ad: right object pulses, coins unchanged, ad button
+  gone for the level: PASS
+- Coin hint still works afterwards (-3 coins): PASS
+- Restart and close the ad early: no pulse, ad button comes back: PASS
+Not covered yet:
+- Console order of "Reward earned." and "Rewarded closed.": not
+  reported; check on an Android device (Editor placeholder is not a real
+  ad).
+- Game pause (timer stops) during the ad: not reported separately.
+- Ad button does not cover a hiding object in any level (all 15).
+- Real full-screen rewarded ad with the "Test Ad" label: device test.
+Note: the Editor placeholder ad does not fill the screen; this is the
+plugin's Editor-only placeholder, not the real ad.

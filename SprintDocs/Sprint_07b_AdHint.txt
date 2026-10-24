@@ -56,6 +56,10 @@ INVARIANTS CHECKED (CLAUDE.md section 3)
 
 DONE CONDITIONS AND RESULTS
 To be filled in after the developer's check:
-- Compiles with no red errors: not tested yet
-- With no adHintButton assigned, smoke test 16 is unchanged: not tested yet
-- Full ad hint test (smoke test 17): after Sprint 07c
+Developer's check, 2026-10-24 (Editor, Android profile, from Bootstrap):
+- Compiles with no red errors: PASS
+- With no adHintButton assigned, smoke test 16 is unchanged: not tested
+  separately (the button was wired in 07c before testing); the coin hint
+  passed in the 07c test
+- Full ad hint test (smoke test 17): PASS in the Editor, see
+  Sprint_07c_AdHintButton.txt
