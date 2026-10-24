@@ -1,0 +1,108 @@
+SPRINT 09 - WORLD SELECTION SCENE
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat (base commit adb49b3)
+
+GOAL
+Play opens a world selection screen instead of loading JungleMap
+directly. The player picks a world, then a level, and the level starts
+with the normal 3-2-1-GO countdown.
+
+DEVELOPER DECISIONS
+- Flow B: world page, then a level page 1-5 inside WorldSelection
+  (chosen over flow A after seeing the two pages in the scene).
+- Worlds unlock step by step: Jungle open, Beach after Jungle level 5,
+  Snow after Beach level 5. Inspector box "Unlock All Worlds" for
+  testing, off by default.
+- Reuse the map window UI the developer copied into WorldSelection.
+  The real MapWindowController is NOT used there (it hides the window on
+  Awake and tries to start a level when StartSelectedLevel is 1). A new
+  small script drives the screen instead, built like MapWindowController
+  (per-world Inspector blocks, buttons found by name, per-world level
+  button backgrounds, LOCKED and star labels).
+- Level button backgrounds filled like MapWindowController.
+- 5 files approved (script, MainMenuController, scene, CLAUDE.md, this
+  file), including clearing all 10 leftover OnClick entries and fixing
+  the out-of-date CLAUDE.md lines.
+
+DEVELOPER WORK (WorldSelection, by hand, before the sprint edits)
+- Canvas/MapWindow copied from a map scene, set active; LevelSelectionPage
+  inactive.
+- Canvas/Background (full-screen Image) as the first Canvas child.
+- Empty objects Managers and Managers/WorldSelectionController.
+
+CHANGES
+1. Assets/Scripts/WorldSelectionController.cs (new, 603 lines; planned
+   about 300, the extra is Inspector fields and per-world helpers).
+   - Fields (all optional, null-safe): pages, SelectedMapTitle, 3 world
+     buttons, 3 ActionTexts, 2 Back buttons, Jungle/Beach/Snow blocks
+     (map id, scene name, level count 5, available, background sprites),
+     labels, main menu scene name, unlockAllWorlds, showDebugLogs.
+   - Awake: finds LevelButton_N, connects all clicks by code, shows the
+     world page.
+   - World lock from {prev}_LevelCompleted_{levelCount}; level lock from
+     {map}_UnlockedLevel; stars from {map}_LevelStars_{n}.
+   - Level tap: CanStreamedLevelBeLoaded check, saves {map}_SelectedLevel
+     and StartSelectedLevel = 1, loads the map scene. Double tap ignored.
+   - No new PlayerPrefs key.
+2. Assets/Scripts/MainMenuController.cs
+   - Removed the unused StartSelectedLevelKey constant.
+   - PlayGame: SceneManager.LoadScene("WorldSelection").
+3. Assets/Scenes/Menu/WorldSelection.unity (direct edits)
+   - WorldSelectionController component added to
+     Managers/WorldSelectionController (plan said Managers; the developer
+     had already made the child object, so it went there). 11 references
+     filled: both pages, SelectedMapTitle, 3 map buttons, 3 ActionTexts,
+     both BackButtons.
+   - 10 leftover OnClick entries removed (SelectJungleMap,
+     SelectDesertMap, SelectSnowMap, CloseMapWindow, BackToMapSelection,
+     SelectLevel1 to SelectLevel5). No MapWindowController reference left.
+   - Background arrays: 12 entries each of Art/Background/level_jungle,
+     level_beach, level_snow (same sprites as the map scenes).
+4. CLAUDE.md: 2.1 scene flow, 2.3 script map (new row, MainMenuController
+   and AdsManager rows), new 2.4e, 2.7 save data note, smoke test step 18,
+   section 10 (hint, rewarded ad, world selection done), section 11
+   (placeholders, missing features, new debt).
+5. This file.
+
+CHECKS
+- Each scene edit compared with a copy taken just before it: only the
+  intended lines changed. Backups kept in the session scratchpad.
+- The script GUID was read from the .meta Unity generated; no .meta file
+  was written.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 1: StartGame is still called only by MapWindowController. WorldSelection
+  only sets StartSelectedLevel and loads the map scene.
+- 5: no LevelState or MapLevelManager added.
+- 6: no PlayerPrefs key renamed, deleted or added.
+- 7: no serialized field, script or class renamed. Only a private const
+  was removed from MainMenuController.
+- 8: every new field is optional or has a default.
+- 9: Canvas UI only.
+- MapWindowController, MapLevelManager, LevelState, HidingObject and
+  CharacterPathMover were not touched.
+
+MANUAL STEPS FOR THE DEVELOPER
+- Tick WorldSelection in File > Build Profiles > Scene List.
+- Commit WorldSelectionController.cs.meta together with the script.
+
+DONE CONDITIONS AND RESULTS
+Developer's check, 2026-10-24 (Editor):
+- Compiles with no red errors: PASS
+- Each world's level page shows its own button background: PASS
+- Console clean: PASS
+Not reported yet (smoke test step 18):
+- Play from MainMenu opens WorldSelection (needs the build list tick).
+- Fresh data: only Jungle open, Beach and Snow LOCKED.
+- Level page: 5 buttons, Level 1 open, 2 to 5 LOCKED, stars after a
+  finish.
+- Level tap loads the map scene and the countdown runs.
+- Finishing Jungle level 5 opens Beach; Unlock All Worlds opens all.
+- Both Back buttons.
+
+KNOWN DEBT CARRIED OVER
+- The in-game map window has no world lock.
+- Level lock and star rules exist in two scripts.
+- Unlock All Worlds ticked during Play shows no change until the world
+  page is shown again.

@@ -410,7 +410,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 769.43335, y: -460}
+  m_AnchoredPosition: {x: 775.53796, y: -460}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &101889541
@@ -851,19 +851,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 178780355}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MapWindowController, Assembly-CSharp
-        m_MethodName: BackToMapSelection
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &178780355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -938,7 +926,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 169.43335, y: -460}
+  m_AnchoredPosition: {x: 175.53796, y: -460}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &223567659
@@ -984,19 +972,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 223567660}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MapWindowController, Assembly-CSharp
-        m_MethodName: SelectLevel4
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &223567660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1285,7 +1261,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 469.43335, y: -460}
+  m_AnchoredPosition: {x: 475.53796, y: -460}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &337938057
@@ -1331,19 +1307,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 337938058}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MapWindowController, Assembly-CSharp
-        m_MethodName: SelectLevel5
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &337938058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1419,10 +1383,10 @@ RectTransform:
   - {fileID: 930643542}
   m_Father: {fileID: 1205704015}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 475.53796, y: -783.3333}
-  m_SizeDelta: {x: 911.0759, y: 300}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &377293628
 MonoBehaviour:
@@ -1467,19 +1431,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 377293629}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MapWindowController, Assembly-CSharp
-        m_MethodName: SelectSnowMap
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &377293629
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1554,7 +1506,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 469.43335, y: -710}
+  m_AnchoredPosition: {x: 475.53796, y: -710}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &418158978
@@ -1675,7 +1627,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 769.43335, y: -960}
+  m_AnchoredPosition: {x: 775.53796, y: -960}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &446128771
@@ -2267,7 +2219,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!225 &565433678
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2475,10 +2427,10 @@ RectTransform:
   - {fileID: 1392411267}
   m_Father: {fileID: 1205704015}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 475.53796, y: -150}
-  m_SizeDelta: {x: 911.0759, y: 300}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &583915778
 MonoBehaviour:
@@ -2523,19 +2475,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 583915779}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MapWindowController, Assembly-CSharp
-        m_MethodName: SelectJungleMap
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &583915779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2794,6 +2734,38 @@ MonoBehaviour:
   m_Spacing: {x: 200, y: 150}
   m_Constraint: 1
   m_ConstraintCount: 3
+--- !u!1 &631902306
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 631902307}
+  m_Layer: 0
+  m_Name: Managers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &631902307
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631902306}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1652644614}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &774462568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2830,7 +2802,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 769.43335, y: -710}
+  m_AnchoredPosition: {x: 775.53796, y: -710}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &774462570
@@ -2951,7 +2923,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 469.43335, y: -960}
+  m_AnchoredPosition: {x: 475.53796, y: -960}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &898334224
@@ -3423,7 +3395,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 169.43335, y: -960}
+  m_AnchoredPosition: {x: 175.53796, y: -960}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1059413803
@@ -3508,6 +3480,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1059413801}
   m_CullTransparentMesh: 1
+--- !u!1 &1067898659
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1067898662}
+  - component: {fileID: 1067898661}
+  - component: {fileID: 1067898660}
+  m_Layer: 5
+  m_Name: Background
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1067898660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067898659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 8632354620397853481, guid: b916e8067e26de240b12ff933627f60a, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1067898661
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067898659}
+  m_CullTransparentMesh: 1
+--- !u!224 &1067898662
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067898659}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1577750030}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -0.000061035156, y: 0.00012207031}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1077682543
 GameObject:
   m_ObjectHideFlags: 0
@@ -4274,7 +4321,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 769.43335, y: -210}
+  m_AnchoredPosition: {x: 775.53796, y: -210}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1326221166
@@ -4320,19 +4367,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1326221167}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MapWindowController, Assembly-CSharp
-        m_MethodName: SelectLevel3
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1326221167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4620,7 +4655,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 469.43335, y: -210}
+  m_AnchoredPosition: {x: 475.53796, y: -210}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1423788809
@@ -4666,19 +4701,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1423788810}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MapWindowController, Assembly-CSharp
-        m_MethodName: SelectLevel2
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1423788810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5027,7 +5050,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 169.43335, y: -710}
+  m_AnchoredPosition: {x: 175.53796, y: -710}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1574188530
@@ -5281,6 +5304,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1067898662}
   - {fileID: 565433679}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5326,10 +5350,10 @@ RectTransform:
   - {fileID: 1802179607}
   m_Father: {fileID: 1205704015}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 475.53796, y: -466.66666}
-  m_SizeDelta: {x: 911.0759, y: 300}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1605633992
 MonoBehaviour:
@@ -5374,19 +5398,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1605633993}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MapWindowController, Assembly-CSharp
-        m_MethodName: SelectDesertMap
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1605633993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5461,7 +5473,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 169.43335, y: -210}
+  m_AnchoredPosition: {x: 175.53796, y: -210}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1632020428
@@ -5507,19 +5519,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1632020429}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MapWindowController, Assembly-CSharp
-        m_MethodName: SelectLevel1
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1632020429
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5558,6 +5558,118 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1632020426}
   m_CullTransparentMesh: 1
+--- !u!1 &1652644613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1652644614}
+  - component: {fileID: 1652644615}
+  m_Layer: 0
+  m_Name: WorldSelectionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1652644614
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652644613}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 631902307}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1652644615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652644613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fbd9b248c851b7439c6bdedc0da4a12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldSelectionController
+  mapSelectionPage: {fileID: 38394135}
+  levelSelectionPage: {fileID: 35162742}
+  selectedMapTitle: {fileID: 455810361}
+  jungleMapButton: {fileID: 583915778}
+  beachMapButton: {fileID: 1605633992}
+  snowMapButton: {fileID: 377293628}
+  jungleActionText: {fileID: 1392411268}
+  beachActionText: {fileID: 1802179608}
+  snowActionText: {fileID: 930643543}
+  mapPageBackButton: {fileID: 1954092874}
+  levelPageBackButton: {fileID: 178780354}
+  jungleMapId: Jungle
+  jungleSceneName: JungleMap
+  jungleLevelCount: 12
+  jungleAvailable: 1
+  jungleLevelButtonBackgrounds:
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  - {fileID: 4634623877160203231, guid: 74e9609f0f048dc4f8322a284b8e4afb, type: 3}
+  beachMapId: Beach
+  beachSceneName: BeachMap
+  beachLevelCount: 12
+  beachAvailable: 1
+  beachLevelButtonBackgrounds:
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  - {fileID: 8547590808813543007, guid: 96a7361d901008c41b254f852a4ae825, type: 3}
+  snowMapId: Snow
+  snowSceneName: SnowMap
+  snowLevelCount: 12
+  snowAvailable: 1
+  snowLevelButtonBackgrounds:
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  - {fileID: 5585559442360117914, guid: c1034a8ce44b9c746979de2a7f4d7123, type: 3}
+  openLabel: CONTINUE
+  lockedLabel: LOCKED
+  levelsTitleSuffix: ' LEVELS'
+  mainMenuSceneName: MainMenu
+  unlockAllWorlds: 0
+  showDebugLogs: 1
 --- !u!1 &1700568812
 GameObject:
   m_ObjectHideFlags: 0
@@ -6415,19 +6527,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1954092875}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MapWindowController, Assembly-CSharp
-        m_MethodName: CloseMapWindow
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1954092875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6962,5 +7062,6 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1139576387}
+  - {fileID: 631902307}
   - {fileID: 1577750030}
   - {fileID: 1181376093}

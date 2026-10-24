@@ -33,9 +33,9 @@ The player taps the object they think hides the monkey.
 ## 2. Architecture
 
 ### 2.1 Scene flow (build order)
-Bootstrap -> Splash -> MainMenu -> JungleMap / BeachMap / SnowMap.
-WorldSelection, LevelSelection, MonkeyCollection, Rewards and Settings exist in the build but are empty placeholders.
-The Play button currently loads JungleMap directly (MainMenuController).
+Bootstrap -> Splash -> MainMenu -> WorldSelection -> JungleMap / BeachMap / SnowMap.
+LevelSelection, MonkeyCollection, Rewards and Settings exist in the build but are empty placeholders.
+The Play button loads WorldSelection (MainMenuController, Sprint 09). See 2.4e.
 
 ### 2.2 One scene per world
 A map scene (for example JungleMap) holds everything for that world:
@@ -51,7 +51,8 @@ A map scene (for example JungleMap) holds everything for that world:
 | Script | One job | Talks to |
 |---|---|---|
 | Bootstrap, SceneLoader, SplashController | Startup. Sets 60 FPS, loads Splash then MainMenu. SceneLoader is a singleton. | none |
-| MainMenuController | Main menu buttons. | scenes |
+| MainMenuController | Main menu buttons. Play loads WorldSelection. | scenes |
+| WorldSelectionController | WorldSelection screen: world page (locks), level page (locks, stars, per-world button backgrounds), loads the chosen level. | PlayerPrefs only (reads MapLevelManager keys) |
 | MapLevelManager | Which level is active, unlocked, completed, best stars. Saves progress. Restart and next level. | LevelState |
 | MapWindowController | In-game map and level picker. Runs the 3-2-1-GO countdown, then calls StartGame. | MapLevelManager, CharacterPathMover |
 | CharacterPathMover | Moves the monkey along MovePoints for several cycles. Handles layering, scale, smoke, animation. | HidingObject reads it |
@@ -67,7 +68,7 @@ A map scene (for example JungleMap) holds everything for that world:
 | PlayerSkinController | Applies the selected skin by swapping the animator override. | ShopManager |
 | GameFeedbackManager | Music, sound effects, vibration. Singleton. | HidingObject, UI |
 | UIButtonTapSound | Click sound on buttons. | GameFeedbackManager |
-| AdsManager | AdMob setup (child-directed), the interstitial ad and the rewarded ad. Singleton, optional. | LevelCompletePanelController calls it; LevelHint will call the rewarded ad (Sprint 07b) |
+| AdsManager | AdMob setup (child-directed), the interstitial ad and the rewarded ad. Singleton, optional. | LevelCompletePanelController calls the interstitial; LevelHint calls the rewarded ad (ad hint button) |
 | LevelHint | Hint button: spends coins and pulses the object that hides the monkey. Optional, one per map scene. | LevelState, CharacterPathMover, HidingObject (RelatedMovePoint), LevelTimer |
 
 Editor-only: Assets/Editor/GameDataDebugWindow shows, edits and resets saved data.
@@ -131,6 +132,14 @@ Never reorder steps 10 and 11.
 - Known gap: a hint can still be bought while a hiding object is sliding (the movement lock in HidingObject is private).
 - Ad hint (Sprint 07b): optional adHintButton on LevelHint. Wired in Sprint 07c: Canvas/AdHintButton in each map scene (Image with Art/UI & UX/AdHint.png, Button with no OnClick entry, UIButtonTapSound, child AdIcon with Art/UI & UX/VideoAdRewardsIcon.png), anchored to the right edge, placed right after HintButton and before MapWindow. Designed in BeachMap, copied to JungleMap and SnowMap. It is shown (SetActive) only when the monkey has stopped, it is not found, the time is not up, no pulse or ad is running, an ad hint is left (adHintsPerLevel, default 1), AdsManager exists and AdsManager.IsRewardedReady is true. Coins do not matter: showAdHintOnlyWithoutCoins is off (default false, unticked in all three scenes since Sprint 07c); ticking it shows the button only below hintCost coins. Otherwise it is hidden. A tap sets Time.timeScale = 0, hides both buttons and calls AdsManager.ShowRewardedThen. When the ad finishes, Time.timeScale is restored; only if the reward was earned does the same pulse run, without spending coins, and the ad hint count goes up. An ad closed early does not use up the ad hint. Coin hints (hintsPerLevel) and ad hints (adHintsPerLevel) are counted separately, so a level can have 1 coin hint and 1 ad hint. OnDisable restores Time.timeScale if an ad is still open. OnValidate refreshes both buttons when a value is changed in the Inspector during Play.
 
+### 2.4e World selection (added in Sprint 09)
+- Assets/Scenes/Menu/WorldSelection.unity. WorldSelectionController sits on Managers/WorldSelectionController. The UI is Canvas/MapWindow/MapPanel with two pages: MapSelectionPage (JungleMapButton, BeachMapButton, SnowMapButton, BackButton) and LevelSelectionPage (SelectedMapTitle, LevelGrid with LevelButton_1 to _12, BackButton). The layout is a copy of the in-game map window, but no project script other than WorldSelectionController is in the scene. All clicks are connected by code; the buttons have no OnClick entries.
+- World page: Jungle is always open. Beach opens when Jungle_LevelCompleted_{jungleLevelCount} is 1, Snow when Beach_LevelCompleted_{beachLevelCount} is 1. A locked world's button is not interactable and its ActionText shows lockedLabel. unlockAllWorlds (Testing, default off, keep off in release) opens every world whose Available box is ticked. An unticked Available box closes a world always.
+- Level page: LevelButton_N buttons are found by name (inactive ones included). Only the first {map}LevelCount (default 5) are shown. A level is open when its number is at most {map}_UnlockedLevel. Labels: "LEVEL n / LOCKED" or "LEVEL n / x/3 STARS" from {map}_LevelStars_{n}. Per-world Sprite arrays (element 0 = Level 1) set the button backgrounds; all three are filled with 12 entries each (Art/Background/level_jungle, level_beach, level_snow). An empty slot keeps the current art.
+- Tapping an open level checks the scene with Application.CanStreamedLevelBeLoaded, saves {map}_SelectedLevel and StartSelectedLevel = 1, and loads the map scene. The map scene then runs the normal countdown (2.4). A second tap while loading is ignored.
+- Back on the level page returns to the world page; Back on the world page loads MainMenu.
+- The lock and star rules are a small copy of MapWindowController's. The in-game map window has no world lock (only its Available boxes). See section 11.
+
 ### 2.5 Events (LevelState)
 OnScoreChanged, OnTotalScoreChanged, OnBananaChanged, OnCoinChanged, OnTryChanged, OnStarsChanged, OnScoreRewarded, OnBananaRewarded, OnMonkeyFound.
 UI and new features listen to these events. Do not poll LevelState every frame.
@@ -145,6 +154,7 @@ Any timer that uses Time.deltaTime pauses automatically. Do not use unscaled tim
   {map}_SelectedLevel, {map}_UnlockedLevel, {map}_LevelStars_{n}, {map}_LevelCompleted_{n}, plus star-reward-claimed flags.
 - ShopManager: SelectedItemKey holds the selected skin id.
 - LevelTimeBonus: {map}_LevelBestTimeTier_{n} holds the best time tier (0 to 3) for each level.
+- WorldSelectionController reads {map}_UnlockedLevel, {map}_LevelStars_{n} and {map}_LevelCompleted_{n}, and writes only {map}_SelectedLevel and StartSelectedLevel. It adds no key.
 - Sound, music and vibration toggles are not saved yet.
 - To reset saved data during development, use Assets/Editor/GameDataDebugWindow (it clears PlayerPrefs). Do not add reset code to the game.
 
@@ -256,6 +266,7 @@ Stop and ask the developer before continuing if:
 15. Tick End Level When Time Runs Out on a level and let the timer reach 0:00. The panel shows Level N Failed!, 0 stars and +0. Taps do nothing and Next is hidden. Nothing is saved: check with GameDataDebugWindow. Restart starts the level properly. With the box off, play continues at 0:00 as in step 10.
 16. Hint (after Sprint 06b): the Hint button is grey while the monkey walks and with fewer than 3 coins. Tapping it with 3 or more coins takes 3 coins, pulses the right object, and the button turns grey for the rest of the level. Stars and tries are unchanged. Restart or Next gives a fresh hint.
 17. Ad hint (after Sprint 07c, play from Bootstrap with the Android profile): when the monkey stops, the ad hint button appears, whatever the coin count. Tapping it pauses the game (timer stops) and shows the test rewarded ad. Watching to the end pulses the right object and spends no coins, and the ad button stays hidden for the rest of the level; closing early gives no hint and the ad button comes back. The coin hint is separate: it still works once per level with 3 or more coins, before or after the ad hint.
+18. World selection (after Sprint 09, WorldSelection ticked in the build list): Play opens WorldSelection. With fresh data only Jungle can be tapped; Beach and Snow show LOCKED. Jungle opens JUNGLE LEVELS with 5 buttons in jungle art: Level 1 open with 0/3 STARS, 2 to 5 LOCKED. Level 1 loads JungleMap and the countdown runs. After a finish, the level shows its stars and the next one opens. Finishing Jungle level 5 opens Beach (beach art). Unlock All Worlds (ticked before Play) opens all three. Both Back buttons work.
 
 ## 9. Unity and UI rules
 - Everything in gameplay is Canvas UI. Use RectTransform, Image, Button, TMP_Text. Do not write world-space code (SpriteRenderer, Collider2D, Transform.position) for gameplay objects.
@@ -269,12 +280,14 @@ Stop and ask the developer before continuing if:
 - Play timer: done (Sprint 01a to 01c). It starts when the monkey stops, never ends the level, and the level-complete panel shows the time spent.
 - Time bonus: done (Sprint 02). Fast finishes earn bonus coins by time tier, paid only on improvement.
 - Harder hiding in later levels (partial visibility, varied positions, faster movement).
-- Hint system: logic done (Sprint 06), button in the scenes is Sprint 06b. Extra tries for coins not started.
+- Hint system: done (Sprint 06 to 06c: coin hint; Sprint 07b to 07c: ad hint). Extra tries for coins not started.
+- World selection screen: done (Sprint 09). See 2.4e.
 - Difficulty balancing: early levels easy, later levels challenging.
 - UI check on different phone sizes.
 - Skin and costume polish, audio and vibration polish.
 - AdMob interstitial: done (Sprint 05, test IDs only). See 2.4c.
-- AdMob rewarded ad, consent (UMP), real AdMob account and IDs, release builds.
+- AdMob rewarded ad: done (Sprint 07, test IDs only), used by the ad hint. See 2.4c and 2.4d.
+- Consent (UMP), real AdMob account and IDs, release builds.
 
 ### Out of scope
 - Moving or animated environments (Forest, Beach, Snow redesign).
@@ -289,15 +302,17 @@ Only avoid assumptions that make it impossible: no code that treats "one player 
 Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealResult.
 
 ## 11. Known debt
-- Empty placeholder scenes: WorldSelection, LevelSelection, MonkeyCollection, Rewards, Settings.
-- Missing features: hint button in the scenes (Sprint 06b), rewarded ad, daily rewards.
+- Empty placeholder scenes: LevelSelection, MonkeyCollection, Rewards, Settings.
+- Missing features: daily rewards.
 - Ads use Google's test IDs only. Real App IDs and ad unit IDs are needed before release.
 - No consent (UMP) flow yet. Needed before release.
 - The interstitial count is per session. There is no frequency cap across sessions.
 - On iOS, music keeps playing under an interstitial. Pausing audio during ads is left for the audio polish sprint.
 - On iOS the game keeps running under full-screen ads. LevelHint pauses gameplay (Time.timeScale = 0) while the rewarded ad is open and restores it after (Sprint 07b). Not yet checked on an iOS device. The interstitial does not pause gameplay, but it only shows from Next, when no level is running.
 - Rewarded ad: the code expects the reward callback before the closed callback. Check this order in the device test after Sprint 07c.
-- Play button skips the menus and loads JungleMap (MainMenuController).
+- World lock only on WorldSelection: the in-game map window (MapWindowController) still lets the player switch to Beach or Snow without finishing the world before. Matching it is a separate sprint.
+- Level lock and star rules exist in two scripts (MapWindowController and WorldSelectionController). A rule change must be made in both.
+- WorldSelectionController refreshes the world page on Awake and on Back only. Ticking Unlock All Worlds during Play shows no change until the page is shown again.
 - Unused scripts: ArrivalLayerTrigger, LevelProgressionController, MapLevelLoader, GameplayInputBlocker, GameplayInputGuard.
 - Hard-coded SelectLevel1() to SelectLevel10() in MapLevelManager and MapWindowController. Scenes hold 5 levels per map.
 - MapWindowController is 1,823 lines. Change it in the smallest possible steps.
