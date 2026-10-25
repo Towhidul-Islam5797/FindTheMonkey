@@ -1,0 +1,101 @@
+SPRINT 10A - LEVELS 6 TO 12 IN ALL THREE WORLDS
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+Every world (Jungle, Beach, Snow) has 12 playable levels instead of 5.
+Levels 6 to 12 get a rising difficulty. Extra hiding objects follow in
+Sprint 10b.
+
+EXISTING PATTERN (levels 1 to 5, same in all three worlds)
+Level  Objects  Start speed  Per cycle  Cycles  Time  Lose at 0:00
+1      3        1000         1000       4       60 s  on
+2      4        1000         1000       8       60 s  on
+3      4        1300         1500       12      60 s  on
+4      4        1500         1500       16      60 s  on
+5      4        2000         2000       16      40 s  on
+
+DEVELOPER DECISIONS
+- All three worlds at once.
+- Search time: levels 1-4 60 s, 5-8 40 s, 9-12 30 s.
+- Hiding object count rises with difficulty (Sprint 10b); sprite linking
+  stays with the developer.
+- Build approach: first "developer duplicates Level_5 in Unity", then
+  changed by the developer to "duplicate them yourself" (direct scene
+  edit).
+- 5 files approved (3 scenes, CLAUDE.md, this file). CLAUDE.md updated
+  to 12 levels.
+
+NEW LEVELS (same in all three worlds)
+Level  Objects  Start speed  Per cycle  Cycles  Time  Lose at 0:00
+6      4*       1500         1500       12      40 s  on
+7      4*       1800         1800       14      40 s  on
+8      4*       2000         2000       16      40 s  on
+9      4*       2000         2000       14      30 s  on
+10     4*       2200         2200       16      30 s  on
+11     4*       2500         2500       16      30 s  on
+12     4*       2500         2500       18      30 s  on
+* Sprint 10b raises this to 5 (levels 6-8) and 6 (levels 9-12).
+
+CHANGES (direct scene edits, JungleMap, BeachMap, SnowMap)
+1. Level_5 copied seven times as Level_6 to Level_12 with a script
+   (session scratchpad copy_levels.ps1). Each copy: 69 documents
+   (GameObjects, components, the classic_monkey prefab instance and its
+   two stripped objects) with new unique fileIDs. All references inside a
+   copy point to that copy. Outside references, unchanged: Canvas
+   GraphicRaycaster, EventSystem, LevelState, Levels (parent).
+   Copies are inactive and sit right after Level_5 under Canvas/Levels.
+2. CharacterPathMover (startSpeed, speedIncreasePerCycle, totalCycles)
+   and LevelSettings (timeLimitSeconds) set per the table above.
+3. MapLevelManager Level Roots: the seven copies appended after Level_5.
+4. In-game map window: LevelButton_6 to _12 OnClick ->
+   MapWindowController.SelectLevel (int argument 6 to 12). No code
+   change; SelectLevel(int) is public.
+Per scene: 9 existing documents changed (MapLevelManager, Levels,
+LevelButton_6 to _12), 483 documents added, 7 lines removed (the empty
+m_Calls lists).
+5. CLAUDE.md: sections 1, 2.2, 2.4b, 2.4e, smoke test 18 and new 19,
+   section 11.
+
+CHECKS (script check_scene.ps1, on a dry run and on the written scenes)
+- Unresolved local references: 0 in all three scenes.
+- Original documents changed: only the 9 expected.
+- Levels 1 to 12: Animator, move points and every HidingObject link
+  (CharacterPathMover, relatedMovePoint, moveReferencePoint,
+  monkeyObject) belong to the same level (invariants 12 and 13).
+- All level roots inactive in JungleMap; in BeachMap and SnowMap Level_1
+  is saved active (as before; MapLevelManager sets the active level).
+- The written scenes are byte-identical to the checked dry run.
+- Backups of the three scenes from before the edit are in the session
+  scratchpad; the previous version is also in git (clean tree before).
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 1: no new StartGame call; levels start through MapWindowController.
+- 5: no LevelState or MapLevelManager added.
+- 6, 7: no key, field, script or class renamed.
+- 12, 13: every level has its own Player and Animator (checked above).
+- 14: LevelTimer unchanged; Lose at 0:00 stays on like levels 1 to 5.
+
+MANUAL STEPS FOR THE DEVELOPER
+- WorldSelection: set Jungle, Beach and Snow Level Count to 12 on
+  Managers/WorldSelectionController. A world then unlocks after its
+  level 12.
+
+DONE CONDITIONS AND RESULTS
+To be filled in after the developer's test (smoke test 19):
+- Three scenes open with no red errors and no Missing references.
+- Level 6 to 12 selectable from the in-game map window and WorldSelection.
+- Each new level: countdown, monkey walks with animation, stops, right
+  object reveals it; times 40 s / 30 s.
+- Next from level 11 loads level 12.
+
+KNOWN DEBT
+- Levels 6 to 12 use Level_5's layout and hiding object positions until
+  Sprint 10b and the developer's new assets.
+- Saved data from before this sprint: a world whose level 5 was already
+  finished has {map}_UnlockedLevel = 5 (it could not go higher with 5
+  levels). Level 6 opens only after level 5 is finished once more
+  (MapLevelManager.CompleteCurrentLevel). No released players are
+  affected; in the Editor, replay level 5 or set the value with
+  GameDataDebugWindow.

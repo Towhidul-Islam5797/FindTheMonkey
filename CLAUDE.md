@@ -27,7 +27,7 @@ The player taps the object they think hides the monkey.
   - Coin totals: 1 star 2, 2 stars 3, 3 stars 5.
   - These numbers are Inspector fields, so the scene values may differ.
 - Coins and bananas are spent in the shop on monkey skins. Score is a running total.
-- Worlds: Jungle, Beach, Snow, each its own scene. Each scene has levels Level_1 to Level_5.
+- Worlds: Jungle, Beach, Snow, each its own scene. Each scene has levels Level_1 to Level_12 (6 to 12 added in Sprint 10a).
 - Levels unlock one at a time. Finishing a level unlocks the next.
 
 ## 2. Architecture
@@ -41,7 +41,7 @@ The Play button loads WorldSelection (MainMenuController, Sprint 09). See 2.4e.
 A map scene (for example JungleMap) holds everything for that world:
 - MapLevelManager: one per scene. Owns level roots, unlock state, best stars, and level selection.
 - LevelState: one per scene. Owns the current run (tries, stars) and the saved totals.
-- Level_1 to Level_5: one root GameObject per level, only the selected one is active.
+- Level_1 to Level_12: one root GameObject per level under Canvas/Levels, only the selected one is active. MapLevelManager Level Roots lists all 12 in order.
   Each level root contains its own Player (monkey), MovePoints, ArrivalTriggers, Hide_Object (the hiding objects), and SmokeEffects.
 - Canvas UI: GameplayHUD, MapWindow (map and level picker), pause menu, level-complete panel, shop window, countdown panel.
 - Never add a second LevelState or MapLevelManager to a scene.
@@ -106,7 +106,7 @@ Never reorder steps 10 and 11.
 - The time bonus is claimed in LevelCompletePanelController.ShowPanel, after the star coin reward. Default tiers: within 20 s = tier 3, 40 s = tier 2, 60 s = tier 1. Total bonus coins are 3, 2, 1 for tiers 3, 2, 1, paid only for an improvement over the best saved tier, like the stars. Slow players keep their normal reward. Tiers and totals are Inspector fields on LevelTimeBonus, set per scene.
 
 ### 2.4b Time-out loss (added in Sprint 04)
-- Off by default. Set per level with End Level When Time Runs Out on that level's LevelSettings.
+- Off by default in code. Set per level with End Level When Time Runs Out on that level's LevelSettings. In the scenes it is on for all 12 levels of all three worlds (checked in Sprint 10a).
 - With no LevelSettings, or the box off, everything in 2.4a stays true: at 0:00 play continues.
 - With the box on, LevelTimer raises OnTimeUp once at 0:00 and stops running. IsTimeUp is reset when the timer starts.
 - LevelCompletePanelController listens to OnTimeUp. It turns off every HidingObject component (taps stop), shows the panel as "Level N Failed!" with 0 stars and +0 rewards, hides Next, and keeps Restart as the retry.
@@ -135,7 +135,7 @@ Never reorder steps 10 and 11.
 ### 2.4e World selection (added in Sprint 09)
 - Assets/Scenes/Menu/WorldSelection.unity. WorldSelectionController sits on Managers/WorldSelectionController. The UI is Canvas/MapWindow/MapPanel with two pages: MapSelectionPage (JungleMapButton, BeachMapButton, SnowMapButton, BackButton) and LevelSelectionPage (SelectedMapTitle, LevelGrid with LevelButton_1 to _12, BackButton). The layout is a copy of the in-game map window, but no project script other than WorldSelectionController is in the scene. All clicks are connected by code; the buttons have no OnClick entries.
 - World page: Jungle is always open. Beach opens when Jungle_LevelCompleted_{jungleLevelCount} is 1, Snow when Beach_LevelCompleted_{beachLevelCount} is 1. A locked world's button is not interactable and its ActionText shows lockedLabel. unlockAllWorlds (Testing, default off, keep off in release) opens every world whose Available box is ticked. An unticked Available box closes a world always.
-- Level page: LevelButton_N buttons are found by name (inactive ones included). Only the first {map}LevelCount (default 5) are shown. A level is open when its number is at most {map}_UnlockedLevel. Labels: "LEVEL n / LOCKED" or "LEVEL n / x/3 STARS" from {map}_LevelStars_{n}. Per-world Sprite arrays (element 0 = Level 1) set the button backgrounds; all three are filled with 12 entries each (Art/Background/level_jungle, level_beach, level_snow). An empty slot keeps the current art.
+- Level page: LevelButton_N buttons are found by name (inactive ones included). Only the first {map}LevelCount (code default 5; set it to 12 in the scene since Sprint 10a) are shown. A level is open when its number is at most {map}_UnlockedLevel. Labels: "LEVEL n / LOCKED" or "LEVEL n / x/3 STARS" from {map}_LevelStars_{n}. Per-world Sprite arrays (element 0 = Level 1) set the button backgrounds; all three are filled with 12 entries each (Art/Background/level_jungle, level_beach, level_snow). An empty slot keeps the current art.
 - Tapping an open level checks the scene with Application.CanStreamedLevelBeLoaded, saves {map}_SelectedLevel and StartSelectedLevel = 1, and loads the map scene. The map scene then runs the normal countdown (2.4). A second tap while loading is ignored.
 - Back on the level page returns to the world page; Back on the world page loads MainMenu.
 - Locked buttons stay opaque, like in the in-game map window: PrepareButtonVisual (same rule as MapWindowController.PrepareLevelButtonVisual) turns Sprite Swap into Color Tint and sets the Disabled Color alpha and the Image alpha to 1, for level and world buttons. Locked buttons are only tinted by the Disabled Color's RGB.
@@ -267,7 +267,8 @@ Stop and ask the developer before continuing if:
 15. Tick End Level When Time Runs Out on a level and let the timer reach 0:00. The panel shows Level N Failed!, 0 stars and +0. Taps do nothing and Next is hidden. Nothing is saved: check with GameDataDebugWindow. Restart starts the level properly. With the box off, play continues at 0:00 as in step 10.
 16. Hint (after Sprint 06b): the Hint button is grey while the monkey walks and with fewer than 3 coins. Tapping it with 3 or more coins takes 3 coins, pulses the right object, and the button turns grey for the rest of the level. Stars and tries are unchanged. Restart or Next gives a fresh hint.
 17. Ad hint (after Sprint 07c, play from Bootstrap with the Android profile): when the monkey stops, the ad hint button appears, whatever the coin count. Tapping it pauses the game (timer stops) and shows the test rewarded ad. Watching to the end pulses the right object and spends no coins, and the ad button stays hidden for the rest of the level; closing early gives no hint and the ad button comes back. The coin hint is separate: it still works once per level with 3 or more coins, before or after the ad hint.
-18. World selection (after Sprint 09, WorldSelection ticked in the build list): Play opens WorldSelection. With fresh data only Jungle can be tapped; Beach and Snow show LOCKED. Jungle opens JUNGLE LEVELS with 5 buttons in jungle art: Level 1 open with 0/3 STARS, 2 to 5 LOCKED. Level 1 loads JungleMap and the countdown runs. After a finish, the level shows its stars and the next one opens. Finishing Jungle level 5 opens Beach (beach art). Unlock All Worlds (ticked before Play) opens all three. Both Back buttons work.
+18. World selection (after Sprint 09, WorldSelection ticked in the build list): Play opens WorldSelection. With fresh data only Jungle can be tapped; Beach and Snow show LOCKED. Jungle opens JUNGLE LEVELS with 12 buttons in jungle art (Level Count 12): Level 1 open with 0/3 STARS, 2 to 12 LOCKED. Level 1 loads JungleMap and the countdown runs. After a finish, the level shows its stars and the next one opens. Finishing Jungle level 12 opens Beach (beach art). Unlock All Worlds (ticked before Play) opens all three. Both Back buttons work.
+19. Levels 6 to 12 (after Sprint 10a): in each map, Level 6 to 12 can be picked from the in-game map window and from WorldSelection, start with 3-2-1-GO, the monkey walks (not Idle) and stops, the right object reveals it. Time: 40 s for levels 5 to 8, 30 s for 9 to 12. Next from level 11 loads level 12; finishing level 12 unlocks nothing further in that world.
 
 ## 9. Unity and UI rules
 - Everything in gameplay is Canvas UI. Use RectTransform, Image, Button, TMP_Text. Do not write world-space code (SpriteRenderer, Collider2D, Transform.position) for gameplay objects.
@@ -315,7 +316,8 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 - Level lock and star rules exist in two scripts (MapWindowController and WorldSelectionController). A rule change must be made in both.
 - WorldSelectionController refreshes the world page on Awake and on Back only. Ticking Unlock All Worlds during Play shows no change until the page is shown again.
 - Unused scripts: ArrivalLayerTrigger, LevelProgressionController, MapLevelLoader, GameplayInputBlocker, GameplayInputGuard.
-- Hard-coded SelectLevel1() to SelectLevel10() in MapLevelManager and MapWindowController. Scenes hold 5 levels per map.
+- Hard-coded SelectLevel1() to SelectLevel10() in MapLevelManager and MapWindowController. Scenes hold 12 levels per map. In the in-game map window, LevelButton_1 to _5 call SelectLevel1() to SelectLevel5(); LevelButton_6 to _12 call SelectLevel(int) with 6 to 12 (Sprint 10a).
+- Levels 6 to 12 (Sprint 10a) are copies of Level_5 with the same layout and 4 hiding objects. Extra hiding objects are Sprint 10b.
 - MapWindowController is 1,823 lines. Change it in the smallest possible steps.
 - Sound and vibration settings are not saved.
 - Bootstrap has to-do comments (AudioManager, SaveManager, SettingsManager).
