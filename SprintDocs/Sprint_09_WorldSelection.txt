@@ -101,6 +101,25 @@ Not reported yet (smoke test step 18):
 - Finishing Jungle level 5 opens Beach; Unlock All Worlds opens all.
 - Both Back buttons.
 
+FOLLOW-UP FIX (2026-10-25, developer approved, 3 files)
+- Found by the developer: locked level and world buttons in
+  WorldSelection looked faded and see-through, while locked level
+  buttons in the in-game map window look solid. Cause: Unity's default
+  Disabled Color is half transparent; MapWindowController forces it
+  opaque in PrepareLevelButtonVisual, WorldSelectionController did not.
+- WorldSelectionController.cs: new PrepareButtonVisual (same rule:
+  Sprite Swap to Color Tint, Disabled Color alpha 1, Image alpha 1),
+  called before and after setting interactable on level buttons and on
+  world buttons. New GetButtonImage helper, also used by
+  ApplyLevelButtonBackgrounds (same behaviour as before).
+- CLAUDE.md 2.4e: one line.
+- Also found: Level Count had been set to 12 for all three worlds in the
+  scene, so Beach waited for Jungle level 12 (does not exist) and stayed
+  locked although Jungle_LevelCompleted_5 = 1. The developer sets the
+  three Level Counts back to 5 by hand.
+- Not reported yet: locked buttons look like the in-game ones; Beach and
+  Snow open with Level Count 5.
+
 KNOWN DEBT CARRIED OVER
 - The in-game map window has no world lock.
 - Level lock and star rules exist in two scripts.

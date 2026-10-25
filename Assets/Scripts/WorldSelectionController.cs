@@ -252,7 +252,9 @@ public class WorldSelectionController : MonoBehaviour
 
             if (worldButton != null)
             {
+                PrepareButtonVisual(worldButton);
                 worldButton.interactable = isUnlocked;
+                PrepareButtonVisual(worldButton);
             }
 
             TMP_Text actionText = GetActionText(world);
@@ -403,7 +405,9 @@ public class WorldSelectionController : MonoBehaviour
 
             bool isUnlocked = levelNumber <= unlockedLevel;
 
+            PrepareButtonVisual(levelButton);
             levelButton.interactable = isUnlocked;
+            PrepareButtonVisual(levelButton);
 
             TMP_Text buttonText = levelButton.GetComponentInChildren<TMP_Text>(true);
 
@@ -428,6 +432,41 @@ public class WorldSelectionController : MonoBehaviour
         }
     }
 
+    private void PrepareButtonVisual(Button button)
+    {
+        if (button.transition == Selectable.Transition.SpriteSwap)
+        {
+            button.transition = Selectable.Transition.ColorTint;
+        }
+
+        ColorBlock colors = button.colors;
+        Color disabledColor = colors.disabledColor;
+        disabledColor.a = 1f;
+        colors.disabledColor = disabledColor;
+        button.colors = colors;
+
+        Image backgroundImage = GetButtonImage(button);
+
+        if (backgroundImage != null)
+        {
+            Color imageColor = backgroundImage.color;
+            imageColor.a = 1f;
+            backgroundImage.color = imageColor;
+        }
+    }
+
+    private Image GetButtonImage(Button button)
+    {
+        Image image = button.targetGraphic as Image;
+
+        if (image == null)
+        {
+            image = button.GetComponent<Image>();
+        }
+
+        return image;
+    }
+
     private void ApplyLevelButtonBackgrounds()
     {
         Sprite[] backgrounds = GetLevelButtonBackgrounds(selectedWorld);
@@ -449,12 +488,7 @@ public class WorldSelectionController : MonoBehaviour
                 continue;
             }
 
-            Image backgroundImage = levelButton.targetGraphic as Image;
-
-            if (backgroundImage == null)
-            {
-                backgroundImage = levelButton.GetComponent<Image>();
-            }
+            Image backgroundImage = GetButtonImage(levelButton);
 
             if (backgroundImage != null)
             {

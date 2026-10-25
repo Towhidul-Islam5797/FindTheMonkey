@@ -138,6 +138,7 @@ Never reorder steps 10 and 11.
 - Level page: LevelButton_N buttons are found by name (inactive ones included). Only the first {map}LevelCount (default 5) are shown. A level is open when its number is at most {map}_UnlockedLevel. Labels: "LEVEL n / LOCKED" or "LEVEL n / x/3 STARS" from {map}_LevelStars_{n}. Per-world Sprite arrays (element 0 = Level 1) set the button backgrounds; all three are filled with 12 entries each (Art/Background/level_jungle, level_beach, level_snow). An empty slot keeps the current art.
 - Tapping an open level checks the scene with Application.CanStreamedLevelBeLoaded, saves {map}_SelectedLevel and StartSelectedLevel = 1, and loads the map scene. The map scene then runs the normal countdown (2.4). A second tap while loading is ignored.
 - Back on the level page returns to the world page; Back on the world page loads MainMenu.
+- Locked buttons stay opaque, like in the in-game map window: PrepareButtonVisual (same rule as MapWindowController.PrepareLevelButtonVisual) turns Sprite Swap into Color Tint and sets the Disabled Color alpha and the Image alpha to 1, for level and world buttons. Locked buttons are only tinted by the Disabled Color's RGB.
 - The lock and star rules are a small copy of MapWindowController's. The in-game map window has no world lock (only its Available boxes). See section 11.
 
 ### 2.5 Events (LevelState)
