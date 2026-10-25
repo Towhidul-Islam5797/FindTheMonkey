@@ -42,6 +42,8 @@ A map scene (for example JungleMap) holds everything for that world:
 - MapLevelManager: one per scene. Owns level roots, unlock state, best stars, and level selection.
 - LevelState: one per scene. Owns the current run (tries, stars) and the saved totals.
 - Level_1 to Level_12: one root GameObject per level under Canvas/Levels, only the selected one is active. MapLevelManager Level Roots lists all 12 in order.
+  Hiding objects per level: 3 (level 1), 4 (levels 2 to 5), 5 (levels 6 to 8), 6 (levels 9 to 12).
+  One hiding object = Hide_Object/<name> (Image + HidingObject), HideObjectMovePoints/<name>_hide (slide target), MovePoint/MovePoint_N with two ArrivalTrigger children, and one entry in the Player's CharacterPathMover Move Points. Add or remove all five parts together.
   Each level root contains its own Player (monkey), MovePoints, ArrivalTriggers, Hide_Object (the hiding objects), and SmokeEffects.
 - Canvas UI: GameplayHUD, MapWindow (map and level picker), pause menu, level-complete panel, shop window, countdown panel.
 - Never add a second LevelState or MapLevelManager to a scene.
@@ -268,7 +270,7 @@ Stop and ask the developer before continuing if:
 16. Hint (after Sprint 06b): the Hint button is grey while the monkey walks and with fewer than 3 coins. Tapping it with 3 or more coins takes 3 coins, pulses the right object, and the button turns grey for the rest of the level. Stars and tries are unchanged. Restart or Next gives a fresh hint.
 17. Ad hint (after Sprint 07c, play from Bootstrap with the Android profile): when the monkey stops, the ad hint button appears, whatever the coin count. Tapping it pauses the game (timer stops) and shows the test rewarded ad. Watching to the end pulses the right object and spends no coins, and the ad button stays hidden for the rest of the level; closing early gives no hint and the ad button comes back. The coin hint is separate: it still works once per level with 3 or more coins, before or after the ad hint.
 18. World selection (after Sprint 09, WorldSelection ticked in the build list): Play opens WorldSelection. With fresh data only Jungle can be tapped; Beach and Snow show LOCKED. Jungle opens JUNGLE LEVELS with 12 buttons in jungle art (Level Count 12): Level 1 open with 0/3 STARS, 2 to 12 LOCKED. Level 1 loads JungleMap and the countdown runs. After a finish, the level shows its stars and the next one opens. Finishing Jungle level 12 opens Beach (beach art). Unlock All Worlds (ticked before Play) opens all three. Both Back buttons work.
-19. Levels 6 to 12 (after Sprint 10a): in each map, Level 6 to 12 can be picked from the in-game map window and from WorldSelection, start with 3-2-1-GO, the monkey walks (not Idle) and stops, the right object reveals it. Time: 40 s for levels 5 to 8, 30 s for 9 to 12. Next from level 11 loads level 12; finishing level 12 unlocks nothing further in that world.
+19. Levels 6 to 12 (after Sprint 10a): in each map, Level 6 to 12 can be picked from the in-game map window and from WorldSelection, start with 3-2-1-GO, the monkey walks (not Idle) and stops, the right object reveals it. Time: 40 s for levels 5 to 8, 30 s for 9 to 12. Next from level 11 loads level 12; finishing level 12 unlocks nothing further in that world. After Sprint 10b: levels 6 to 8 show 5 hiding objects and 9 to 12 show 6; the monkey also stops behind NewObject_5/6; the right one reveals it, a wrong one slides and returns, the hint pulses the right one.
 
 ## 9. Unity and UI rules
 - Everything in gameplay is Canvas UI. Use RectTransform, Image, Button, TMP_Text. Do not write world-space code (SpriteRenderer, Collider2D, Transform.position) for gameplay objects.
@@ -317,7 +319,7 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 - WorldSelectionController refreshes the world page on Awake and on Back only. Ticking Unlock All Worlds during Play shows no change until the page is shown again.
 - Unused scripts: ArrivalLayerTrigger, LevelProgressionController, MapLevelLoader, GameplayInputBlocker, GameplayInputGuard.
 - Hard-coded SelectLevel1() to SelectLevel10() in MapLevelManager and MapWindowController. Scenes hold 12 levels per map. In the in-game map window, LevelButton_1 to _5 call SelectLevel1() to SelectLevel5(); LevelButton_6 to _12 call SelectLevel(int) with 6 to 12 (Sprint 10a).
-- Levels 6 to 12 (Sprint 10a) are copies of Level_5 with the same layout and 4 hiding objects. Extra hiding objects are Sprint 10b.
+- Levels 6 to 12 (Sprint 10a) are copies of Level_5 with the same layout. Sprint 10b added NewObject_5 (levels 6 to 12) and NewObject_6 (levels 9 to 12) with placeholder sprites (a copy of each world's first hiding object), size 250 x 150, at first-guess positions. The developer links the real sprites and adjusts positions; move MovePoint_5/6 together with its object.
 - MapWindowController is 1,823 lines. Change it in the smallest possible steps.
 - Sound and vibration settings are not saved.
 - Bootstrap has to-do comments (AudioManager, SaveManager, SettingsManager).

@@ -1,0 +1,91 @@
+SPRINT 10B - EXTRA HIDING OBJECTS IN LEVELS 6 TO 12
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+More hiding objects as the difficulty rises: 5 in levels 6 to 8, 6 in
+levels 9 to 12, in Jungle, Beach and Snow. Sprite linking stays with the
+developer.
+
+DEVELOPER DECISIONS
+- Number of objects per level left to Claude; sprites by the developer.
+- 5 files approved (3 scenes, CLAUDE.md, this file). Dry run first.
+- The three map scenes were saved and closed in Unity before the edit.
+
+STRUCTURE OF ONE HIDING OBJECT (found in Level_5 and its copies)
+- Hide_Object/<name>: RectTransform, CanvasRenderer, Image, HidingObject.
+- HideObjectMovePoints/<name>_hide: slide target (moveReferencePoint).
+- MovePoint/MovePoint_N with two ArrivalTrigger children
+  (relatedMovePoint; the triggers start the "monkey behind objects"
+  layering).
+- One entry in the Player's CharacterPathMover Move Points.
+
+CHANGES (direct scene edits, script add_objects.ps1 in the session
+scratchpad)
+For each world, each new object is a copy of that level's first hiding
+object set (Jungle: rock, Beach: chair, Snow: glacier) with new unique
+fileIDs: 13 documents per object (5 GameObjects and their components).
+- Names: NewObject_5 / NewObject_6, NewObject_5_hide / NewObject_6_hide,
+  MovePoint_5 / MovePoint_6, ArrivalTrigger_5 + ArrivalTrigger_5.5
+  (and _6, _6.6).
+- HidingObject relatedMovePoint and moveReferencePoint point to the new
+  parts; LevelState, CharacterPathMover, monkey and raycaster links are
+  the level's own, as on the source object.
+- Each new move point appended to the level's CharacterPathMover Move
+  Points with its two triggers.
+- New objects are the last children of Hide_Object (drawn on top of the
+  others in that group).
+- Object size 250 x 150, scale 1.7 (Beach NewObject_6: 1.4). Move point
+  50 below the object's centre. Slide target at x -850 or +850 (object's
+  side), same y. Trigger offsets copied from the source point.
+- Placeholder sprite: the source object's sprite.
+
+Positions (canvas, centre 0,0):
+World   NewObject_5      NewObject_6 (levels 9-12)
+Jungle  (-260, 450)      (240, 480)
+Beach   (-280, 560)      (-200, -360), scale 1.4
+Snow    (-260, 470)      (240, 520)
+
+Per scene: 28 existing documents changed (for levels 6 to 12:
+Hide_Object, HideObjectMovePoints and MovePoint children lists, and the
+CharacterPathMover Move Points), 143 documents added (11 objects x 13),
+0 lines removed. Levels 1 to 5 untouched.
+CLAUDE.md: 2.2 (objects per level, the five parts of one object), smoke
+test 19, section 11.
+
+CHECKS (dry run and written scenes are byte-identical)
+- Unresolved local references: 0 in all three scenes.
+- Only the 28 expected existing documents changed per scene.
+- Every level 1 to 12: Animator, move points and HidingObject links stay
+  inside the level.
+- Levels 6 to 8: 5 objects and 5 move points; 9 to 12: 6 and 6; the set
+  of relatedMovePoints equals the Move Points list in every level.
+- No new object overlaps an existing object, the HUD and timer band
+  (y > 700), the Hint button (bottom centre) or the ad hint button
+  (right edge), and none goes past the screen edge (bounding boxes of
+  size x scale; the background art was not checked).
+- Backups of the scenes before the edit are in the session scratchpad;
+  the previous version is in git.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 3: right or wrong still only CurrentArrivedPoint == relatedMovePoint;
+  each new object has its own move point.
+- 11: the moving-object lock in HidingObject is unchanged.
+- 12, 13: no Player or Animator changed.
+- 5, 6, 7: no manager, key, field, script or class added or renamed.
+
+DEVELOPER STEPS AFTER THIS SPRINT
+- Replace the placeholder sprite on NewObject_5 / NewObject_6 (Image >
+  Source Image) in each level 6 to 12, and set the size.
+- Move objects to fit the background; move MovePoint_5/6 with them so
+  the monkey stays hidden behind the object.
+- If level 12's walk feels long (about 108 stops at 0.2 s), lower Total
+  Cycles on Level_12's Player.
+
+DONE CONDITIONS AND RESULTS
+Developer's test in Unity (2026-10-25, smoke test 19):
+- Three scenes open with no red errors: passed.
+- Levels 6-8 show 5 objects, 9-12 show 6: passed.
+- The new hiding objects work in levels 6 to 12: passed.
+Open: real sprites and final positions, linked by the developer.

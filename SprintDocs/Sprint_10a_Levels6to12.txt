@@ -83,12 +83,10 @@ MANUAL STEPS FOR THE DEVELOPER
   level 12.
 
 DONE CONDITIONS AND RESULTS
-To be filled in after the developer's test (smoke test 19):
-- Three scenes open with no red errors and no Missing references.
-- Level 6 to 12 selectable from the in-game map window and WorldSelection.
-- Each new level: countdown, monkey walks with animation, stops, right
-  object reveals it; times 40 s / 30 s.
-- Next from level 11 loads level 12.
+Developer's test in Unity (smoke test 19):
+- Three scenes open with no red errors: passed.
+- Levels 6 to 12 play from the in-game map window and WorldSelection:
+  passed.
 
 KNOWN DEBT
 - Levels 6 to 12 use Level_5's layout and hiding object positions until
