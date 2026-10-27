@@ -89,3 +89,109 @@ Developer's test in Unity (2026-10-25, smoke test 19):
 - Levels 6-8 show 5 objects, 9-12 show 6: passed.
 - The new hiding objects work in levels 6 to 12: passed.
 Open: real sprites and final positions, linked by the developer.
+
+FOLLOW-UP: BEACH SPRITES (2026-10-26)
+The developer added Assets/Art/Hiding Object/Beach_Prop_Ship.png and
+Beach_Prop_SandCastle.png (one sprite each). Direct edit of BeachMap
+(script link_sprites.ps1 in the session scratchpad), dry run first,
+written scene byte-identical to the dry run. 33 lines changed, nothing
+else:
+- NewObject_5 (levels 6-12, 7 objects): renamed Ship, Source Image
+  Beach_Prop_Ship, size 250 x 150 -> 250 x 198 (sprite shape 1207 x 957).
+- NewObject_6 (levels 9-12, 4 objects): renamed SandCastle, Source Image
+  Beach_Prop_SandCastle, size 250 x 150 -> 250 x 212 (sprite 886 x 750).
+- Positions, scale, _hide slide targets, move points and their names
+  unchanged. JungleMap and SnowMap still use placeholders.
+- Positions tuned by the developer in Play mode, then written to the scene
+  (26 lines, levels 6-12): Ship (-280, 560) -> (-230, 560) with
+  MovePoint_5 (-280, 510) -> (-230, 510); SandCastle (-200, -360) ->
+  (-190, -330) with MovePoint_6 (-200, -410) -> (-190, -380) and
+  NewObject_6_hide (-850, -360) -> (-850, -330).
+- Developer's test (2026-10-26): BeachMap opens with no errors; Ship and
+  SandCastle look right in levels 6-12. Passed.
+
+FOLLOW-UP: JUNGLE SPRITES (2026-10-26)
+The developer added Assets/Art/Hiding Object/Jungle_Prop_TermiteMound.png
+and Jungle_Prop_BambooGrove.png (one sprite each; the BambooGrove .meta
+keeps 7 unused names from an old slicing, only _0 is a sprite). Positions
+from the developer's Play-mode layout in Level_12. Direct edit of JungleMap
+(script jungle_objects.ps1 in the session scratchpad), dry run first,
+written scene byte-identical to the dry run. 66 lines changed, nothing
+else:
+- NewObject_5 (levels 6-12): renamed TermiteMound, Source Image
+  Jungle_Prop_TermiteMound, size 250 x 217 (sprite 1182 x 1025),
+  position (-260, 450) -> (-499, -561), MovePoint_5 -> (-499, -611),
+  NewObject_5_hide -> (-850, -561).
+- NewObject_6 (levels 9-12): renamed BambooGrove, Source Image
+  Jungle_Prop_BambooGrove, size 200 x 304 (sprite 900 x 1368), position
+  (240, 480) -> (473, 80), MovePoint_6 -> (473, 30), NewObject_6_hide ->
+  (850, 80).
+- Scale (1.7) and the _hide and MovePoint names unchanged.
+- To check: the BambooGrove top reaches the ad hint button area at the
+  right edge; TermiteMound's move point is about 40 px inside the left
+  edge.
+
+FOLLOW-UP: SNOW OBJECTS (2026-10-26)
+The developer renamed and placed the two objects in Level_12 in the Unity
+Editor (glacier sprite kept). Unity re-sorted the file on save, so the
+line diff is large; compared object by object, 7 objects had changed.
+Direct edit of SnowMap (script snow_objects.ps1 in the session
+scratchpad), dry run first, written scene byte-identical to the dry run.
+51 lines changed:
+- Levels 6-11: NewObject_5 -> glacier_2, position (-330.74, -720), size
+  166.7699 x 117.8761; levels 9-11: NewObject_6 -> glacier_3, position
+  (380, -268), size 128.5446 x 104.6566 (values copied from Level_12).
+- Levels 6-12: MovePoint_5 -> (-330.74, -770), NewObject_5_hide ->
+  (-850, -720); levels 9-12: MovePoint_6 -> (380, -318),
+  NewObject_6_hide -> (850, -268). Level_12's move points had stayed at
+  the old spots after the Editor change.
+- Level_1 set back to active and Level_12 to inactive, as committed.
+- Left from the Editor save: adHintsPerLevel: 1 written on HintButton
+  (the existing default).
+- To check: glacier_2 reaches about 11 px into the Hint button area;
+  glacier_3 touches the top of snow by about 6 px.
+
+FIX: MONKEY VISIBLE BEHIND SMALL OBJECTS (2026-10-26)
+Found by the developer: the monkey could sometimes be seen behind a new
+object. CharacterPathMover puts the monkey's centre on the move point; at
+Arrived Scale 0.5 (Snow) or 0.4 (Jungle) its box is about 175 or 140 px.
+The "50 below the object's centre" rule from this sprint left the monkey
+hanging below the small glaciers, and put it in the gappy stalk part of
+the bamboo sprite.
+- SnowMap levels 6-12: MovePoint_5 (-330.74, -770) -> (-330.74, -720);
+  levels 9-12: MovePoint_6 (380, -318) -> (380, -268) (glacier centres).
+  11 lines.
+- JungleMap levels 9-12: MovePoint_6 (473, 30) -> (473, -84), inside the
+  dense base of BambooGrove. 4 lines.
+- Checked and unchanged: TermiteMound (monkey inside the solid lower
+  mound), Beach Ship and SandCastle (large enough).
+- Arrival triggers are children of the move points and moved with them.
+- glacier_3 (178 px tall) is only just taller than the monkey box; if the
+  monkey still shows, make glacier_3 slightly bigger.
+- Not changed, reported: JungleMap Level_3's Player has Arrived Scale
+  (0, 0, 0); all other levels use 0.4 or 0.5.
+
+FIX: LARGER OBJECTS WHERE THE MONKEY'S LEGS SHOWED (2026-10-27)
+The developer still saw a thin strip of the monkey's legs below some
+objects. A read-only pixel check (script coverage.ps1 in the session
+scratchpad) compares the monkey's idle frames (default skin, all 10,
+mirrored, at Arrived Scale) with the real sprites of all hiding objects
+in the level and counts the uncovered monkey pixels.
+Before, levels 5-12: Snow glacier 5.3% (bottom 15 px), snow 4.5%
+(bottom 13 px), glacier_2 0.5% (head), glacier_3 10.2% (sides and feet),
+Jungle tree 1.2% (bottom 12 px). Beach and the other new objects: 0% or
+a few stray pixels.
+Scale only, positions and move points unchanged:
+- SnowMap levels 5-12: glacier (2.59, 2.87) -> (2.849, 3.157); snow
+  (2, 2.2222223) -> (2.2, 2.4444444). Levels 6-12: glacier_2 1.7 ->
+  1.955. Levels 9-12: glacier_3 1.7 -> 2.55. 27 lines.
+- JungleMap levels 5-12: tree 2.4 -> 2.64. 8 lines.
+- Pixel check on the dry run: every object in levels 5-12 at 0%, except
+  0.1% stray pixels (glacier_2, glacier_3, Box). Written scenes
+  byte-identical to the dry run.
+- Reported, not changed (levels 1-4, to confirm in Play mode first):
+  Snow L2 snow 50.6%, Beach L2 flower 34.1%, Jungle L2 Rock 19.3%, and
+  smaller ones of 2-9% (Jungle L1 Box, Rock; Beach L1 corn, L3 grass;
+  Snow L1 bush, rock; L2 glacier, box; L3 bush, snow; L4 box).
+- Limits of the check: default skin only; only objects under Hide_Object
+  count as cover.

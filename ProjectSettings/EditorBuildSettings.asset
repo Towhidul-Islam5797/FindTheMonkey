@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Menu/MainMenu.unity
     guid: b1cac35190c39054b8047eb0b9518ec1
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Menu/WorldSelection.unity
     guid: 360ad9884ee0eee41823ecf95807d610
   - enabled: 0

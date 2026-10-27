@@ -1,0 +1,58 @@
+SPRINT 11 - TAPS PASSING THROUGH PANELS
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+PROBLEM (found by the developer)
+While the in-game map window was open, tapping a world or level button
+sometimes completed the level: the hiding object behind the button
+took the tap.
+
+CAUSE
+HidingObject checks taps itself every frame (Update ->
+CheckManualUIClick). It raycasts the Canvas and walked through every
+hit, front to back, skipping hits that were not itself. A panel or
+button in front was skipped, so the object behind it took the tap.
+OnPointerClick (EventSystem) was not the cause: it only reaches the
+topmost object.
+The panels do not fully block taps either: MapPanel's Image has Raycast
+Target off, MapWindow and CountdownPanel have no full-screen image, the
+pause menu Panel is 673 x 1100 in the middle, and the ShopWindow root
+Image has Raycast Target off. Every one of these panels sets
+Time.timeScale = 0 while open (map, pause menu, shop, countdown,
+level-complete panel, ad hint).
+
+CHANGES
+Assets/Scripts/HidingObject.cs, 2 lines changed / added:
+- CheckManualUIClick: "if (!hitThisObject) continue;" ->
+  "return;". Only the topmost raycast hit counts; a tap on anything
+  drawn in front of the object is not a tap on the object.
+- TryReveal: new first check "if (Time.timeScale == 0f) return;".
+  Covers taps in empty spots of a panel that does not block raycasts.
+  Both tap paths (manual raycast and OnPointerClick) go through
+  TryReveal.
+CLAUDE.md: 2.4 step 5 notes both rules.
+No scene, prefab or serialized field changed.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 2: taps still wait for IsMovementComplete.
+- 3: right or wrong still only CurrentArrivedPoint == relatedMovePoint.
+- 10, 14: no new game-over; the timer is untouched.
+- 11: the activeMovingObject lock is unchanged.
+- 7, 8: no serialized field renamed or added.
+
+DONE CONDITIONS
+- Map window open (world page and level page): taps on buttons and on
+  empty spots never move a hiding object, add a try or complete the
+  level. Selecting a level loads it normally.
+- Same for the pause menu, the shop and the level-complete panel.
+- After closing a panel, taps on hiding objects work again.
+- Smoke test 2 to 4 still pass.
+
+RISK TO WATCH
+A decoration or effect with Raycast Target on that sits above a hiding
+object now blocks taps on that spot. If one object stops reacting,
+untick Raycast Target on whatever covers it.
+
+RESULTS
+Developer's test in Unity: pending.

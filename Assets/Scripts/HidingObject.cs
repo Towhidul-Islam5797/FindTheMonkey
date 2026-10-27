@@ -374,7 +374,7 @@ public class HidingObject : MonoBehaviour, IPointerClickHandler
                 hitObject.transform.IsChildOf(transform);
 
             if (!hitThisObject)
-                continue;
+                return;
 
             clickHandledThisFrame = true;
 
@@ -400,6 +400,9 @@ public class HidingObject : MonoBehaviour, IPointerClickHandler
             $"isRevealed={isRevealed}, " +
             $"anotherObjectMoving={IsAnotherObjectMoving}."
         );
+
+        if (Time.timeScale == 0f)
+            return;
 
         if (isMoving || isRevealed)
             return;

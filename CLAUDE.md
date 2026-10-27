@@ -84,7 +84,7 @@ Editor-only: Assets/Editor/HintSetupTool (Tools > Monkey Rush > Add Hint Button)
 4. The monkey walks the MovePoints for totalCycles. Speed rises by speedIncreasePerCycle each cycle.
    Options: randomizeMovePoints, stopAtSpecificPoint.
    When finished, IsMovementComplete becomes true and CurrentArrivedPoint is the monkey's final point.
-5. HidingObject ignores taps until IsMovementComplete is true.
+5. HidingObject ignores taps until IsMovementComplete is true. It also ignores taps while Time.timeScale is 0, and a tap counts only when the object is the topmost UI under the finger, so taps never pass through the map window or any panel (Sprint 11).
 6. Tap: LevelState.RegisterTry(), the object slides to its reference point.
 7. Right or wrong is decided by one comparison: CharacterPathMover.CurrentArrivedPoint == the object's relatedMovePoint.
    There is no "has monkey" flag to set by hand.
@@ -319,7 +319,7 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 - WorldSelectionController refreshes the world page on Awake and on Back only. Ticking Unlock All Worlds during Play shows no change until the page is shown again.
 - Unused scripts: ArrivalLayerTrigger, LevelProgressionController, MapLevelLoader, GameplayInputBlocker, GameplayInputGuard.
 - Hard-coded SelectLevel1() to SelectLevel10() in MapLevelManager and MapWindowController. Scenes hold 12 levels per map. In the in-game map window, LevelButton_1 to _5 call SelectLevel1() to SelectLevel5(); LevelButton_6 to _12 call SelectLevel(int) with 6 to 12 (Sprint 10a).
-- Levels 6 to 12 (Sprint 10a) are copies of Level_5 with the same layout. Sprint 10b added NewObject_5 (levels 6 to 12) and NewObject_6 (levels 9 to 12) with placeholder sprites (a copy of each world's first hiding object), size 250 x 150, at first-guess positions. The developer links the real sprites and adjusts positions; move MovePoint_5/6 together with its object.
+- Levels 6 to 12 (Sprint 10a) are copies of Level_5 with the same layout. Sprint 10b added NewObject_5 (levels 6 to 12) and NewObject_6 (levels 9 to 12) with placeholder sprites (a copy of each world's first hiding object), size 250 x 150, at first-guess positions. The developer links the real sprites and adjusts positions; move MovePoint_5/6 together with its object. BeachMap is done: NewObject_5 is now Ship (Beach_Prop_Ship, 250 x 198) and NewObject_6 is SandCastle (Beach_Prop_SandCastle, 250 x 212); their _hide and MovePoint names are unchanged. JungleMap is done: NewObject_5 is TermiteMound (Jungle_Prop_TermiteMound, 250 x 217) and NewObject_6 is BambooGrove (Jungle_Prop_BambooGrove, 200 x 304). SnowMap is done: NewObject_5 is glacier_2 and NewObject_6 is glacier_3, both with the existing glacier sprite, placed by the developer.
 - MapWindowController is 1,823 lines. Change it in the smallest possible steps.
 - Sound and vibration settings are not saved.
 - Bootstrap has to-do comments (AudioManager, SaveManager, SettingsManager).
