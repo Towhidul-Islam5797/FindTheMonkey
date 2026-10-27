@@ -1,0 +1,52 @@
+SPRINT 13 - MONKEY 20 PERCENT SLOWER
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+The monkey was too fast to follow in the hard levels. Make it 20 percent
+slower in every level of every world.
+
+HOW THE SPEED WORKS (CharacterPathMover)
+Speed in cycle N (N from 0) = Start Speed + Speed Increase Per Cycle x N,
+in canvas pixels per second. In every level except 3, Speed Increase Per
+Cycle equals Start Speed, so the speed grows by a full Start Speed each
+cycle. Example before: Level 12 (2500 / 2500, 18 cycles) ended at
+45,000 px/s.
+
+CHANGES (direct scene edits, script slow_speed.ps1 in the session
+scratchpad)
+Start Speed and Speed Increase Per Cycle x 0.8 on the Player's
+CharacterPathMover in Level_1 to Level_12, in JungleMap, BeachMap and
+SnowMap. 24 lines per scene, 72 in total, nothing else. Dry run first;
+written scenes byte-identical to the dry run. The three worlds had the
+same values before and after.
+
+Level   Start / Increase before   after
+1, 2    1000 / 1000               800 / 800
+3       1300 / 1500               1040 / 1200
+4, 6    1500 / 1500               1200 / 1200
+7       1800 / 1800               1440 / 1440
+5, 8, 9 2000 / 2000               1600 / 1600
+10      2200 / 2200               1760 / 1760
+11, 12  2500 / 2500               2000 / 2000
+
+Unchanged: cycles, wait at point (0.2 s), stop points, randomize, code.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 1, 2, 3: StartGame, the tap gate and right/wrong are untouched.
+- 12: the Animator field is untouched.
+
+NOTE FOR LATER
+The last cycles are still very fast (Level 12 ends at 36,000 px/s).
+If the hard levels are still too hard, lower Speed Increase Per Cycle
+(for example to 10 to 20 percent of Start Speed) instead of the start
+speed.
+
+DONE CONDITIONS
+- All three scenes open with no red errors.
+- The monkey walks visibly slower in every level and still stops and
+  hides correctly.
+
+RESULTS
+Developer's test in Unity: pending.
