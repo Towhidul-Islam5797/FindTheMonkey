@@ -6581,7 +6581,7 @@ MonoBehaviour:
     - {fileID: 983040100}
     - {fileID: 1193438909}
   startSpeed: 1200
-  speedIncreasePerCycle: 1200
+  speedIncreasePerCycle: 300
   totalCycles: 16
   stopDistance: 0
   waitAtPoint: 0.2
@@ -11231,7 +11231,7 @@ MonoBehaviour:
     - {fileID: 606706786}
     - {fileID: 126346669}
   startSpeed: 1600
-  speedIncreasePerCycle: 1600
+  speedIncreasePerCycle: 400
   totalCycles: 16
   stopDistance: 0
   waitAtPoint: 0.2
@@ -19879,7 +19879,7 @@ MonoBehaviour:
     - {fileID: 7035169722463488511}
     - {fileID: 3794382494592007312}
   startSpeed: 800
-  speedIncreasePerCycle: 800
+  speedIncreasePerCycle: 200
   totalCycles: 4
   stopDistance: 0
   waitAtPoint: 0.2
@@ -20733,7 +20733,7 @@ MonoBehaviour:
     - {fileID: 3457500108875821725}
     - {fileID: 1104330832518506481}
   startSpeed: 1760
-  speedIncreasePerCycle: 1760
+  speedIncreasePerCycle: 440
   totalCycles: 16
   stopDistance: 0
   waitAtPoint: 0.2
@@ -25913,7 +25913,7 @@ MonoBehaviour:
     - {fileID: 1323511355}
     - {fileID: 1762913734}
   startSpeed: 800
-  speedIncreasePerCycle: 800
+  speedIncreasePerCycle: 200
   totalCycles: 8
   stopDistance: 0
   waitAtPoint: 0.2
@@ -25975,7 +25975,7 @@ MonoBehaviour:
     - {fileID: 181310612}
     - {fileID: 1515304341}
   startSpeed: 1040
-  speedIncreasePerCycle: 1200
+  speedIncreasePerCycle: 260
   totalCycles: 12
   stopDistance: 0
   waitAtPoint: 0.2
@@ -26752,7 +26752,7 @@ MonoBehaviour:
     - {fileID: 2345333178977044695}
     - {fileID: 9147543318622141645}
   startSpeed: 1200
-  speedIncreasePerCycle: 1200
+  speedIncreasePerCycle: 300
   totalCycles: 12
   stopDistance: 0
   waitAtPoint: 0.2
@@ -27978,7 +27978,7 @@ MonoBehaviour:
     - {fileID: 8470014558437976474}
     - {fileID: 6711664584546462296}
   startSpeed: 2000
-  speedIncreasePerCycle: 2000
+  speedIncreasePerCycle: 500
   totalCycles: 18
   stopDistance: 0
   waitAtPoint: 0.2
@@ -30283,7 +30283,7 @@ MonoBehaviour:
     - {fileID: 6566875780478644810}
     - {fileID: 6898141641357603399}
   startSpeed: 2000
-  speedIncreasePerCycle: 2000
+  speedIncreasePerCycle: 500
   totalCycles: 16
   stopDistance: 0
   waitAtPoint: 0.2
@@ -30942,7 +30942,7 @@ MonoBehaviour:
     - {fileID: 3588504068445836004}
     - {fileID: 2618424275998513795}
   startSpeed: 1600
-  speedIncreasePerCycle: 1600
+  speedIncreasePerCycle: 400
   totalCycles: 16
   stopDistance: 0
   waitAtPoint: 0.2
@@ -34014,7 +34014,7 @@ MonoBehaviour:
     - {fileID: 3588841778286666137}
     - {fileID: 8570956978093662984}
   startSpeed: 1600
-  speedIncreasePerCycle: 1600
+  speedIncreasePerCycle: 400
   totalCycles: 14
   stopDistance: 0
   waitAtPoint: 0.2
@@ -35371,7 +35371,7 @@ MonoBehaviour:
     - {fileID: 5092522556779552348}
     - {fileID: 8889906336169412674}
   startSpeed: 1440
-  speedIncreasePerCycle: 1440
+  speedIncreasePerCycle: 360
   totalCycles: 14
   stopDistance: 0
   waitAtPoint: 0.2

@@ -1,0 +1,56 @@
+SPRINT 14 - GENTLER SPEED GROWTH
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+After Sprint 13 (20 percent slower) the last cycles were still too fast
+to follow, because Speed Increase Per Cycle was as large as Start Speed
+(the monkey got one full Start Speed faster every cycle). Make the speed
+grow gently.
+
+CHANGES (direct scene edits, script speed_increase.ps1 in the session
+scratchpad)
+Speed Increase Per Cycle = 25 percent of Start Speed on the Player's
+CharacterPathMover in Level_1 to Level_12, in JungleMap, BeachMap and
+SnowMap. 12 lines per scene, 36 in total, nothing else. Start Speed kept
+from Sprint 13. Dry run first; written scenes byte-identical to the dry
+run. The three worlds have the same values.
+
+Top speed in the last cycle = Start + Increase x (Cycles - 1), px/s:
+Level  Start  Increase before -> after  Cycles  Top before -> after
+1      800    800 -> 200                4       3,200 -> 1,400
+2      800    800 -> 200                8       6,400 -> 2,200
+3      1040   1200 -> 260               12      14,240 -> 3,900
+4      1200   1200 -> 300               16      19,200 -> 5,700
+5      1600   1600 -> 400               16      25,600 -> 7,600
+6      1200   1200 -> 300               12      14,400 -> 4,500
+7      1440   1440 -> 360               14      20,160 -> 6,120
+8      1600   1600 -> 400               16      25,600 -> 7,600
+9      1600   1600 -> 400               14      22,400 -> 6,800
+10     1760   1760 -> 440               16      28,160 -> 8,360
+11     2000   2000 -> 500               16      32,000 -> 9,500
+12     2000   2000 -> 500               18      36,000 -> 10,500
+
+Unchanged: Start Speed, cycles, wait at point (0.2 s), stop points,
+randomize, code.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 1, 2, 3: StartGame, the tap gate and right/wrong are untouched.
+- 12: the Animator field is untouched.
+
+TRADE-OFF TO WATCH
+A slower monkey takes longer to finish its walk. Level 12 has 108 stops
+(18 cycles x 6 points); its walk grows from about 23 s to about 30-35 s
+(estimate). The level timer starts only when the monkey stops, so time
+bonuses are not affected. If waiting feels long, lower Total Cycles in
+the long levels as a separate change.
+
+DONE CONDITIONS
+- All three scenes open with no red errors.
+- The monkey can be followed with the eye in the hard levels (9 to 12)
+  and still stops and hides correctly.
+- Later levels still feel harder than early ones.
+
+RESULTS
+Developer's test in Unity: pending.
