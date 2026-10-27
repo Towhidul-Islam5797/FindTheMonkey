@@ -142,6 +142,8 @@ public class HidingObject : MonoBehaviour, IPointerClickHandler
 
     public RectTransform RelatedMovePoint => relatedMovePoint;
 
+    public static bool IsAnyObjectMoving => activeMovingObject != null;
+
     // -------------------------------------------------------
     // UNITY
     // -------------------------------------------------------

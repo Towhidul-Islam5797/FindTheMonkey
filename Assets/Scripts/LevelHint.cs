@@ -81,6 +81,7 @@ public class LevelHint : MonoBehaviour
     private CharacterPathMover characterPathMover;
     private LevelTimer levelTimer;
     private bool lastMovementComplete;
+    private bool lastObjectMoving;
     private int hintsUsed;
     private int adHintsUsed;
 
@@ -200,6 +201,7 @@ public class LevelHint : MonoBehaviour
             hintsUsed = 0;
             adHintsUsed = 0;
             lastMovementComplete = false;
+            lastObjectMoving = false;
 
             RefreshButton();
         }
@@ -212,6 +214,15 @@ public class LevelHint : MonoBehaviour
         {
             lastMovementComplete =
                 characterPathMover.IsMovementComplete;
+
+            RefreshButton();
+        }
+
+        if (HidingObject.IsAnyObjectMoving !=
+            lastObjectMoving)
+        {
+            lastObjectMoving =
+                HidingObject.IsAnyObjectMoving;
 
             RefreshButton();
         }
@@ -280,6 +291,9 @@ public class LevelHint : MonoBehaviour
             return false;
 
         if (pulseRoutine != null)
+            return false;
+
+        if (HidingObject.IsAnyObjectMoving)
             return false;
 
         return !waitingForAd;

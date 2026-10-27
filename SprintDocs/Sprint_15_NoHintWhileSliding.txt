@@ -1,0 +1,46 @@
+SPRINT 15 - NO HINT WHILE AN OBJECT SLIDES
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+Close the known gap from Sprint 06: a hint (coin or ad) could be used
+while a hiding object was sliding, because LevelHint could not see the
+private movement lock in HidingObject.
+
+DEVELOPER DECISIONS
+- 4 files approved (over the 3-file stop rule): HidingObject.cs (one
+  read-only property), LevelHint.cs, CLAUDE.md, this file.
+
+CHANGES
+Assets/Scripts/HidingObject.cs (2 lines added):
+- public static bool IsAnyObjectMoving => activeMovingObject != null;
+  Read-only view of the movement lock. The lock itself is unchanged.
+  It is held for the whole tap: slide out, wait, slide back (wrong) or
+  reveal (right).
+Assets/Scripts/LevelHint.cs (14 lines added):
+- New private field lastObjectMoving (not serialized), reset with the
+  hint counts when a new level's Player becomes active.
+- Update: when HidingObject.IsAnyObjectMoving changes, RefreshButton
+  (same pattern as lastMovementComplete).
+- CanGiveHint: returns false while IsAnyObjectMoving. Covers the coin
+  hint (greyed out) and the ad hint (hidden).
+CLAUDE.md 2.4d: the "Known gap" line replaced by the new rule.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 3: right or wrong still only CurrentArrivedPoint == relatedMovePoint.
+- 11: the activeMovingObject lock is unchanged; only read.
+- 7, 8: no serialized field added, renamed or removed.
+- A hint still never reveals the monkey, counts as a try or changes
+  stars or rewards.
+
+DONE CONDITIONS
+- Tap a wrong object: while it slides out and back, the Hint button is
+  grey and the ad hint button is hidden; both come back after the
+  object is back (if they were available before).
+- A hint still works normally when nothing moves.
+- Tapping the right object ends the level as before.
+- Smoke test 16 and 17 still pass.
+
+RESULTS
+Developer's test in Unity: pending.
