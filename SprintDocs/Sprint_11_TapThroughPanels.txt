@@ -55,4 +55,4 @@ object now blocks taps on that spot. If one object stops reacting,
 untick Raycast Target on whatever covers it.
 
 RESULTS
-Developer's test in Unity: pending.
+Developer's test in Unity (2026-10-27): passed.

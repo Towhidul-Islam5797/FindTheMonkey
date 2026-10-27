@@ -141,7 +141,7 @@ Never reorder steps 10 and 11.
 - Tapping an open level checks the scene with Application.CanStreamedLevelBeLoaded, saves {map}_SelectedLevel and StartSelectedLevel = 1, and loads the map scene. The map scene then runs the normal countdown (2.4). A second tap while loading is ignored.
 - Back on the level page returns to the world page; Back on the world page loads MainMenu.
 - Locked buttons stay opaque, like in the in-game map window: PrepareButtonVisual (same rule as MapWindowController.PrepareLevelButtonVisual) turns Sprite Swap into Color Tint and sets the Disabled Color alpha and the Image alpha to 1, for level and world buttons. Locked buttons are only tinted by the Disabled Color's RGB.
-- The lock and star rules are a small copy of MapWindowController's. The in-game map window has no world lock (only its Available boxes). See section 11.
+- The lock and star rules are a small copy of MapWindowController's. Since Sprint 12 the in-game map window has the same world lock (MapWindowController.RefreshMapButtons, IsBeachUnlocked, IsSnowUnlocked; its own openLabel, lockedLabel and unlockAllWorlds fields; ActionText found by name). See section 11.
 
 ### 2.5 Events (LevelState)
 OnScoreChanged, OnTotalScoreChanged, OnBananaChanged, OnCoinChanged, OnTryChanged, OnStarsChanged, OnScoreRewarded, OnBananaRewarded, OnMonkeyFound.
@@ -314,8 +314,7 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 - On iOS, music keeps playing under an interstitial. Pausing audio during ads is left for the audio polish sprint.
 - On iOS the game keeps running under full-screen ads. LevelHint pauses gameplay (Time.timeScale = 0) while the rewarded ad is open and restores it after (Sprint 07b). Not yet checked on an iOS device. The interstitial does not pause gameplay, but it only shows from Next, when no level is running.
 - Rewarded ad: the code expects the reward callback before the closed callback. Check this order in the device test after Sprint 07c.
-- World lock only on WorldSelection: the in-game map window (MapWindowController) still lets the player switch to Beach or Snow without finishing the world before. Matching it is a separate sprint.
-- Level lock and star rules exist in two scripts (MapWindowController and WorldSelectionController). A rule change must be made in both.
+- World lock, level lock and star rules exist in two scripts (MapWindowController and WorldSelectionController). A rule change must be made in both.
 - WorldSelectionController refreshes the world page on Awake and on Back only. Ticking Unlock All Worlds during Play shows no change until the page is shown again.
 - Unused scripts: ArrivalLayerTrigger, LevelProgressionController, MapLevelLoader, GameplayInputBlocker, GameplayInputGuard.
 - Hard-coded SelectLevel1() to SelectLevel10() in MapLevelManager and MapWindowController. Scenes hold 12 levels per map. In the in-game map window, LevelButton_1 to _5 call SelectLevel1() to SelectLevel5(); LevelButton_6 to _12 call SelectLevel(int) with 6 to 12 (Sprint 10a).

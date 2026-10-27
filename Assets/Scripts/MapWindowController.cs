@@ -242,6 +242,23 @@ public class MapWindowController : MonoBehaviour
     private bool snowAvailable = true;
 
     // =======================================================
+    // WORLD LOCK
+    // =======================================================
+
+    [Header("World Lock")]
+    [Tooltip("Shown on the ActionText of an open world button.")]
+    [SerializeField]
+    private string openLabel = "CONTINUE";
+
+    [Tooltip("Shown on the ActionText of a locked world button.")]
+    [SerializeField]
+    private string lockedLabel = "LOCKED";
+
+    [Tooltip("Opens every available world without finishing the world before. Keep off in release builds.")]
+    [SerializeField]
+    private bool unlockAllWorlds = false;
+
+    // =======================================================
     // SORTING
     // =======================================================
 
@@ -602,6 +619,12 @@ public class MapWindowController : MonoBehaviour
 
     public void SelectBeachMap()
     {
+        if (!IsBeachUnlocked())
+        {
+            DebugLog("Beach is locked.");
+            return;
+        }
+
         ShowLevelsForMap(
             beachMapId,
             beachSceneName,
@@ -621,6 +644,12 @@ public class MapWindowController : MonoBehaviour
 
     public void SelectSnowMap()
     {
+        if (!IsSnowUnlocked())
+        {
+            DebugLog("Snow is locked.");
+            return;
+        }
+
         ShowLevelsForMap(
             snowMapId,
             snowSceneName,
@@ -1790,23 +1819,100 @@ public class MapWindowController : MonoBehaviour
 
     public void RefreshMapButtons()
     {
-        if (jungleMapButton != null)
+        RefreshMapButton(
+            jungleMapButton,
+            jungleAvailable
+        );
+
+        RefreshMapButton(
+            beachMapButton,
+            IsBeachUnlocked()
+        );
+
+        RefreshMapButton(
+            snowMapButton,
+            IsSnowUnlocked()
+        );
+    }
+
+    private void RefreshMapButton(
+        Button mapButton,
+        bool isUnlocked
+    )
+    {
+        if (mapButton == null)
         {
-            jungleMapButton.interactable =
-                jungleAvailable;
+            return;
         }
 
-        if (beachMapButton != null)
+        PrepareLevelButtonVisual(
+            mapButton
+        );
+
+        mapButton.interactable =
+            isUnlocked;
+
+        TMP_Text[] texts =
+            mapButton.GetComponentsInChildren<TMP_Text>(
+                true
+            );
+
+        for (int i = 0; i < texts.Length; i++)
         {
-            beachMapButton.interactable =
-                beachAvailable;
+            if (texts[i].name == "ActionText")
+            {
+                texts[i].text =
+                    isUnlocked ? openLabel : lockedLabel;
+            }
+        }
+    }
+
+    // =======================================================
+    // WORLD LOCK
+    // =======================================================
+
+    private bool IsBeachUnlocked()
+    {
+        if (!beachAvailable)
+        {
+            return false;
         }
 
-        if (snowMapButton != null)
+        return unlockAllWorlds ||
+               IsWorldFinished(
+                   jungleMapId,
+                   jungleLevelCount
+               );
+    }
+
+    private bool IsSnowUnlocked()
+    {
+        if (!snowAvailable)
         {
-            snowMapButton.interactable =
-                snowAvailable;
+            return false;
         }
+
+        return unlockAllWorlds ||
+               IsWorldFinished(
+                   beachMapId,
+                   beachLevelCount
+               );
+    }
+
+    private bool IsWorldFinished(
+        string mapId,
+        int levelCount
+    )
+    {
+        string lastLevelCompletedKey =
+            mapId +
+            "_LevelCompleted_" +
+            levelCount;
+
+        return PlayerPrefs.GetInt(
+            lastLevelCompletedKey,
+            0
+        ) == 1;
     }
 
     // =======================================================

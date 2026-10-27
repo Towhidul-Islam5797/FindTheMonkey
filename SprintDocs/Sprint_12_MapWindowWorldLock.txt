@@ -1,0 +1,59 @@
+SPRINT 12 - WORLD LOCK IN THE IN-GAME MAP WINDOW
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+The in-game map window (JungleMap, BeachMap, SnowMap) let the player
+switch to Beach or Snow without finishing the world before. Use the same
+world lock as WorldSelection (Sprint 09).
+
+RULE (same as WorldSelectionController)
+- Jungle is always open.
+- Beach opens when Jungle_LevelCompleted_{jungleLevelCount} is 1.
+- Snow opens when Beach_LevelCompleted_{beachLevelCount} is 1.
+- An unticked Available box always closes a world.
+- Unlock All Worlds (Testing, default off) opens every available world.
+Level counts are 12 in all three scenes. Keys are only read; none added.
+
+CHANGES
+Assets/Scripts/MapWindowController.cs (115 lines added, 9 removed: the
+old body of RefreshMapButtons):
+- New optional fields under [Header("World Lock")]: openLabel
+  ("CONTINUE", the text in the scenes today), lockedLabel ("LOCKED"),
+  unlockAllWorlds (false). Defaults work, no scene edit needed.
+- RefreshMapButtons now calls RefreshMapButton for each world:
+  PrepareLevelButtonVisual keeps a locked button opaque (only tinted by
+  the Disabled Color RGB, as in WorldSelection), interactable is set by
+  the lock, and the ActionText child (found by name) shows openLabel or
+  lockedLabel. Called each time the map window opens, as before.
+- New IsBeachUnlocked, IsSnowUnlocked, IsWorldFinished.
+- SelectBeachMap and SelectSnowMap return early when the world is
+  locked (also covers SelectDesertMap).
+CLAUDE.md: 2.4e note and section 11 known debt updated.
+No scene, prefab or PlayerPrefs key changed.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 1: StartGame still only after GO; countdown code untouched.
+- 4: save order untouched; no write to PlayerPrefs added.
+- 6, 7: no key or serialized field renamed or removed.
+- 8: new fields are optional with defaults.
+
+DEVELOPER STEPS
+- None required. Optional: the new World Lock fields are on
+  MapWindowController in each map scene.
+- A test save that played Beach or Snow without finishing Jungle now
+  shows those worlds LOCKED in the map window too. Use Unlock All Worlds
+  or GameDataDebugWindow.
+
+DONE CONDITIONS
+- Fresh data: the in-game map shows Jungle open, Beach and Snow LOCKED;
+  tapping a locked world does nothing.
+- Finishing Jungle level 12 opens Beach the next time the map opens;
+  finishing Beach 12 opens Snow.
+- Unlock All Worlds (ticked) opens all three.
+- Locked buttons stay fully visible.
+- The level page and selecting a level work as before.
+
+RESULTS
+Developer's test in Unity: pending.
