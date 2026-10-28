@@ -53,7 +53,7 @@ MonoBehaviour:
   monkeyFoundSound: {fileID: 8300000, guid: e6c4f0c74728c134bb05c0fee6fb07f4, type: 3}
   musicEnabled: 1
   soundEffectsEnabled: 1
-  vibrationEnabled: 0
+  vibrationEnabled: 1
   musicVolume: 0.331
   soundEffectsVolume: 1
 --- !u!82 &2582376446324968900

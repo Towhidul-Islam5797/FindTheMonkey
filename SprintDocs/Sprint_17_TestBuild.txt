@@ -66,6 +66,26 @@ DONE CONDITIONS
 - The device test in the delivery checklist passes.
 - The APK and the client test guide are sent to the client.
 
+BUILD FIX (DEVELOPER APPROVED, 2026-10-28)
+- First build failed: "UniversalRenderPipelineGlobalSettings ... is not
+  at last version". The asset had m_AssetVersion 11 (saved by a newer
+  URP, since the initial commit); the installed URP 17.3.0 expects 9
+  and its build check needs an exact match.
+- Fix: Assets/UniversalRenderPipelineGlobalSettings.asset
+  m_AssetVersion 11 -> 9 (one line). Unity also filled
+  m_RuntimeSettings in the same file during the build.
+- The clean fix (fresh global settings from the installed URP, and the
+  17.6.0 line in Packages/manifest.json) stays in known debt.
+
+FILES CHANGED BY UNITY DURING THE BUILD (EXPECTED)
+- GoogleMobileAdsPlugin.androidlib/AndroidManifest.xml and
+  ProjectSettings/AndroidResolverDependencies.xml: Force Resolve.
+- New Universal Render Pipeline Asset.asset: shader prefilter flags.
+- BeachMap, JungleMap, SnowMap: re-saved. Background anchors stored as
+  0 (driven by AspectRatioFitter), pause menu button positions and
+  Panel size stored (driven by the layout group), MenuWindow saved
+  inactive (MenuWindowController.Start hides it anyway).
+
 RESULTS
 Build: pending.
 Device test: pending (phone model and Android version: ...).

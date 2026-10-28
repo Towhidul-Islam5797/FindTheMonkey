@@ -9,7 +9,7 @@
   <files />
   <settings>
     <setting name="androidAbis" value="arm64-v8a" />
-    <setting name="bundleId" value="com.tp_studio.MonkeyRush" />
+    <setting name="bundleId" value="com.tpstudio.monkeyrush" />
     <setting name="gradleBuildEnabled" value="True" />
     <setting name="gradlePropertiesTemplateEnabled" value="True" />
     <setting name="gradleTemplateEnabled" value="True" />
