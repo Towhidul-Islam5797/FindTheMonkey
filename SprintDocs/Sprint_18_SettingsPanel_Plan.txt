@@ -1,0 +1,93 @@
+SPRINT 18 - SETTINGS PANEL (PLAN FOR THE NEXT PHASE, NOT STARTED)
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Written: 2026-10-28. Moved out of the current delivery phase by the
+developer; to be done in the next client phase. Nothing below is built.
+
+GOAL
+One settings panel, the same in MainMenu and in the three map scenes,
+with saved Music, Sound and Vibration toggles, a Privacy Policy link and
+a Rate Us link behind a parental gate, and the game version.
+
+STATE AT THE TIME OF WRITING
+- GameFeedbackManager (DontDestroyOnLoad singleton, one copy in MainMenu
+  and in each map scene; the first one survives) already has
+  SetMusicEnabled, SetSoundEffectsEnabled and SetVibrationEnabled.
+  Nothing calls them and nothing is saved.
+- Pause menu (MenuWindow/Panel) in BeachMap, JungleMap and SnowMap has a
+  SettingsButton between Shop and Exit, with an empty On Click (added
+  2026-10-27). It does nothing yet.
+- MainMenu has only PlayButton and Exit. MainMenuController.OpenSettings
+  loads the empty Settings scene and is not used by any button.
+- The pause menu sets Time.timeScale = 0, so taps on hiding objects are
+  blocked while it (and a panel opened from it) is open (Sprint 11).
+
+PANEL CONTENTS (agreed)
+1. Music ON/OFF        saved
+2. Sound ON/OFF        saved (button taps, monkey-found sound)
+3. Vibration ON/OFF    saved (wrong tap, monkey found)
+4. Privacy Policy      parental gate, then opens the policy URL
+5. Rate Us             parental gate, then opens the store page
+6. Close               back to the main menu or the pause menu
+7. Version text        Application.version, not a button
+Left out on purpose: volume sliders (later audio polish), reset progress
+(project rule: no reset code in the game), language, More Games, a
+private feedback form (collecting data from children, COPPA), ad privacy
+options (comes with the UMP consent sprint, reuses the parental gate).
+
+OPEN DECISION
+- Button style: A) text such as "MUSIC: ON", or B) icon with an ON and
+  an OFF sprite. The code can support both (optional state text, optional
+  on/off sprites).
+
+SPLIT (3-file stop rule)
+Sprint 18 - saved settings and the panel
+- GameFeedbackManager.cs: load MusicEnabled, SoundEffectsEnabled and
+  VibrationEnabled (new PlayerPrefs keys, int 0/1) in Awake after the
+  singleton check; default to the Inspector values when no key exists.
+  Save the key in each Set...Enabled method. Add read-only getters
+  IsMusicEnabled, IsSoundEffectsEnabled, IsVibrationEnabled.
+- New SettingsPanelController.cs, one per scene: optional fields
+  panelRoot, openButton, closeButton, and for each setting a button plus
+  an optional state text and optional on/off sprites; versionText.
+  Buttons connected by code (no On Click entries). Talks to
+  GameFeedbackManager.Instance; does nothing if there is none. Does not
+  touch Time.timeScale or gameplay.
+- CLAUDE.md (2.3 script map, 2.7 save keys, smoke test, section 11) and
+  the sprint doc.
+- Unity (developer): build SettingsPanel in MainMenu, make it a prefab,
+  place it as the last child of MenuWindow in each map scene (draws over
+  the pause menu), set Open Button to the existing SettingsButton; add a
+  SettingsButton to MainMenu.
+Sprint 18b - parental gate, Privacy Policy and Rate Us
+- New ParentalGate.cs: popup "Ask a grown-up: what is A x B?" with random
+  numbers, 3 answer buttons and Cancel. Right answer runs the action,
+  wrong answer or Cancel closes it.
+- SettingsPanelController: Privacy Policy and Rate Us buttons call the
+  gate, then Application.OpenURL. Inspector fields: privacyPolicyUrl,
+  androidStoreUrl, iosStoreUrl (empty field = button hidden).
+- No in-app review package (project rule: no new packages); Rate Us opens
+  the store page. It only works once the game is live; the iOS link needs
+  the App Store ID from App Store Connect.
+Sprint 18c - client package
+- Privacy.html: template written from what the game really does (no
+  accounts, progress only on the device, AdMob child-directed with G
+  content, no personal data collected by the game). Placeholders for
+  company name, contact email, date. Marked as a template to be checked
+  by the client (not legal advice; COPPA, GDPR-K).
+- Walkthrough document: free hosting (GitHub Pages or Google Sites),
+  where to paste the URL in Unity, where it goes in Google Play Console
+  and App Store Connect, how to find the store links for Rate Us.
+
+INVARIANTS TO KEEP
+- 6: keys are only added. 7, 8: no field renamed; new fields optional.
+- Gameplay, taps, rewards and the 2.4 order are untouched.
+
+DONE CONDITIONS (Sprint 18)
+- Settings opens and closes in MainMenu and from the pause menu in all
+  three maps; in a map the game stays paused and hiding objects ignore
+  taps while it is open.
+- Music off stops the music at once; Sound off silences taps and the
+  found sound; Vibration off stops vibration on a device.
+- Settings are kept after quitting and reopening.
+- The version text shows the build version.
