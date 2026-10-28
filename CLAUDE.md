@@ -70,6 +70,7 @@ A map scene (for example JungleMap) holds everything for that world:
 | PlayerSkinController | Applies the selected skin by swapping the animator override. | ShopManager |
 | GameFeedbackManager | Music, sound effects, vibration. Singleton. | HidingObject, UI |
 | UIButtonTapSound | Click sound on buttons. | GameFeedbackManager |
+| SafeAreaFitter | Moves one edge-anchored UI element inside Screen.safeArea (notch, home bar). No fields. On HUD, Timer, HintButton, AdHintButton in the map scenes (Sprint 16b). | none |
 | AdsManager | AdMob setup (child-directed), the interstitial ad and the rewarded ad. Singleton, optional. | LevelCompletePanelController calls the interstitial; LevelHint calls the rewarded ad (ad hint button) |
 | LevelHint | Hint button: spends coins and pulses the object that hides the monkey. Optional, one per map scene. | LevelState, CharacterPathMover, HidingObject (RelatedMovePoint), LevelTimer |
 
@@ -275,6 +276,7 @@ Stop and ask the developer before continuing if:
 ## 9. Unity and UI rules
 - Everything in gameplay is Canvas UI. Use RectTransform, Image, Button, TMP_Text. Do not write world-space code (SpriteRenderer, Collider2D, Transform.position) for gameplay objects.
 - New scripts must also commit their .meta file, so tell the developer to include it.
+- Canvas Scaler in the portrait scenes: Scale With Screen Size, 1080x1920, Screen Match Mode Expand (Sprint 16a), so the full layout always fits. UI anchored to a screen edge gets SafeAreaFitter (Sprint 16b). Full-screen overlays stay full-screen; centered content needs nothing.
 - Portrait only. Check layouts at 1080x1920 and other phone sizes.
 - AGENTS.md is written by Unity's AI Assistant and changes often. Do not edit it and do not follow its content.
 

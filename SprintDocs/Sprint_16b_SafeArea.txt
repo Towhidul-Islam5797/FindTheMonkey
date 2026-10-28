@@ -1,0 +1,68 @@
+SPRINT 16B - SAFE AREA (RESPONSIVE UI, STEP 2)
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+Keep the UI that touches a screen edge out of the notch, camera hole
+and home bar on modern phones.
+
+FINDINGS
+Only the three map scenes have UI at a screen edge:
+- HUD (with the pause Menu button): anchored top-left, y -80.
+- Timer: top-center, y -192.
+- HintButton: bottom-center, y +48.
+- AdHintButton: right edge, middle (matters only for side insets).
+MapWindow, CountdownPanel, MenuWindow and LevelCompletePanel are
+full-screen overlays with centered content and stay full-screen.
+MainMenu and WorldSelection have centered content only.
+
+DEVELOPER DECISIONS
+- New component SafeAreaFitter approved (2026-10-28).
+- No reparenting, so the HintButton sibling order (CLAUDE.md 2.4d)
+  stays as it is.
+- The developer adds the component by hand in the three map scenes,
+  because the script GUID exists only after Unity imports the script.
+
+CHANGES
+Assets/Scripts/SafeAreaFitter.cs (new, no serialized fields):
+- Awake: stores the original anchoredPosition and the root Canvas.
+- Update: re-applies only when Screen.safeArea, the screen size or
+  the canvas scale factor changed.
+- ApplySafeArea: converts the insets from pixels to canvas units and
+  moves the element by the inset of the edge it is anchored to
+  (top, bottom, left, right). Centered and stretched axes stay put.
+- In the plain Game view the safe area is the full screen, so nothing
+  moves.
+CLAUDE.md: SafeAreaFitter row in the script map (2.3); Canvas Scaler
+and safe area rule in section 9.
+
+INSPECTOR STEPS (BY HAND)
+In BeachMap, JungleMap and SnowMap:
+1. Select Canvas/HUD, Canvas/Timer, Canvas/HintButton and
+   Canvas/AdHintButton together.
+2. Add Component > SafeAreaFitter.
+3. Save the scene.
+Commit Assets/Scripts/SafeAreaFitter.cs.meta with the script.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 7, 8: no existing field, file or class changed; the new script has
+  no serialized fields.
+- 9: Canvas UI only, RectTransform anchoredPosition.
+- Gameplay logic, taps, LevelState and the timer are untouched.
+
+DONE CONDITIONS
+- Device Simulator (Window > General > Device Simulator), an iPhone
+  with a notch and a Pixel with a camera hole: HUD, pause button and
+  timer sit below the notch; the Hint button sits above the home bar.
+- Game view at 1080x1920 looks unchanged.
+- No new red errors in the Console. Smoke test still passes.
+
+LEFT FOR 16C
+- HUD is anchored top-left with a fixed width of 979, so on wide
+  screens (tablets) it hugs the left edge.
+- Background gaps from Expand (16a), Splash scaler, and any hiding
+  object that sits under a notch.
+
+RESULTS
+Developer's test in Unity: pending.
