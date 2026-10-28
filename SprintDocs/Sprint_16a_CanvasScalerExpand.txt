@@ -1,0 +1,50 @@
+SPRINT 16A - CANVAS SCALER EXPAND (RESPONSIVE UI, STEP 1)
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+Make the whole 1080x1920 layout fit on every phone and tablet. With
+Match Width Or Height 0.5, tall phones (19.5:9) lost about 50 units on
+each side and tablets (3:4) lost about 130 units at the top and bottom.
+
+SPRINT 16 SPLIT (developer decision, 2026-10-28)
+- 16a: Canvas Scaler Expand (this sprint).
+- 16b: safe area (notch, punch-hole) for the HUD and top buttons.
+- 16c: layout fixes found in the 16a device check (backgrounds that do
+  not fill the extra space, wrong anchors). Splash is checked there too:
+  its Canvas Scaler uses a landscape reference (1920x1080, match width).
+- Audio and vibration polish moved to Sprint 17.
+
+DEVELOPER DECISIONS
+- 5 scene files approved (over the 3-file stop rule), edited directly.
+- Unity Editor was not running and the working tree was clean before
+  the edit.
+
+CHANGES
+One line per scene, Canvas/CanvasScaler m_ScreenMatchMode: 0 -> 1
+(Match Width Or Height -> Expand). Reference resolution 1080x1920 and
+the unused match value 0.5 are unchanged.
+- Assets/Scenes/Gameplay/BeachMap.unity    line 7937
+- Assets/Scenes/Gameplay/JungleMap.unity   line 8086
+- Assets/Scenes/Gameplay/SnowMap.unity     line 8830
+- Assets/Scenes/Menu/MainMenu.unity        line 981
+- Assets/Scenes/Menu/WorldSelection.unity  line 5265
+No script, prefab or meta file changed. The Resources/ShopWindow
+prefab was not checked for its own Canvas Scaler.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 9: gameplay stays Canvas UI; only the scaling mode changed.
+- 7, 8: no serialized field or script changed.
+- Gameplay logic, taps and the right/wrong rule are untouched.
+
+DONE CONDITIONS
+- Game view at 1080x1920 looks exactly as before.
+- At 1080x2340, 1440x3200, 1536x2048 and 720x1280 no hiding object,
+  HUD item, button or panel is cut off in any of the 5 scenes.
+- Gaps at the screen edges (background not filling) are expected and
+  noted for 16c.
+- Smoke test still passes; no new red errors in the Console.
+
+RESULTS
+Developer's test in Unity: pending.
