@@ -87,5 +87,11 @@ FILES CHANGED BY UNITY DURING THE BUILD (EXPECTED)
   inactive (MenuWindowController.Start hides it anyway).
 
 RESULTS
-Build: pending.
-Device test: pending (phone model and Android version: ...).
+Build: done. MonkeyRush_0.2.0_test.apk built without errors after the
+URP fix (2026-10-28).
+Install: done. The APK installs and runs on the developer's Android
+phone (2026-10-28).
+Device test (delivery checklist section 3): all checks pass
+(2026-10-28). Phone model and Android version: not recorded.
+Sprint 17 is done. Next: send the APK and Phase2_ClientTestGuide.txt
+to the client.
