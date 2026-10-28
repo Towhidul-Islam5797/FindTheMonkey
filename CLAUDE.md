@@ -313,6 +313,11 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 - Missing features: daily rewards.
 - Ads use Google's test IDs only. Real App IDs and ad unit IDs are needed before release.
 - No consent (UMP) flow yet. Needed before release.
+- AD_ID permission: the AdMob SDK adds it to the Android manifest. Play's Families policy expects child-directed apps not to request it. Remove it before release (separate plan; manifest files are not edited without one).
+- Release signing: test builds use the debug keystore. A release keystore and a signed AAB are needed for Google Play. No iOS build yet (needs a Mac).
+- Phase 2 test build (Sprint 17): Android APK, package com.tpstudio.monkeyrush, version 0.2.0, code 2, test ad IDs. Delivery checklist in SprintDocs/Phase2_DeliveryChecklist.txt, client guide in SprintDocs/Phase2_ClientTestGuide.txt.
+- Left from Sprint 16: MainMenu, WorldSelection and Splash backgrounds still stretch on non-9:16 screens (no AspectRatioFitter); the WorldSelection and in-game level grid were not checked at tablet width.
+- No wrong-tap sound clip (GameFeedbackManager plays only vibration on a wrong tap).
 - The interstitial count is per session. There is no frequency cap across sessions.
 - On iOS the game keeps running under full-screen ads. LevelHint pauses gameplay (Time.timeScale = 0) while the rewarded ad is open and restores it after (Sprint 07b). Not yet checked on an iOS device. The interstitial does not pause gameplay, but it only shows from Next, when no level is running.
 - Rewarded ad: the code expects the reward callback before the closed callback. Check this order in the device test after Sprint 07c.

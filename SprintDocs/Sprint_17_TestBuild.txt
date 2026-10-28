@@ -1,0 +1,71 @@
+SPRINT 17 - TEST BUILD FOR THE PHASE 2 DELIVERY
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+One Android APK the client can install and test, plus the delivery
+checklist and a short client test guide.
+
+DEVELOPER DECISIONS (2026-10-28)
+- Delivery: Android APK, sideloaded. No Play Console, no iOS build.
+- Package name: com.tpstudio.monkeyrush.
+- Version 0.2.0, Bundle Version Code 2 (1.0 stays free for release).
+- Test ad IDs stay in (correct for a test build).
+- No code or scene changes in this sprint.
+
+STATE CHECKED BEFORE THE BUILD
+Ready:
+- Build list: Bootstrap, Splash, MainMenu, WorldSelection, JungleMap,
+  BeachMap, SnowMap. LevelSelection, MonkeyCollection, Rewards and
+  Settings are disabled.
+- Default orientation Portrait. Scripting backend IL2CPP, ARM64,
+  Min SDK 25, Target SDK automatic (highest installed).
+- unlockAllWorlds off in WorldSelection, BeachMap, JungleMap, SnowMap.
+- AdMob App IDs and ad unit IDs are Google's public test IDs.
+- Default app icon set (128x128).
+Blocking or wrong (fixed by hand, see below):
+- No Android package name. Only Standalone had com.DefaultCompany.2D-URP,
+  which is not a valid Android id.
+- GameFeedbackManager.prefab: vibrationEnabled still 0, although the
+  Sprint 16d commit message says it was ticked.
+- Version 1.0, code 1.
+
+STEPS (BY HAND, IN UNITY)
+1. Assets/Audio/GameFeedbackManager.prefab: tick Vibration Enabled.
+   Save.
+2. Edit > Project Settings > Player > Android tab > Other Settings:
+   - Package Name: com.tpstudio.monkeyrush
+   - Version: 0.2.0
+   - Bundle Version Code: 2
+3. Assets > External Dependency Manager > Android Resolver > Force
+   Resolve. Wait until it finishes without errors.
+4. File > Build Profiles > Android:
+   - Scene list as above.
+   - Development Build: off.
+   - Keystore: default debug keystore (Publishing Settings unchanged).
+   - Build. File name: MonkeyRush_0.2.0_test.apk.
+5. Install on one Android phone (adb install or copy the file) and run
+   the device test in SprintDocs/Phase2_DeliveryChecklist.txt.
+6. Commit the prefab and ProjectSettings changes (see the commit
+   message below). Do not commit the APK.
+
+DOCUMENTS WRITTEN
+- SprintDocs/Phase2_DeliveryChecklist.txt (milestone checklist,
+  device test, known debt, next phase).
+- SprintDocs/Phase2_ClientTestGuide.txt (for the client).
+- CLAUDE.md section 11: release items added to the known debt.
+
+INVARIANTS
+No script, scene or serialized field changed in this sprint.
+
+DONE CONDITIONS
+- The APK builds without errors.
+- It installs and starts on a real Android phone (portrait, splash,
+  main menu).
+- The device test in the delivery checklist passes.
+- The APK and the client test guide are sent to the client.
+
+RESULTS
+Build: pending.
+Device test: pending (phone model and Android version: ...).

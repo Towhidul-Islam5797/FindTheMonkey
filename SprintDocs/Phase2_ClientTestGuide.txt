@@ -1,0 +1,48 @@
+MONKEY RUSH - TEST BUILD 0.2.0 (ANDROID)
+Test guide for the phase 2 delivery
+
+1. INSTALL
+- File: MonkeyRush_0.2.0_test.apk
+- Copy it to the Android phone (or download it there) and open it.
+- If Android asks, allow "Install unknown apps" for the app you used to
+  open the file (Files, Chrome, Drive). This is normal for test builds
+  that do not come from Google Play.
+- If an older test build is installed, uninstall it first.
+- Needs Android 7.1 or newer, 64-bit phone.
+
+2. WHAT IS NEW IN THIS BUILD
+- Three worlds (Jungle, Beach, Snow) with 12 levels each, unlocked one
+  by one. Finish all of Jungle to open Beach, all of Beach to open Snow.
+- A level timer. If it reaches 0:00 the level is lost and you can
+  restart it. Finishing fast gives bonus coins.
+- Stars by tries: 1 try = 3 stars, 2 tries = 2, 3 or more = 1.
+- Hint button: costs 3 coins and shows which object hides the monkey.
+- Video hint: watch a short ad for a free hint.
+- Sound and vibration when you tap a wrong object and when you find the
+  monkey.
+- The layout fits all phone sizes, including phones with a notch.
+
+3. PLEASE TEST
+- Play several levels in each world you can reach.
+- Tap wrong objects on purpose, use both hints, let the timer run out
+  once.
+- Pause the game, resume, go back to the main menu.
+- Close the app fully and open it again: your progress should be kept.
+- If you have a phone with a notch or a tablet, check that nothing is
+  cut off.
+
+4. EXPECTED IN THIS TEST BUILD (NOT BUGS)
+- Ads are Google test ads and show a "Test Ad" label. Real ads come
+  with the store release.
+- The Settings button in the pause menu does nothing yet. The settings
+  panel (music, sound, vibration, privacy policy) comes in the next
+  phase.
+- Sound and vibration cannot be turned off yet (next phase).
+- There is no app store page yet; the build is installed by hand.
+
+5. REPORTING A PROBLEM
+For each problem, please send:
+- Phone model and Android version.
+- World and level number.
+- What you did, what happened, what you expected.
+- A screenshot or screen recording if possible.

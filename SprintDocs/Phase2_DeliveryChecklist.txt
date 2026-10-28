@@ -1,0 +1,132 @@
+PHASE 2 DELIVERY CHECKLIST
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Build: Android APK, version 0.2.0 (code 2), package com.tpstudio.monkeyrush
+Engine: Unity 6000.3.6f1
+Written: 2026-10-28 (Sprint 17)
+
+1. WHAT THIS PHASE DELIVERS
+- Level timer: starts when the monkey stops, the panel shows the time
+  spent (Sprint 01 to 01c).
+- Time bonus coins for fast finishes, paid only on improvement
+  (Sprint 02, 02b, 03a to 03c).
+- Time-out loss per level: "Level N Failed!", nothing saved, Restart
+  to retry. On for all 36 levels (Sprint 04 to 04e).
+- AdMob interstitial on every 3rd Next tap, child-directed settings,
+  test IDs (Sprint 05 to 05c).
+- Hint button: 3 coins, pulses the right object, once per level
+  (Sprint 06 to 06c).
+- Rewarded ad hint: watch an ad, get a free hint, once per level
+  (Sprint 07 to 07c).
+- World selection screen with world and level locks and stars
+  (Sprint 09); the same world lock in the in-game map (Sprint 12).
+- 12 levels per world, 3 to 6 hiding objects per level, new props for
+  levels 6 to 12 (Sprint 10a, 10b).
+- Taps never pass through panels or the map window (Sprint 11).
+- Monkey speed balancing (Sprint 13, 14).
+- No hint while a hiding object slides (Sprint 15).
+- Pause menu layout in all three worlds (Settings button has no
+  function yet, next phase).
+- Responsive UI: full layout fits every screen, safe area for notch
+  phones, backgrounds keep their shape, HUD centered (Sprint 16a to
+  16c).
+- Sound and vibration on a wrong tap and when the monkey is found;
+  audio paused under ads (Sprint 16d).
+
+2. BEFORE BUILDING
+[ ] git status clean, all sprint commits in.
+[ ] GameFeedbackManager.prefab: Vibration Enabled ticked.
+[ ] Player Settings (Android): package com.tpstudio.monkeyrush,
+    version 0.2.0, code 2.
+[ ] Unlock All Worlds off in WorldSelection and the three map scenes.
+[ ] Ads: test IDs (do not put real IDs in a test build).
+[ ] External Dependency Manager: Force Resolve done, no errors.
+[ ] Development Build off.
+[ ] Unity Console: no red errors.
+
+3. DEVICE TEST (real Android phone, fresh install)
+Start
+[ ] App installs, starts in portrait, Splash then Main Menu. Music plays.
+[ ] Play opens World Selection. Only Jungle is open; Beach and Snow
+    show LOCKED.
+[ ] Jungle shows 12 levels: Level 1 open (0/3 STARS), 2 to 12 LOCKED.
+Gameplay (Jungle Level 1)
+[ ] 3-2-1-GO countdown, then the monkey walks (not Idle) and stops.
+[ ] Timer shows the full time while the monkey walks, counts down
+    after it stops.
+[ ] Tapping before the monkey stops does nothing.
+[ ] Wrong object: slides, shows nothing, returns; tries +1; the phone
+    vibrates.
+[ ] Right object: monkey revealed, monkey sound, the phone vibrates,
+    panel shows stars (1 try = 3, 2 = 2, 3+ = 1), time, time bonus.
+[ ] Score, coins and bananas go up. The next level unlocks.
+[ ] Restart reloads the level; Next loads the next level; both start
+    with the countdown.
+Hints and ads
+[ ] Hint button grey while the monkey walks and below 3 coins; with 3+
+    coins it takes 3 coins, pulses the right object, then greys out.
+[ ] No hint while a wrong object is sliding.
+[ ] Ad hint button appears when the monkey stops; the test rewarded ad
+    plays with music paused; watching to the end pulses the right
+    object; closing early gives no hint.
+[ ] Every 3rd Next tap shows a test interstitial (music paused); the
+    next level loads after it closes.
+Time-out
+[ ] Let the timer reach 0:00: "Level N Failed!", 0 stars, +0, taps do
+    nothing, Next hidden, Restart works, nothing saved.
+Pause and progress
+[ ] Pause menu freezes the game and timer, Resume continues, Main Menu
+    works. (Settings button does nothing: expected.)
+[ ] Close the app fully and reopen: progress, stars and totals kept.
+[ ] Finishing Jungle level 12 opens Beach; Beach level 12 opens Snow.
+    (For a quick check, use a test device with progress, not the
+    client build.)
+Screens
+[ ] Phone with a notch or camera hole: HUD, pause button and timer are
+    below it; the Hint button is above the home bar.
+[ ] Tablet or wide phone, if available: nothing cut off, backgrounds
+    not stretched, HUD centered.
+[ ] All three worlds open and play without visual errors.
+
+4. KNOWN DEBT CARRIED OVER (NOT IN THIS BUILD)
+Release blockers (before any store release)
+- Real AdMob account, App IDs and ad unit IDs.
+- Consent (UMP) flow.
+- AD_ID permission: the AdMob SDK adds it; Play's Families policy
+  expects child-directed apps not to request it. Remove it in the
+  manifest before release.
+- Release keystore and signed AAB for Google Play; store listing.
+- iOS build (needs a Mac with Xcode and an Apple developer account).
+Features and polish
+- Settings panel with saved Music, Sound, Vibration, Privacy Policy
+  and Rate Us behind a parental gate (Sprint 18, next phase).
+- Main Menu, World Selection and Splash backgrounds still stretch on
+  non-9:16 screens; level grid not checked at tablet width (left from
+  Sprint 16).
+- No wrong-tap sound clip. Vibration is one fixed buzz.
+- Empty placeholder scenes: LevelSelection, MonkeyCollection, Rewards,
+  Settings (disabled in the build).
+- Daily rewards not built.
+- Interstitial count is per session; no frequency cap across sessions.
+- Rewarded ad: reward callback is expected before the closed callback;
+  check on device.
+- iOS: gameplay pause under the rewarded ad not checked on a device.
+Code health
+- Debug logging is on in many scripts (showDebugLogs).
+- Unused scripts: ArrivalLayerTrigger, LevelProgressionController,
+  MapLevelLoader, GameplayInputBlocker, GameplayInputGuard.
+- Hard-coded SelectLevel1() to SelectLevel10(); world and level lock
+  rules exist in two scripts.
+- MapWindowController is about 1,800 lines.
+- URP version warning (manifest 17.6.0, installed 17.3.0).
+
+5. NEXT PHASE (PROPOSED)
+- Sprint 18: settings panel (18), parental gate and links (18b),
+  privacy policy template (18c). Plan: SprintDocs/Sprint_18_SettingsPanel_Plan.txt.
+- Remaining Sprint 16 work: menu and Splash backgrounds, tablet check.
+- Release: UMP consent, real ad IDs, AD_ID removal, release signing,
+  store listing, iOS build.
+
+6. SIGN-OFF
+Build tested on: ............ (model, Android version)
+Tested by: ............  Date: ............
+Result: [ ] all checks pass   [ ] issues (list): ............
