@@ -122,6 +122,7 @@ Never reorder steps 10 and 11.
 - The interstitial shows only from LevelCompletePanelController.LoadNextLevel (the Next button), on every levelsBetweenInterstitials-th tap (default 3, session count only, not saved). If no ad is ready, the count stays and the next tap tries again.
 - When the ad closes or fails to show, the next level loads. Without an ad the next level loads at once.
 - No ads on Restart, after a loss, during the countdown, or while searching.
+- All audio is paused while an ad is open (Sprint 16d): AudioListener.pause = true just before interstitialAd.Show and rewardedAd.Show, false in FinishAd and FinishRewarded (closed or failed).
 - AdsManager is optional. Without it (for example Play mode started in a map scene) Next loads the next level directly.
 - Ad unit IDs are Inspector fields. They default to Google's public test IDs. The App IDs are set in Assets > Google Mobile Ads > Settings, by hand or with Tools > Monkey Rush > Set Up Ads (Sprint 05b), which also adds AdsManager to Bootstrap.
 - Rewarded ad (Sprint 07): loaded after initialization next to the interstitial, reloaded after every show. Test IDs in androidRewardedId and iosRewardedId. IsRewardedReady says whether one can be shown; OnRewardedReadyChanged fires on load, show and close. ShowRewardedThen(Action<bool>) calls back exactly once: true only if the reward was earned, false if the ad was closed early, failed or was not ready. A second call while one is open is ignored. Nothing calls it until Sprint 07b (ad hint button in LevelHint).
@@ -313,7 +314,6 @@ Prefer neutral names in new code, for example SubmitGuess, ResolveRound, RevealR
 - Ads use Google's test IDs only. Real App IDs and ad unit IDs are needed before release.
 - No consent (UMP) flow yet. Needed before release.
 - The interstitial count is per session. There is no frequency cap across sessions.
-- On iOS, music keeps playing under an interstitial. Pausing audio during ads is left for the audio polish sprint.
 - On iOS the game keeps running under full-screen ads. LevelHint pauses gameplay (Time.timeScale = 0) while the rewarded ad is open and restores it after (Sprint 07b). Not yet checked on an iOS device. The interstitial does not pause gameplay, but it only shows from Next, when no level is running.
 - Rewarded ad: the code expects the reward callback before the closed callback. Check this order in the device test after Sprint 07c.
 - World lock, level lock and star rules exist in two scripts (MapWindowController and WorldSelectionController). A rule change must be made in both.

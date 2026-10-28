@@ -242,6 +242,8 @@ public class AdsManager : MonoBehaviour
 
         DebugLog("Showing interstitial.");
 
+        AudioListener.pause = true;
+
         interstitialAd.Show();
     }
 
@@ -279,6 +281,8 @@ public class AdsManager : MonoBehaviour
         }
 
         isShowing = false;
+
+        AudioListener.pause = false;
 
         LoadInterstitial();
 
@@ -376,6 +380,8 @@ public class AdsManager : MonoBehaviour
 
         OnRewardedReadyChanged?.Invoke();
 
+        AudioListener.pause = true;
+
         rewardedAd.Show(reward =>
         {
             MobileAdsEventExecutor.ExecuteInUpdate(() =>
@@ -421,6 +427,8 @@ public class AdsManager : MonoBehaviour
         }
 
         isRewardedShowing = false;
+
+        AudioListener.pause = false;
 
         LoadRewarded();
 

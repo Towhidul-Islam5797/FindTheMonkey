@@ -1,0 +1,67 @@
+SPRINT 16D - AUDIO AND VIBRATION POLISH
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+Make the existing feedback work: the monkey-found sound, vibration on
+a wrong tap and on finding the monkey, and no music under full-screen
+ads.
+
+FINDINGS
+- GameFeedbackManager.WrongObjectFeedback and MonkeyFoundFeedback were
+  never called (no script, scene or prefab). Only button clicks and
+  music played. CLAUDE.md said HidingObject talks to it.
+- vibrationEnabled was unticked on Assets/Audio/GameFeedbackManager
+  .prefab since the initial commit; no scene overrides it.
+- On iOS the game keeps running under full-screen ads, so music kept
+  playing (known debt).
+
+DEVELOPER DECISIONS (2026-10-28)
+- Sprint numbering: audio and vibration polish is 16d. The menu and
+  Splash background fix (planned as 16d) is still open.
+- Vibration on: the developer ticks it in the prefab by hand.
+- No wrong-tap sound field for now (no clip in the project).
+- 4 files approved: HidingObject.cs, AdsManager.cs, CLAUDE.md, this
+  file.
+
+CHANGES
+Assets/Scripts/HidingObject.cs (2 null-checked calls):
+- MoveObjectRoutine, wrong branch: WrongObjectFeedback() right before
+  ReturnWrongObject (the object is out and shows nothing).
+- RevealMonkey: MonkeyFoundFeedback() right after isRevealed = true,
+  so after LevelState.MarkMonkeyFound. Audio ignores Time.timeScale,
+  so the sound plays while the panel pauses the game.
+Assets/Scripts/AdsManager.cs (4 lines):
+- AudioListener.pause = true just before interstitialAd.Show and
+  rewardedAd.Show.
+- AudioListener.pause = false in FinishAd and FinishRewarded, which run
+  on closed and on failed to show.
+CLAUDE.md: audio pause rule in 2.4c; iOS music line removed from
+known debt.
+
+INSPECTOR STEPS (BY HAND)
+- Assets/Audio/GameFeedbackManager.prefab: tick Vibration Enabled.
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 3: right or wrong still only CurrentArrivedPoint == relatedMovePoint.
+- 4 and the 2.4 order: feedback runs after MarkMonkeyFound; the reward
+  order is unchanged.
+- 11: the movement lock is unchanged.
+- 7, 8: no serialized field added, renamed or removed.
+- Time-out loss plays no sound (it never reaches RevealMonkey).
+
+LIMITATION
+Handheld.Vibrate is one fixed buzz (about half a second on many
+Android phones). Shorter haptics would need a plugin (not allowed).
+
+DONE CONDITIONS
+- Editor: finding the monkey plays the monkey sound.
+- Phone: a wrong tap vibrates; finding the monkey vibrates and plays
+  the sound.
+- Phone with test ads: music stops while an interstitial or rewarded
+  ad is open and comes back after close or failure.
+- No new red errors. Smoke test passes.
+
+RESULTS
+Developer's test in Unity and on device: pending.

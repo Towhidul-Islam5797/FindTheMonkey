@@ -675,6 +675,12 @@ public class HidingObject : MonoBehaviour, IPointerClickHandler
              * Only after the object is completely back can
              * another hiding object be clicked.
              */
+            if (GameFeedbackManager.Instance != null)
+            {
+                GameFeedbackManager.Instance
+                    .WrongObjectFeedback();
+            }
+
             yield return ReturnWrongObject();
         }
 
@@ -928,6 +934,12 @@ public class HidingObject : MonoBehaviour, IPointerClickHandler
         );
 
         isRevealed = true;
+
+        if (GameFeedbackManager.Instance != null)
+        {
+            GameFeedbackManager.Instance
+                .MonkeyFoundFeedback();
+        }
 
         if (monkeyObject != null)
         {
