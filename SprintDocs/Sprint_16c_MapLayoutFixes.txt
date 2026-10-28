@@ -1,0 +1,83 @@
+SPRINT 16C - MAP LAYOUT FIXES (RESPONSIVE UI, STEP 3)
+Project: Find The Cheeky Monkey (working title: Monkey Rush)
+Engine: Unity 6000.3.6f1
+Branch: TowhidulRahat
+
+GOAL
+Make the three map scenes look right on screens that are not 9:16,
+now that the Canvas Scaler uses Expand (16a).
+
+FINDINGS (from the scene files; no device notes yet)
+- Backgrounds (941x1672, 9:16) were stretched to the screen with
+  Preserve Aspect off: about 22 percent taller on 19.5:9 phones,
+  about 33 percent wider on 3:4 tablets.
+- HUD was anchored and pivoted top-left with a fixed width of 979, so
+  on wide screens it hugged the left edge.
+- grass_r (Beach, Jungle) was anchored bottom-center at x 500, so on
+  wide screens it floated in from the right edge.
+- In BeachMap and SnowMap the grass was a child of the background, so
+  any background resize would also move the grass.
+
+DEVELOPER DECISIONS
+- 16c approved for BeachMap, JungleMap, SnowMap (2026-10-28).
+- Unity was running; the developer confirmed the scenes were saved.
+- Menus and Splash backgrounds moved to 16d.
+
+CHANGES (direct scene edits)
+All three map scenes:
+- Canvas/HUD RectTransform: anchors and pivot (0, 1) -> (0.5, 1),
+  anchored x 0 -> -50.5. Same rect at 1080 wide, centered on wider
+  screens. Children and the layout group unchanged.
+- Background (beach_gameplay, jungle_gameplay, snow_gameplay): new
+  built-in AspectRatioFitter (fileID 258720845), Envelope Parent,
+  ratio 0.5628 (941/1672). The art keeps its shape and covers the
+  screen; edges are cropped instead of stretched.
+BeachMap and SnowMap:
+- New Canvas/Grass (GameObject 695162145, RectTransform 695162146),
+  stretched, right after the background and before Levels (same draw
+  order as before). grass_l, grass_r and grass_m moved into it from
+  the background. Same setup as JungleMap's Grass.
+BeachMap and JungleMap:
+- grass_r anchors (0.5, 0) -> (1, 0), anchored x 500 -> -40. Same spot
+  at 1080 wide, stays at the right edge on wider screens.
+SnowMap grass anchors unchanged (it sits near the objects, not at the
+edges).
+
+INVARIANTS CHECKED (CLAUDE.md section 3)
+- 9: Canvas UI only.
+- 7, 8: no script or serialized field changed.
+- HintButton sibling order (2.4d) unchanged: Grass goes before Levels.
+- Gameplay logic, taps and level roots untouched.
+
+KNOWN LIMITATION
+Hiding objects are centered; the background art scales a little
+around the center on non-9:16 screens, so art near the top or bottom
+can shift up to about 130 units relative to the objects (the old
+stretch did the same).
+
+FOUND DURING THIS SPRINT
+SafeAreaFitter (16b) is not on HUD, Timer, HintButton or AdHintButton
+in any map scene (script GUID e772217ca485c37439a46abec37bfa1e has no
+reference in the scenes), although the 16b commit message says so.
+Fixed in this sprint (developer approved): SafeAreaFitter added by
+direct scene edit to Canvas/HUD, Canvas/Timer, Canvas/HintButton and
+Canvas/AdHintButton in all three map scenes. New component fileID =
+GameObject fileID + 50:
+- BeachMap:  HUD 1364881753, Timer 744740169, HintButton 47894166,
+  AdHintButton 2067739960.
+- JungleMap: HUD 1364881753, Timer 837846474, HintButton 47894166,
+  AdHintButton 676073289.
+- SnowMap:   HUD 1364881753, Timer 1820075415, HintButton 756363180,
+  AdHintButton 1189234076.
+Check in the Device Simulator: HUD, pause button and timer below the
+notch, Hint button above the home bar.
+
+DONE CONDITIONS
+- 1080x1920: all three maps look unchanged.
+- 1080x2340 and 1536x2048: backgrounds keep their shape and cover the
+  screen, HUD is centered, grass sits at both bottom corners (Beach,
+  Jungle) and in place (Snow).
+- No new red errors. Smoke test still passes.
+
+RESULTS
+Developer's test in Unity: pending.
